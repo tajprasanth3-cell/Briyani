@@ -217,7 +217,7 @@ export default function App() {
           </nav>
         </header>
 
-        <main style={{ padding: "24px 5% 40px" }}>
+        <main style={{ padding: "0 0 40px 0" }}>
           <Routes>
             <Route
               path="/"

@@ -265,7 +265,7 @@ const biryaniStyles = `
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
-  padding: 34px 0;
+  padding: 34px 5%;
 }
 
 .briyaniFeatureCard {
@@ -280,7 +280,7 @@ const biryaniStyles = `
 }
 
 .briyaniProductsSection {
-  padding: 36px 0 58px;
+  padding: 36px 5% 58px;
 }
 
 .briyaniSectionTitle {
@@ -372,7 +372,7 @@ const biryaniStyles = `
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
-  padding: 12px 0 42px;
+  padding: 12px 5% 42px;
   text-align: center;
 }
 

@@ -9,7 +9,7 @@ import feastImg from "./Images/gemi1.png";
 
 const menuStyles = `
 .menuContainer {
-  padding: 20px 0;
+  padding: 20px 5%;
 }
 
 .menuSearchFilterSection {
