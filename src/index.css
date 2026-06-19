@@ -1,0 +1,29 @@
+/* Basic responsive rules for navbar and hero */
+:root{
+	--brand-dark: #6b0f0f;
+	--brand-gold: #f7c66b;
+}
+
+.navbar img{
+	display: block;
+}
+
+.nav-search{
+	background: #fff;
+	border-radius: 10px;
+}
+
+@media (max-width: 1024px) {
+	.nav-search{ width: 70% !important; }
+}
+
+@media (max-width: 768px) {
+	.navbar{ padding: 10px 4% !important; }
+	.nav-search{ width: 100% !important; max-width: none !important; }
+	header.navbar{ flex-direction: column; align-items: stretch; gap: 10px; }
+	header.navbar nav{ justify-content: center; }
+}
+
+/* Make hero slideshow adapt */
+.hero-slide img{ width:100%; height:auto; display:block }
+
