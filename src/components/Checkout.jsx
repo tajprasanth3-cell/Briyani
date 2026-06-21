@@ -1,6 +1,45 @@
 import { useState } from 'react';
 import { ArrowLeft, MapPin, Phone, User, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import checkoutBg from "./Images/background2.jpg";
+
+const checkoutStyles = `
+.checkoutPage {
+  position: relative;
+}
+
+.checkoutPage::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("${checkoutBg}") center/cover fixed no-repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.checkoutPage > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .checkoutGrid { grid-template-columns: 1fr !important; }
+  .checkoutBill { order: -1; }
+}
+
+@media (max-width: 768px) {
+  .checkoutPage { padding: 24px 12px !important; }
+  .checkoutFormCard { padding: 24px 16px !important; }
+  .checkoutCityRow { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .checkoutPageTitle { font-size: 24px !important; }
+  .checkoutFormCard { padding: 20px 12px !important; }
+  .checkoutBillCard { padding: 16px !important; }
+}
+`;
 
 export default function Checkout({ cartItems = [] }) {
   const navigate = useNavigate();
@@ -32,38 +71,46 @@ export default function Checkout({ cartItems = [] }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
+    <div className="checkoutPage" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
+      <style>{checkoutStyles}</style>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         
         {/* Header */}
-        <div style={{ marginBottom: "40px", display: "flex", alignItems: "center", gap: "16px" }}>
+        <div style={{ marginBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
           <button 
             onClick={() => navigate(-1)}
             style={{
-              background: "none",
+              background: "rgba(107,15,15,0.08)",
               border: "none",
               cursor: "pointer",
-              padding: "8px",
+              padding: "10px 20px",
               color: "#6b0f0f",
               display: "flex",
               alignItems: "center",
-              fontSize: "16px",
-              transition: "transform 0.2s",
+              gap: "8px",
+              fontSize: "14px",
+              fontWeight: "700",
+              borderRadius: "12px",
+              transition: "all 0.2s",
             }}
-            onMouseOver={(e) => e.currentTarget.style.transform = "scale(1.1)"}
-            onMouseOut={(e) => e.currentTarget.style.transform = "scale(1)"}
+            onMouseOver={(e) => e.currentTarget.style.background = "rgba(107,15,15,0.15)"}
+            onMouseOut={(e) => e.currentTarget.style.background = "rgba(107,15,15,0.08)"}
           >
-            <ArrowLeft size={24} />
+            <ArrowLeft size={20} /> Back
           </button>
-          <h1 style={{ fontSize: "32px", fontWeight: "800", color: "#6b0f0f", margin: 0 }}>Checkout</h1>
+          <div style={{ textAlign: "center" }}>
+            <h1 className="checkoutPageTitle" style={{ fontSize: "34px", fontWeight: "900", color: "#6b0f0f", margin: 0, fontFamily: "Georgia, serif", letterSpacing: "1px" }}>Royal Checkout</h1>
+            <p style={{ fontSize: "12px", color: "#c89a2b", fontWeight: "700", letterSpacing: "1.5px", margin: "4px 0 0 0" }}>✦ COMPLETE YOUR ORDER ✦</p>
+          </div>
+          <div style={{ width: "80px" }} />
         </div>
 
         {/* Main Content */}
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+        <div className="checkoutGrid responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
           
           {/* Left: Form */}
           <div>
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "32px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
+            <div className="checkoutFormCard" style={{ background: "#fff", borderRadius: "20px", padding: "32px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
               <h2 style={{ fontSize: "18px", fontWeight: "800", color: "#6b0f0f", marginBottom: "24px", display: "flex", alignItems: "center", gap: "10px" }}>
                 <User size={20} /> Delivery Details
               </h2>
@@ -150,7 +197,7 @@ export default function Checkout({ cartItems = [] }) {
                 </div>
 
                 {/* City & Pincode */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div className="checkoutCityRow" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                   <div>
                     <label style={{ fontSize: "12px", fontWeight: "700", color: "#666", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>City</label>
                     <select
@@ -237,7 +284,7 @@ export default function Checkout({ cartItems = [] }) {
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             
             {/* Order Items Card */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "24px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
+            <div className="checkoutBillCard" style={{ background: "#fff", borderRadius: "20px", padding: "24px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
               <h2 style={{ fontSize: "16px", fontWeight: "800", color: "#6b0f0f", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
                 <Package size={20} /> Order Summary
               </h2>

@@ -1,21 +1,199 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import chickenImg from "./Images/chicken dum.jpg";
 import muttonImg from "./Images/motton bry (1).jpg";
 import vegImg from "./Images/veg.jpg";
 import familyImg from "./Images/family.jpg";
-import specialImg from "./Images/gemi1.png";
-import royalImg from "./Images/be9c5060a8bf1bfbaf2afb514808bf4f.jpg";
-import feastImg from "./Images/gemi1.png";
+import specialImg from "./Images/wow.jpg";
+import royalImg from "./Images/kolkata.jpg";
+import vegspecial from "./Images/two.jpg";
+import feastImg from "./Images/gril briyani (1).jpg";
+import feastImg3 from "./Images/gril briyani (2).jpg";
+import feastImg5 from "./Images/chicken dum.jpg";
+import ton from "./Images/ton.jpg";
+import feastImg6 from "./Images/veg11.jpg";
+import logoImg from "./Images/logo (1).jpg";
+
+const MENU_ITEMS = [
+  {
+    id: 1,
+    name: "Chicken Dum Biryani",
+    rating: 4.8,
+    reviews: "1.2K",
+    price: 599,
+    qty: 1,
+    category: "Chicken",
+    image: chickenImg,
+    desc: "Basmati rice cooked with tender chicken.",
+  },
+  {
+    id: 2,
+    name: "Mutton Dum Biryani",
+    rating: 4.9,
+    reviews: "856",
+    price: 799,
+    qty: 1,
+    category: "Mutton",
+    image: muttonImg,
+    desc: "Perfect blend of mutton and basmati rice.",
+  },
+  {
+    id: 3,
+    name: "Veg Dum Biryani",
+    rating: 4.7,
+    reviews: "623",
+    price: 449,
+    qty: 1,
+    category: "Veg",
+    image: vegImg,
+    desc: "Flavorful mix of vegetables and spices.",
+  },
+  {
+    id: 4,
+    name: "Family Pack Biryani",
+    rating: 5.0,
+    reviews: "340",
+    price: 999,
+    qty: 2,
+    category: "Family",
+    image: familyImg,
+    desc: "Best for gatherings & parties.",
+  },
+  {
+    id: 5,
+    name: "Hyderabadi Special Biryani",
+    rating: 4.9,
+    reviews: "2.1K",
+    price: 849,
+    qty: 1,
+    category: "Special",
+    image: specialImg,
+    desc: "Saffron-rich biryani made with premium spices.",
+  },
+  {
+    id: 6,
+    name: "Royal Biryani Feast",
+    rating: 5.0,
+    reviews: "1.7K",
+    price: 1099,
+    qty: 2,
+    category: "Special",
+    image: royalImg,
+    desc: "A festive royal platter for family celebrations.",
+  },
+  {
+    id: 7,
+    name: "Chef's Signature Biryani",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "chickenfull",
+    image: feastImg,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+  {
+    id: 8,
+    name: "Vegetable Dum Biryani (In Oven)",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "Oven",
+    image: vegspecial,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+  {
+    id: 9,
+    name: "USA Chicken Biryani",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "usa grill",
+    image: feastImg3,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+  {
+    id: 10,
+    name: " Chicken Tandoori Masala vs Garam Masala: Are They The Same...",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "tandoori",
+    image: ton,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+  {
+    id: 11,
+    name: "Chicken Dum Biryani",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "Chef",
+    image: feastImg5,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+  {
+    id: 12,
+    name: "Mutton Biryani",
+    rating: 4.8,
+    reviews: "930",
+    price: 679,
+    qty: 1,
+    category: "mutton grill",
+    image: feastImg6,
+    desc: "Rich, slow-cooked biryani with chef's special masala.",
+  },
+];
+
+const CATEGORIES = ["All", "Chicken", "Mutton", "Veg", "Family"];
 
 const menuStyles = `
 .menuContainer {
-  padding: 20px 5%;
+  padding: 20px 9%;
+}
+
+.menuBrandSection {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #6b0f0f, #8b1a1a);
+  border-radius: 20px;
+  color: #fff;
+}
+
+.menuLogoImg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f7c66b;
+  flex-shrink: 0;
+}
+
+.menuBrandTitle {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #f7c66b;
+}
+
+.menuBrandSub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  opacity: 0.85;
+  color: #fff;
 }
 
 .menuSearchFilterSection {
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   display: flex;
-  gap: 16px;
+  gap:13px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -69,14 +247,29 @@ const menuStyles = `
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.menuActiveCategory {
+  background: linear-gradient(135deg, #6b0f0f, #8b1a1a) !important;
+  color: #f7c66b !important;
+  box-shadow: 0 8px 24px rgba(107, 15, 15, 0.25) !important;
+}
+
 .menuItemCard {
   display: flex;
   flex-direction: column;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 14px 32px rgba(44, 18, 9, 0.12);
   height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 380px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.menuItemCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(44, 18, 9, 0.16);
 }
 
 .menuItemImage {
@@ -164,10 +357,22 @@ const menuStyles = `
   font-weight: 800; /* Added */
 }
 
-.menuProductGrid { /* Added this new class */
+.menuProductGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .menuProductGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .menuProductGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .menuCartSummary {
@@ -188,7 +393,27 @@ const menuStyles = `
   color: #555;
 }
 
+@media (max-width: 1024px) {
+  .menuBrandSection {
+    padding: 16px 18px;
+  }
+
+  .menuBrandTitle {
+    font-size: 22px;
+  }
+
+  .menuContainer {
+    padding: 16px 4%;
+  }
+}
+
 @media (max-width: 768px) {
+  .menuBrandSection {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+
   .menuSearchFilterSection {
     flex-direction: column;
     align-items: stretch;
@@ -224,6 +449,34 @@ const menuStyles = `
   .menuAddToCartButton {
     width: 100%;
   }
+
+  .menuItemTitle {
+    font-size: 17px;
+    min-height: auto;
+  }
+
+  .menuItemBody {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menuContainer {
+    padding: 12px 3%;
+  }
+
+  .menuBrandTitle {
+    font-size: 20px;
+  }
+
+  .menuCategoryButton {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .menuItemPrice {
+    font-size: 16px;
+  }
 }
 `;
 
@@ -236,162 +489,26 @@ export default function Menu({
   const [location, setLocation] = useState("Mumbai");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      name: "Chicken Dum Biryani",
-      rating: 4.8,
-      reviews: "1.2K",
-      price: 599,
-      qty: 1,
-      category: "Chicken",
-      image: chickenImg,
-      desc: "Basmati rice cooked with tender chicken.",
-    },
-    {
-      id: 2,
-      name: "Mutton Dum Biryani",
-      rating: 4.9,
-      reviews: "856",
-      price: 799,
-      qty: 1,
-      category: "Mutton",
-      image: muttonImg,
-      desc: "Perfect blend of mutton and basmati rice.",
-    },
-    {
-      id: 3,
-      name: "Veg Dum Biryani",
-      rating: 4.7,
-      reviews: "623",
-      price: 449,
-      qty: 1,
-      category: "Veg",
-      image: vegImg,
-      desc: "Flavorful mix of vegetables and spices.",
-    },
-    {
-      id: 4,
-      name: "Family Pack Biryani",
-      rating: 5.0,
-      reviews: "340",
-      price: 999,
-      qty: 2,
-      category: "Family",
-      image: familyImg,
-      desc: "Best for gatherings & parties.",
-    },
-    {
-      id: 5,
-      name: "Hyderabadi Special Biryani",
-      rating: 4.9,
-      reviews: "2.1K",
-      price: 849,
-      qty: 1,
-      category: "Special",
-      image: specialImg,
-      desc: "Saffron-rich biryani made with premium spices.",
-    },
-    {
-      id: 6,
-      name: "Royal Biryani Feast",
-      rating: 5.0,
-      reviews: "1.7K",
-      price: 1099,
-      qty: 2,
-      category: "Special",
-      image: royalImg,
-      desc: "A festive royal platter for family celebrations.",
-    },
-    {
-      id: 7,
-      name: "Chef's Signature Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    },
-     {
-      id: 8,
-      name: "Chef's Signature Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    },
-     {
-      id: 9,
-      name: "Chef's Signature Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    }, {
-      id: 10,
-      name: "Chef's Signature Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    }, {
-      id: 11,
-      name: "Chicken Dum Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    },
-     {
-      id:12,
-      name: "Chef's Signature Biryani",
-      rating: 4.8,
-      reviews: "930",
-      price: 679,
-      qty: 1,
-      category: "Chef",
-      image: feastImg,
-      desc: "Rich, slow-cooked biryani with chef's special masala.",
-    },
-  ]);
-
-  const categories = ["All", "Chicken", "Mutton", "Veg", "Family"];
+  const [qtyMap, setQtyMap] = useState({});
 
   const updateQty = (id, action) => {
-    setItems((prev) =>
-      prev.map((item) => {
-        if (item.id !== id) return item;
-        if (action === "plus") {
-          return { ...item, qty: item.qty + 1 };
-        }
-        if (action === "minus" && item.qty > 1) {
-          return { ...item, qty: item.qty - 1 };
-        }
-        return item;
-      })
-    );
+    setQtyMap((prev) => {
+      const current = prev[id] ?? 1;
+      let next = current;
+      if (action === "plus") next = current + 1;
+      if (action === "minus" && current > 1) next = current - 1;
+      return { ...prev, [id]: next };
+    });
   };
+
+  const getQty = (id) => qtyMap[id] ?? 1;
 
   const addToCart = (item) => {
     const product = {
       id: item.id,
       name: item.name,
       price: item.price,
-      quantity: item.qty || 1,
+      quantity: getQty(item.id),
       image: item.image,
       description: item.desc,
     };
@@ -401,16 +518,27 @@ export default function Menu({
     }
   };
 
-  const filteredItems = items.filter((item) => {
-    const matchSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchCategory =
-      activeCategory === "All" ? true : item.category === activeCategory;
-    return matchSearch && matchCategory;
-  });
+  const filteredItems = useMemo(() => {
+    const q = searchQuery.toLowerCase();
+    return MENU_ITEMS.filter((item) => {
+      const matchSearch = item.name.toLowerCase().includes(q);
+      const matchCategory =
+        activeCategory === "All" ? true : item.category === activeCategory;
+      return matchSearch && matchCategory;
+    });
+  }, [searchQuery, activeCategory]);
 
   return (
     <div className="menuContainer">
       <style>{menuStyles}</style>
+
+      <div className="menuBrandSection">
+        <img src={logoImg} alt="Taj Biryani" className="menuLogoImg" />
+        <div>
+          <h1 className="menuBrandTitle">TAJ BIRYANI</h1>
+          <p className="menuBrandSub">Authentic Dum Biryani Since 1998</p>
+        </div>
+      </div>
 
       <section className="menuSearchFilterSection">
         <div className="menuSearchInputWrapper">
@@ -439,7 +567,7 @@ export default function Menu({
       </section>
 
       <section className="menuCategorySection">
-        {categories.map((category) => (
+        {CATEGORIES.map((category) => (
           <button
             key={category}
             onClick={() => setActiveCategory(category)}
@@ -469,7 +597,7 @@ export default function Menu({
                     >
                       -
                     </button>
-                    <span className="menuQuantityDisplay">{item.qty}</span>
+                    <span className="menuQuantityDisplay">{getQty(item.id)}</span>
                     <button
                       onClick={() => updateQty(item.id, "plus")}
                       className="menuQuantityButton"

@@ -10,6 +10,48 @@ import {
   ReceiptText,
   ShoppingBag
 } from 'lucide-react';
+import trackBg from "./Images/background3.jpg";
+
+const trackStyles = `
+.trackPage {
+  position: relative;
+}
+
+.trackPage::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("${trackBg}") center/cover fixed no-repeat;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.trackPage > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .trackBody { grid-template-columns: 1fr !important; }
+  .trackHeader { flex-direction: column !important; text-align: center !important; gap: 12px !important; }
+  .trackHeaderRight { width: auto !important; text-align: center !important; }
+}
+
+@media (max-width: 768px) {
+  .trackPage { padding: 20px 12px !important; }
+  .trackContainer { border-radius: 16px !important; }
+  .trackContent { padding: 20px 16px !important; }
+  .trackStepRow { gap: 12px !important; }
+  .trackDeliveryPartner { flex-direction: column !important; gap: 12px !important; }
+}
+
+@media (max-width: 480px) {
+  .trackPageTitle { font-size: 17px !important; }
+  .trackContainer { border-radius: 12px !important; }
+  .trackContent { padding: 16px 12px !important; }
+}
+`;
 
 export default function TrackOrder() {
   // Sample data simulating the order lifecycle state
@@ -81,12 +123,13 @@ export default function TrackOrder() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
+    <div className="trackPage" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
+      <style>{trackStyles}</style>
       {/* Main Layout Container */}
-      <div style={{ maxWidth: "1000px", margin: "0 auto", background: "#fff", borderRadius: "24px", boxShadow: "0 20px 50px rgba(0,0,0,0.1)", overflow: "hidden", border: "1px solid rgba(107, 15, 15, 0.05)" }}>
+      <div className="trackContainer" style={{ maxWidth: "1000px", margin: "0 auto", background: "#fff", borderRadius: "24px", boxShadow: "0 20px 50px rgba(0,0,0,0.1)", overflow: "hidden", border: "1px solid rgba(107, 15, 15, 0.05)" }}>
         
         {/* Header Navigation */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 32px", borderBottom: "1px solid #f0f0f0" }}>
+        <div className="trackHeader" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 32px", borderBottom: "1px solid #f0f0f0" }}>
           <button 
             onClick={() => navigate('/menu')}
             style={{
@@ -110,17 +153,17 @@ export default function TrackOrder() {
           </button>
           
           <div style={{ textAlign: "center" }}>
-            <h1 style={{ fontSize: "20px", fontWeight: "900", color: "#6b0f0f", margin: "0", letterSpacing: "1px", textTransform: "uppercase" }}>Track Order</h1>
+            <h1 className="trackPageTitle" style={{ fontSize: "20px", fontWeight: "900", color: "#6b0f0f", margin: "0", letterSpacing: "1px", textTransform: "uppercase" }}>Track Order</h1>
             <p style={{ fontSize: "12px", color: "#c89a2b", margin: "2px 0 0 0", fontWeight: "700" }}>Live Status Updates</p>
           </div>
           
-          <div style={{ width: "120px", textAlign: "right", fontSize: "13px", color: "#666", fontWeight: "600" }}>
+          <div className="trackHeaderRight" style={{ width: "120px", textAlign: "right", fontSize: "13px", color: "#666", fontWeight: "600" }}>
             ID: <span style={{ color: "#6b0f0f" }}>{orderInfo.id}</span>
           </div>
         </div>
 
         {/* Content Body Layout */}
-        <div style={{ padding: "32px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "40px" }}>
+        <div className="trackBody trackContent" style={{ padding: "32px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "40px" }}>
           
           {/* Left Side: Timeline */}
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -137,7 +180,7 @@ export default function TrackOrder() {
             {/* Vertical Custom Timeline Tracker */}
             <div className="relative pl-2 space-y-5 mt-4">
               {steps.map((step, index) => (
-                <div key={index} style={{ display: "flex", gap: "20px", alignItems: "start", position: "relative", marginBottom: "28px" }}>
+                <div key={index} className="trackStepRow" style={{ display: "flex", gap: "20px", alignItems: "start", position: "relative", marginBottom: "28px" }}>
                   
                   {/* Vertical Connection Line connecting the steps */}
                   {index !== steps.length - 1 && (
@@ -227,7 +270,7 @@ export default function TrackOrder() {
             </div>
 
             {/* Delivery Partner */}
-            <div style={{ background: "#fff", padding: "16px", borderRadius: "20px", border: "1px solid #f0f0f0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div className="trackDeliveryPartner" style={{ background: "#fff", padding: "16px", borderRadius: "20px", border: "1px solid #f0f0f0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <img 
                   src={orderInfo.partner.avatar} 
