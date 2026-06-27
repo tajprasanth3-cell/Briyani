@@ -30,18 +30,20 @@ const checkoutStyles = `
 
 @media (max-width: 768px) {
   .checkoutPage { padding: 24px 12px !important; }
+  .checkoutHeaderSpacer { display: none !important; }
+  .checkoutPageTitle { font-size: 24px !important; }
   .checkoutFormCard { padding: 24px 16px !important; }
   .checkoutCityRow { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 480px) {
-  .checkoutPageTitle { font-size: 24px !important; }
+  .checkoutPageTitle { font-size: 20px !important; }
   .checkoutFormCard { padding: 20px 12px !important; }
   .checkoutBillCard { padding: 16px !important; }
 }
 `;
 
-export default function Checkout({ cartItems = [] }) {
+export default function Checkout({ cartItems = [], appliedCoupon }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -51,11 +53,17 @@ export default function Checkout({ cartItems = [] }) {
     pincode: '',
     instructions: '',
   });
+  const [notification, setNotification] = useState(null);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const discount = appliedCoupon
+    ? appliedCoupon.flat
+      ? appliedCoupon.flat
+      : Math.round(subtotal * appliedCoupon.discount)
+    : 0;
   const deliveryCharge = 40;
   const packagingCharge = 20;
-  const total = subtotal + deliveryCharge + packagingCharge;
+  const total = subtotal - discount + deliveryCharge + packagingCharge;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,10 +72,11 @@ export default function Checkout({ cartItems = [] }) {
 
   const handlePlaceOrder = () => {
     if (!formData.fullName || !formData.phone || !formData.address || !formData.pincode) {
-      alert('Please fill all required fields');
+      setNotification({ type: "error", message: "Please fill in all required fields!" });
       return;
     }
-    navigate('/track-order');
+    setNotification({ type: "success", message: "Your royal order has been placed! 👑" });
+    setTimeout(() => navigate('/track-order'), 2000);
   };
 
   return (
@@ -102,7 +111,7 @@ export default function Checkout({ cartItems = [] }) {
             <h1 className="checkoutPageTitle" style={{ fontSize: "34px", fontWeight: "900", color: "#6b0f0f", margin: 0, fontFamily: "Georgia, serif", letterSpacing: "1px" }}>Royal Checkout</h1>
             <p style={{ fontSize: "12px", color: "#c89a2b", fontWeight: "700", letterSpacing: "1.5px", margin: "4px 0 0 0" }}>✦ COMPLETE YOUR ORDER ✦</p>
           </div>
-          <div style={{ width: "80px" }} />
+          <div className="checkoutHeaderSpacer" style={{ width: "80px" }} />
         </div>
 
         {/* Main Content */}
@@ -311,6 +320,12 @@ export default function Checkout({ cartItems = [] }) {
                   <span>Subtotal</span>
                   <span>₹{subtotal}</span>
                 </div>
+                {discount > 0 && (
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", color: "#16a34a", marginBottom: "8px" }}>
+                    <span>Discount ({appliedCoupon?.label || appliedCoupon?.code})</span>
+                    <span>-₹{discount}</span>
+                  </div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", color: "#666", marginBottom: "8px" }}>
                   <span>Delivery Fee</span>
                   <span>₹{deliveryCharge}</span>
@@ -370,6 +385,69 @@ export default function Checkout({ cartItems = [] }) {
           </div>
         </div>
       </div>
+
+      {notification && (
+        <div
+          onClick={() => setNotification(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: "20px",
+              padding: "40px 32px 32px",
+              maxWidth: "360px",
+              width: "100%",
+              textAlign: "center",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+            }}
+          >
+            <div style={{ fontSize: "48px", marginBottom: "12px", lineHeight: 1 }}>
+              {notification.type === "success" ? "👑" : "⚠️"}
+            </div>
+            <h3 style={{
+              fontSize: "18px",
+              fontWeight: "800",
+              color: notification.type === "success" ? "#16a34a" : "#dc2626",
+              margin: "0 0 8px",
+              fontFamily: "Georgia, serif",
+            }}>
+              {notification.type === "success" ? "Order Placed!" : "Oops!"}
+            </h3>
+            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 20px", lineHeight: 1.6 }}>
+              {notification.message}
+            </p>
+            <button
+              onClick={() => {
+                setNotification(null);
+                if (notification.type === "success") navigate('/track-order');
+              }}
+              style={{
+                padding: "12px 32px",
+                borderRadius: "12px",
+                border: "none",
+                background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
+                color: "#f7c66b",
+                fontWeight: "800",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              {notification.type === "success" ? "Track Order" : "Got it"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }   

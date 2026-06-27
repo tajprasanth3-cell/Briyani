@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -60,16 +61,25 @@ const cartStyles = `
   .cartPageTitle { font-size: 28px !important; }
   .cartBillTotal { font-size: 28px !important; }
   .cartItemCard { flex-direction: column !important; }
+  .cartItemImg { width: 100% !important; height: 160px !important; }
+  .cartEmptyEmoji { font-size: 48px !important; }
+  .cartEmptyTitle { font-size: 20px !important; }
 }
 
 @media (max-width: 480px) {
   .cartPage { padding: 16px 10px !important; }
   .cartBillCard { padding: 20px !important; }
+  .cartItemImg { height: 120px !important; }
+  .cartEmptyEmoji { font-size: 40px !important; }
+  .cartCouponRow { flex-direction: column !important; }
+  .cartCouponInput { width: 100% !important; }
+  .cartCouponBtn { width: 100% !important; }
 }
 `;
 
-export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart }) {
+export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, onClearCart, appliedCoupon, onApplyCoupon }) {
   const navigate = useNavigate();
+  const [couponInput, setCouponInput] = useState("");
 
   const deliveryCharge = 40;
   const packagingCharge = 20;
@@ -93,7 +103,12 @@ export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, o
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const total = subtotal > 0 ? subtotal + deliveryCharge + packagingCharge : 0;
+  const discount = appliedCoupon
+    ? appliedCoupon.flat
+      ? appliedCoupon.flat
+      : Math.round(subtotal * appliedCoupon.discount)
+    : 0;
+  const total = subtotal > 0 ? subtotal - discount + deliveryCharge + packagingCharge : 0;
 
   return (
     <div className="cartPage" style={{ background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)" }}>
@@ -126,7 +141,7 @@ export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, o
           <div>
             {cartItems.length === 0 ? (
               <div style={{ background: "rgba(255,255,255,0.9)", backdropFilter: "blur(10px)", borderRadius: "24px", padding: "60px 40px", textAlign: "center", border: "2px dashed rgba(107,15,15,0.15)" }}>
-                <div style={{ fontSize: "72px", marginBottom: "20px", lineHeight: 1 }}>👑</div>
+                <div className="cartEmptyEmoji" style={{ fontSize: "72px", marginBottom: "20px", lineHeight: 1 }}>👑</div>
                 <h3 style={{ fontSize: "24px", fontWeight: "700", color: "#6b0f0f", margin: "0 0 12px 0" }}>Your Feast Awaits</h3>
                 <p style={{ fontSize: "16px", color: "#888", marginBottom: "32px", lineHeight: "1.6" }}>Add royal biryanis to your cart</p>
                 <button onClick={() => navigate('/menu')} style={{ background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", border: "none", padding: "16px 36px", borderRadius: "14px", cursor: "pointer", fontSize: "16px", fontWeight: "800", letterSpacing: "0.5px" }}>
@@ -137,7 +152,7 @@ export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, o
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {cartItems.map((item) => (
                   <div key={item.id} className="cartItemCard">
-                    <div style={{ width: "120px", height: "120px", borderRadius: "14px", overflow: "hidden", flexShrink: 0 }}>
+                    <div className="cartItemImg" style={{ width: "120px", height: "120px", borderRadius: "14px", overflow: "hidden", flexShrink: 0 }}>
                       <img src={item.image} alt={item.name} loading="lazy" onError={(e) => e.currentTarget.src = "https://via.placeholder.com/120?text=Biryani"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </div>
                     <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", minWidth: 0 }}>
@@ -173,13 +188,77 @@ export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, o
           {cartItems.length > 0 && (
             <div className="cartBillCard" style={{ background: "rgba(255,255,255,0.95)", backdropFilter: "blur(10px)", borderRadius: "24px", padding: "32px", boxShadow: "0 20px 50px rgba(0,0,0,0.1)", border: "1px solid rgba(200,154,43,0.15)", position: "sticky", top: "80px" }}>
               
-              <button style={{ width: "100%", background: "linear-gradient(135deg, rgba(247,198,107,0.12), rgba(247,198,107,0.05))", border: "2px dashed #c89a2b", borderRadius: "14px", padding: "16px", marginBottom: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span style={{ fontSize: "24px" }}>🎟️</span>
-                  <span style={{ fontSize: "13px", fontWeight: "600", color: "#666" }}>Royal Coupon</span>
+              <div style={{ marginBottom: "20px" }}>
+                <div className="cartCouponRow" style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                  <input
+                    className="cartCouponInput"
+                    value={couponInput}
+                    onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                    placeholder="Enter code"
+                    style={{
+                      flex: 1,
+                      padding: "12px 14px",
+                      borderRadius: "12px",
+                      border: appliedCoupon ? "2px solid #22c55e" : "2px dashed #c89a2b",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      color: "#333",
+                      outline: "none",
+                      background: appliedCoupon ? "#f0fdf4" : "#fff",
+                    }}
+                  />
+                  <button
+                    className="cartCouponBtn"
+                    onClick={() => {
+                      if (appliedCoupon) {
+                        onApplyCoupon?.(appliedCoupon.code);
+                      } else if (couponInput) {
+                        onApplyCoupon?.(couponInput);
+                      }
+                    }}
+                    style={{
+                      padding: "12px 18px",
+                      borderRadius: "12px",
+                      border: "none",
+                      background: appliedCoupon
+                        ? "linear-gradient(135deg, #dc2626, #b91c1c)"
+                        : "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
+                      color: "#f7c66b",
+                      fontWeight: "800",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {appliedCoupon ? "Remove" : "Apply"}
+                  </button>
                 </div>
-                <ChevronRight size={18} style={{ color: "#c89a2b" }} />
-              </button>
+                {!appliedCoupon && (
+                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                    {["ROYAL", "1750", "2500"].map((code) => (
+                      <span
+                        key={code}
+                        onClick={() => {
+                          setCouponInput(code);
+                          onApplyCoupon?.(code);
+                        }}
+                        style={{
+                          padding: "4px 10px",
+                          borderRadius: "8px",
+                          background: "rgba(247,198,107,0.15)",
+                          border: "1px solid rgba(247,198,107,0.3)",
+                          fontSize: "11px",
+                          fontWeight: "700",
+                          color: "#c89a2b",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {code}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <div style={{ borderTop: "2px solid #f5f0eb", paddingTop: "20px", marginBottom: "20px" }}>
                 <h3 style={{ fontSize: "11px", fontWeight: "800", letterSpacing: "2px", color: "#c89a2b", textTransform: "uppercase", margin: "0 0 16px 0" }}>Order Summary</h3>
@@ -189,6 +268,12 @@ export default function Cart({ cartItems = [], onUpdateQuantity, onRemoveItem, o
                     <span style={{ color: "#888" }}>Subtotal</span>
                     <span style={{ fontWeight: "700", color: "#333" }}>₹{subtotal.toLocaleString('en-IN')}</span>
                   </div>
+                  {discount > 0 && (
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                      <span style={{ color: "#16a34a" }}>Discount ({appliedCoupon?.label || appliedCoupon?.code})</span>
+                      <span style={{ fontWeight: "700", color: "#16a34a" }}>-₹{discount.toLocaleString('en-IN')}</span>
+                    </div>
+                  )}
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
                     <span style={{ color: "#888" }}>Delivery Fee</span>
                     <span style={{ fontWeight: "700", color: "#333" }}>₹{subtotal > 0 ? deliveryCharge : 0}</span>

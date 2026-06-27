@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Crown } from "lucide-react";
 import One from "./Images/one.jpg";
 
 const loginStyles = `
@@ -233,7 +234,7 @@ export default function Login() {
       </div>
       <div className="loginFormPanel">
         <div className="loginCard">
-          <div className="loginLogo">👑 ROYAL TAJ</div>
+          <div className="loginLogo"><Crown size={24} style={{ verticalAlign: "middle", marginRight: 8, color: "#f7c66b" }} /> ROYAL TAJ</div>
           <p className="loginWelcome">Sign in to continue your food journey</p>
           <form className="loginForm" onSubmit={handleSubmit}>
             <div className="loginInputGroup">

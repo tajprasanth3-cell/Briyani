@@ -1,7 +1,9 @@
-/* Basic responsive rules for navbar and hero */
+/* Royal Glass Navbar Theme */
 :root{
-	--brand-dark: #6b0f0f;
+	--brand-dark: #5a0c0c;
 	--brand-gold: #f7c66b;
+	--glass-bg: rgba(255,255,255,0.06);
+	--glass-border: rgba(255,255,255,0.12);
 }
 
 .navbar img{
@@ -9,8 +11,31 @@
 }
 
 .nav-search{
-	background: #fff;
-	border-radius: 10px;
+	background: transparent !important;
+	border-radius: 0 !important;
+	color: #fff !important;
+}
+
+.nav-search::placeholder {
+	color: rgba(255,255,255,0.5);
+	font-weight: 400;
+}
+
+.royal-search:focus-within {
+	border-color: rgba(247,198,107,0.5) !important;
+	box-shadow: 0 0 20px rgba(247,198,107,0.08);
+	background: rgba(255,255,255,0.14) !important;
+}
+
+.nav-brand:hover {
+	background: rgba(255,255,255,0.14) !important;
+	border-color: rgba(247,198,107,0.3) !important;
+}
+
+header nav a:hover {
+	background: rgba(255,255,255,0.1) !important;
+	border-color: rgba(255,255,255,0.15) !important;
+	transform: translateY(-1px);
 }
 
 @media (max-width: 1024px) {
@@ -22,6 +47,7 @@
 	.nav-search{ width: 100% !important; max-width: none !important; }
 	header.navbar{ flex-direction: column; align-items: stretch; gap: 10px; }
 	header.navbar nav{ justify-content: center; }
+	.nav-brand { align-self: center !important; }
 }
 
 /* Make hero slideshow adapt */

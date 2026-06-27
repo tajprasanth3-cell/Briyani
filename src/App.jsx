@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink, useNavigate } from "react-router-dom";
+import { Search, MapPin, Phone, Mail, UtensilsCrossed } from "lucide-react";
 import TajBiryani from "./components/Briyani.jsx";
 import Menu from "./components/Menu.jsx";
 import Cart from "./components/Cart.jsx";
@@ -13,13 +14,28 @@ const navItems = [
   { to: "/cart", label: "Cart" },
   { to: "/checkout", label: "Checkout" },
   { to: "/track-order", label: "Track Order" },
+  { to: "/login", label: "Login" },
 ];
 
-export default function App() {
+function AppContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cartItems, setCartItems] = useState([]);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const navigate = useNavigate();
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const coupons = {
+    ROYAL: { discount: 0.5, label: "ROYAL" },
+    "1750": { discount: 0, flat: 175, min: 699, label: "FIRST ORDER" },
+    "2500": { discount: 0.25, label: "TAKE AWAY" },
+  };
+
+  const handleApplyCoupon = useCallback((code) => {
+    setAppliedCoupon((prev) =>
+      prev?.code === code ? null : coupons[code] ? { code, ...coupons[code] } : prev
+    );
+  }, []);
 
   const handleAddToCart = useCallback((product) => {
     setCartItems((prev) => {
@@ -33,7 +49,8 @@ export default function App() {
       }
       return [...prev, { ...product }];
     });
-  }, []);
+    navigate("/cart");
+  }, [navigate]);
 
   const handleUpdateCartItem = useCallback((id, change) => {
     setCartItems((prev) =>
@@ -52,7 +69,12 @@ export default function App() {
   const handleClearCart = useCallback(() => setCartItems([]), []);
 
   return (
-    <BrowserRouter>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f8f6f2",
+      }}
+    >
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
@@ -75,6 +97,7 @@ export default function App() {
             }
             
             .nav-search { width: 100% !important; max-width: none !important; }
+            .nav-search-wrapper { width: 100% !important; }
             
             header nav { 
               justify-content: center; 
@@ -82,7 +105,7 @@ export default function App() {
               margin-top: 10px;
             }
             
-            main { padding: 15px 4% !important; }
+            main { padding: 2px 4% !important; }
             
             .responsive-grid { 
               grid-template-columns: 1fr !important; 
@@ -110,89 +133,114 @@ export default function App() {
           }
         `}
       </style>
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "#f8f6f2",
-        }}
-      >
-          <header
-            className="navbar"
+        <header
+          className="navbar"
+          style={{
+            background: "linear-gradient(135deg, rgba(90,12,12,0.85) 0%, rgba(107,15,15,0.85) 50%, rgba(74,10,10,0.85) 100%)",
+            backdropFilter: "blur(24px) saturate(180%)",
+            WebkitBackdropFilter: "blur(24px) saturate(180%)",
+            color: "#fff",
+            padding: "10px 1% 10px 1%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "12px",
+            position: "sticky",
+            top: 0,
+            zIndex: 999,
+            borderBottom: "2px solid rgba(247,198,107,0.12)",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+          }}
+        >
+          <NavLink
+            to="/"
+            className="nav-brand"
             style={{
-              background: "linear-gradient(135deg, #5a0c0c 0%, #6b0f0f 50%, #4a0a0a 100%)",
-              color: "#fff",
-              padding: "12px 5%",
               display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
-              flexWrap: "wrap",
-              gap: "12px",
-              position: "sticky",
-              top: 0,
-              zIndex: 999,
-              borderBottom: "2px solid rgba(247,198,107,0.12)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+              gap: 14,
+              background: "rgba(255,255,255,0.1)",
+              padding: "6px 22px 6px 10px",
+              borderRadius: 50,
+              border: "1px solid rgba(255,255,255,0.2)",
+              backdropFilter: "blur(4px)",
+              textDecoration: "none",
             }}
           >
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "linear-gradient(135deg, rgba(247,198,107,0.12), rgba(247,198,107,0.04))", padding: "5px 20px 5px 8px", borderRadius: 50, border: "1px solid rgba(247,198,107,0.15)" }}>
-            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, #f7c66b, #d99523)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, lineHeight: 1, flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.3)" }}>
-              👑
+            <div
+              style={{
+                width: 42,
+                height: 42,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #f7c66b, #d99523)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                boxShadow: "0 4px 12px rgba(247,198,107,0.3)",
+              }}
+            >
+              <UtensilsCrossed size={20} color="#5a0c0c" strokeWidth={2.5} />
             </div>
             <div>
-              <div style={{ color: "#f7c66b", fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>TAJ</div>
-              <div style={{ color: "#fff", fontSize: "10px", fontWeight: "700", lineHeight: 1, letterSpacing: "2px", opacity: 0.9 }}>BIRYANI</div>
-            </div>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, justifyContent: "center" }}>
-            <input
-              className="nav-search"
-              placeholder="Search biryani, dishes or keywords..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                padding: "10px 14px",
-                borderRadius: 10,
-                border: "none",
-                width: "60%",
-                maxWidth: 520,
-                outline: "none",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              color: "#fff",
-            }}
-          >
-            {cartCount > 0 && (
               <div
                 style={{
-                  padding: "6px 12px",
-                  borderRadius: "999px",
-                  background: "rgba(247,198,107,0.18)",
                   color: "#f7c66b",
-                  fontWeight: 700,
-                  fontSize: "14px",
+                  fontSize: "20px",
+                  fontWeight: "900",
+                  lineHeight: 1.1,
+                  letterSpacing: "1.5px",
+                  fontFamily: "Georgia, serif",
                 }}
               >
-                Cart: {cartCount}
+                TAJ
               </div>
-            )}
-          </div>
+              <div
+                style={{
+                  color: "rgba(255,255,255,0.9)",
+                  fontSize: "10px",
+                  fontWeight: "700",
+                  lineHeight: 1,
+                  letterSpacing: "2px",
+                  opacity: 0.9,
+                }}
+              >
+                BIRYANI
+              </div>
+            </div>
+          </NavLink>
 
           <nav
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "12px",
+              gap: "8px",
               alignItems: "center",
             }}
           >
+            <span
+              onClick={() => navigate("/menu")}
+              style={{
+                color: "rgba(255,255,255,0.85)",
+                padding: "7px 14px",
+                borderRadius: 50,
+                background: "rgba(255,255,255,0.04)",
+                fontWeight: 500,
+                border: "1px solid rgba(255,255,255,0.06)",
+                fontSize: "13px",
+                letterSpacing: "0.3px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "all 0.3s ease",
+                backdropFilter: "blur(4px)",
+              }}
+            >
+              <Search size={14} strokeWidth={2.5} />
+              Search
+            </span>
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -201,14 +249,19 @@ export default function App() {
                 style={({ isActive }) => ({
                   color: isActive ? "#f7c66b" : "rgba(255,255,255,0.85)",
                   textDecoration: "none",
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  background: isActive ? "rgba(247,198,107,0.1)" : "transparent",
+                  padding: "7px 14px",
+                  borderRadius: 50,
+                  background: isActive
+                    ? "rgba(247,198,107,0.12)"
+                    : "rgba(255,255,255,0.04)",
                   fontWeight: isActive ? 800 : 500,
-                  border: isActive ? "1px solid rgba(247,198,107,0.2)" : "1px solid transparent",
+                  border: isActive
+                    ? "1px solid rgba(247,198,107,0.25)"
+                    : "1px solid rgba(255,255,255,0.06)",
                   fontSize: "13px",
                   letterSpacing: "0.3px",
-                  transition: "all 0.2s ease",
+                  transition: "all 0.3s ease",
+                  backdropFilter: "blur(4px)",
                 })}
               >
                 {item.label}
@@ -224,6 +277,7 @@ export default function App() {
               element={
                 <TajBiryani
                   onAddToCart={handleAddToCart}
+                  onApplyCoupon={handleApplyCoupon}
                 />
               }
             />
@@ -246,10 +300,12 @@ export default function App() {
                   onUpdateQuantity={handleUpdateCartItem}
                   onRemoveItem={handleRemoveCartItem}
                   onClearCart={handleClearCart}
+                  appliedCoupon={appliedCoupon}
+                  onApplyCoupon={handleApplyCoupon}
                 />
               }
             />
-            <Route path="/checkout" element={<Checkout cartItems={cartItems} />} />
+            <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} />} />
             <Route path="/track-order" element={<TrackOrder />} />
             <Route path="/login" element={<Login />} />
             <Route
@@ -274,7 +330,9 @@ export default function App() {
           <div className="footerInner">
             <div className="footerCol brandCol">
               <div className="footerLogo">
-                <span className="footerLogoIcon">👑</span>
+                <div style={{ width: 50, height: 40, borderRadius: "50%", background: "linear-gradient(135deg, #f7c66b, #d99523)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <UtensilsCrossed size={18} color="#5a0c0c" strokeWidth={2.5} />
+                </div>
                 <div>
                   <div className="footerLogoTitle">TAJ</div>
                   <div className="footerLogoSub">BIRYANI</div>
@@ -301,9 +359,9 @@ export default function App() {
             <div className="footerCol">
               <h4 className="footerHeading">Contact Us</h4>
               <ul className="footerLinks">
-                <li><span className="footerContactItem">📍 123, Bhendi Bazaar, Mumbai</span></li>
-                <li><span className="footerContactItem">📞 +91 98765 43210</span></li>
-                <li><span className="footerContactItem">✉️ info@tajbiryani.com</span></li>
+                <li><span className="footerContactItem"><MapPin size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> 123, Bhendi Bazaar, Mumbai</span></li>
+                <li><span className="footerContactItem"><Phone size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> +91 98765 43210</span></li>
+                <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbiryani.com</span></li>
               </ul>
             </div>
 
@@ -319,7 +377,6 @@ export default function App() {
             <p>&copy; 2026 Taj Biryani. All rights reserved.</p>
           </div>
         </footer>
-      </div>
 
       <style>{`
         .siteFooter {
@@ -351,10 +408,6 @@ export default function App() {
           display: flex;
           align-items: center;
           gap: 12px;
-        }
-        .footerLogoIcon {
-          font-size: 32px;
-          line-height: 1;
         }
         .footerLogoTitle {
           color: #f7c66b;
@@ -421,8 +474,20 @@ export default function App() {
             grid-template-columns: 1fr;
             gap: 30px;
           }
+          .footerLogoTitle { font-size: 18px !important; }
+          .footerHeading { font-size: 13px !important; }
+          .footerDesc { font-size: 12px !important; }
+          .footerContactItem { font-size: 12px !important; }
         }
       `}</style>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

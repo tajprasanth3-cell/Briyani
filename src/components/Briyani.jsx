@@ -1,5 +1,14 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import heroBg from "./Images/download.png";
+import { Utensils, Smile, Store, Star } from "lucide-react";
+import {
+  FaFire,
+  FaPercent,
+  FaGift,
+  FaTag,
+} from "react-icons/fa";
+
+import bgImage from "./Images/eraser.png";
 import cardOne from "./Images/one.jpg";
 import cardTwo from "./Images/wow.jpg";
 import cardThree from "./Images/veg special.jpg";
@@ -7,6 +16,7 @@ import cardFour from "./Images/family.jpg";
 import cardFive from "./Images/chicken full.jpg";
 import cardSix from "./Images/kolkata.jpg";
 import cardSeven from "./Images/ciiii.jpg";
+import cardEight from "./Images/chicken dum.jpg";
 import statBg1 from "./Images/ton.jpg";
 import statBg2 from "./Images/ton.jpg";
 import statBg3 from "./Images/ton.jpg";
@@ -274,7 +284,7 @@ const biryaniStyles = `
 
 .briyaniStats > div .statContent {
   position: relative;
-  z-index: -1;
+  z-index: 1;
 }
 
 .briyaniStats > div:hover {
@@ -316,6 +326,10 @@ const biryaniStyles = `
   .briyaniStats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .briyaniHeroContent {
+    width: 50% !important;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -328,6 +342,7 @@ const biryaniStyles = `
 @media (max-width: 900px) {
   .briyaniHero {
     height: 60vh;
+    min-height: 400px;
   }
 
   .briyaniHeroShade {
@@ -337,6 +352,11 @@ const biryaniStyles = `
   .briyaniFeatures {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .briyaniHeroContent {
+    width: 60% !important;
+    padding: 15px 30px !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -344,11 +364,28 @@ const biryaniStyles = `
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
+
+  .briyaniHero {
+    height: 50vh;
+    min-height: 350px;
+  }
+
+  .briyaniOfferBox {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .briyaniHeroContent {
+    width: 70% !important;
+    padding: 15px 20px !important;
+  }
 }
 
 @media (max-width: 600px) {
   .briyaniHero {
     min-height: 320px;
+    height: auto;
+    padding: 40px 0;
   }
 
   .briyaniFeatures {
@@ -384,6 +421,20 @@ const biryaniStyles = `
   .briyaniStatLabel {
     font-size: 12px;
   }
+
+  .briyaniHeroContent {
+    width: 85% !important;
+    padding: 10px 16px !important;
+  }
+
+  .briyaniOfferBox {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .briyaniOfferIcon {
+    font-size: 18px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -391,17 +442,69 @@ const biryaniStyles = `
     grid-template-columns: 1fr;
     gap: 16px;
   }
+
+  .briyaniHeroContent {
+    width: 92% !important;
+    padding: 10px 12px !important;
+  }
+
+  .briyaniOfferBox {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  .briyaniOfferIcon {
+    font-size: 16px !important;
+  }
+
+  .briyaniOffersRow {
+    gap: 8px !important;
+  }
 }
 
 @media (max-width: 400px) {
   .briyaniStats {
     grid-template-columns: 1fr;
   }
+
+  .briyaniOffersRow {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
 }
 `;
 
-export default function TajBiryani({ onAddToCart }) {
+export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
   const navigate = useNavigate();
+  const [selectedOffer, setSelectedOffer] = useState(null);
+  const [showBookTable, setShowBookTable] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  const offers = {
+    first: {
+      title: "Rs 175 OFF",
+      subtitle: "on FIRST ORDER",
+      minOrder: "Min. order amount: Rs 699",
+      desc: "Get Rs 175 off on your first order. Valid for new customers only.",
+      color: "#d4af37",
+      code: "1750",
+    },
+    takeaway: {
+      title: "FLAT 25% OFF",
+      subtitle: "on Take Away Orders",
+      desc: "No minimum order amount. Now get FLAT 25% OFF on all Take Away Orders for website and APP.",
+      color: "#22c55e",
+      code: "2500",
+      terms: [
+        "This Coupon code can be applied only once in 2 hours",
+        "Offer Valid on BBK APP and website only",
+        "This offer cannot be clubbed with any other offer",
+        "Offer not valid on combos or already discounted offer",
+        "Offer applicable on min. order amount of Rs 199 & above",
+        "Max discount Rs 3000 per order",
+      ],
+    },
+  };
 
   const items = [
     {
@@ -446,6 +549,12 @@ export default function TajBiryani({ onAddToCart }) {
       unit: "2 KG",
       image: cardSeven,
     },
+    {
+      name: "Prawn Biryani",
+      price: 749,
+      unit: "KG",
+      image: cardEight,
+    },
   ];
 
   const handleAddToCart = (item, index) => {
@@ -464,18 +573,192 @@ export default function TajBiryani({ onAddToCart }) {
   return (
     <div className="briyaniPage">
       <style>{biryaniStyles}</style>
-      <section className="briyaniHero">
-        <img
-          src={heroBg}
-          alt="Royal biryani handi"
-          className="briyaniHeroImage briyaniHeroImageActive"
-        />
+      <section
+        className="briyaniHero"
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          backgroundImage: `
+            linear-gradient(
+              90deg,
+              rgba(0,0,0,0.85) 0%,
+              rgba(0,0,0,0.7) 30%,
+              rgba(0,0,0,0.3) 60%,
+              rgba(0,0,0,0.1) 100%
+            ),
+            url(${bgImage})
+          `,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div
+          className="briyaniHeroContent"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            height: "100%",
+            width: "35%",
+            marginRight: "auto",
+            padding: "15px 40px",
+          }}
+        >
+          <div
+            style={{
+              padding: "6px 18px",
+              borderRadius: "50px",
+              border: "1px solid rgba(212,175,55,.4)",
+              color: "#D4AF37",
+              fontSize: "11px",
+              letterSpacing: "2px",
+              textTransform: "uppercase",
+            }}
+          >
+            Royal Taste Experience
+          </div>
 
-        <div className="briyaniHeroShade" />
+          <h1
+            style={{
+              fontSize: "clamp(1.6rem,3vw,2.6rem)",
+              lineHeight: "1",
+              fontWeight: "800",
+              color: "#fff",
+              textShadow: "0 0 25px rgba(212,175,55,.2)",
+              margin: 0,
+              textAlign: "center",
+            }}
+          >
+            A TASTY DISH{" "}
+            <span
+              style={{
+                background: "linear-gradient(180deg,#FFF8D6,#FFD700,#D4AF37)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontStyle: "italic",
+              }}
+            >
+              Delights
+            </span>
+          </h1>
 
-        <div className="briyaniTopBar">
-          <button className="briyaniLoginBtn" onClick={() => navigate("/login")}>LOGIN</button>
+          <h3
+            style={{
+              color: "#D4AF37",
+              fontSize: "clamp(0.75rem,1.2vw,1rem)",
+              fontWeight: "400",
+              margin: 0,
+            }}
+          >
+            The Senses With Its Rich Flavors
+          </h3>
+
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button
+              onClick={() => navigate("/menu")}
+              style={{
+                padding: "7px 22px",
+                border: "none",
+                borderRadius: "50px",
+                background: "linear-gradient(135deg,#FFD700,#D4AF37)",
+                color: "#000",
+                fontWeight: "700",
+                fontSize: "11px",
+                cursor: "pointer",
+                boxShadow: "0 5px 15px rgba(212,175,55,.3)",
+              }}
+            >
+              Explore Menu
+            </button>
+
+            <button
+              onClick={() => setShowBookTable(true)}
+              style={{
+                padding: "7px 22px",
+                borderRadius: "50px",
+                background: "transparent",
+                border: "1px solid rgba(212,175,55,.5)",
+                color: "#D4AF37",
+                fontWeight: "600",
+                fontSize: "11px",
+                cursor: "pointer",
+              }}
+            >
+              Book Table
+            </button>
+          </div>
+
+          <div
+            className="briyaniOffersRow"
+            style={{
+              display: "flex",
+              gap: "14px",
+            }}
+          >
+            {[
+              { icon: <FaPercent />, title: "First\nOrder" },
+              { icon: <FaFire />, title: "Take\nAway" },
+              { icon: <FaGift />, title: "Gift Box" },
+              { icon: <FaTag />, title: "ROYAL" },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="briyaniOfferBox"
+                onClick={() => {
+                  if (index === 0) setSelectedOffer("first");
+                  else if (index === 1) setSelectedOffer("takeaway");
+                  else if (index === 3) {
+                    if (onApplyCoupon) onApplyCoupon("ROYAL");
+                    navigate("/cart");
+                  } else {
+                    navigate("/menu");
+                  }
+                }}
+                style={{
+                  width: "85px",
+                  height: "85px",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(212,175,55,.25)",
+                  background: "linear-gradient(135deg, rgba(212,175,55,.12), rgba(255,255,255,.03))",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backdropFilter: "blur(10px)",
+                  cursor: "pointer",
+                  transition: "transform 0.2s",
+                }}
+              >
+                <div
+                  className="briyaniOfferIcon"
+                  style={{
+                    color: "#D4AF37",
+                    fontSize: "22px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {item.icon}
+                </div>
+                <span
+                  style={{
+                    color: "#fff",
+                    fontSize: "9px",
+                    textAlign: "center",
+                    padding: "0 6px",
+                    whiteSpace: "pre-line",
+                  }}
+                >
+                  {item.title}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
+
       </section>
 
       <section className="briyaniProductsSection">
@@ -513,33 +796,273 @@ export default function TajBiryani({ onAddToCart }) {
       <section className="briyaniStats">
         <div style={{"--statBg": `url(${statBg1})`}}>
           <div className="statContent">
-            <span className="briyaniStatIcon">🍛</span>
+            <Utensils size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">50K+</div>
             <p className="briyaniStatLabel">Orders Delivered</p>
           </div>
         </div>
         <div style={{"--statBg": `url(${statBg2})`}}>
           <div className="statContent">
-            <span className="briyaniStatIcon">😊</span>
+            <Smile size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">20K+</div>
             <p className="briyaniStatLabel">Happy Customers</p>
           </div>
         </div>
         <div style={{"--statBg": `url(${statBg3})`}}>
           <div className="statContent">
-            <span className="briyaniStatIcon">🏪</span>
+            <Store size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">12+</div>
             <p className="briyaniStatLabel">Branches</p>
           </div>
         </div>
         <div style={{"--statBg": `url(${statBg4})`}}>
           <div className="statContent">
-            <span className="briyaniStatIcon">⭐</span>
+            <Star size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px", fill: "#f7c66b" }} />
             <div className="briyaniStatNumber">4.8</div>
             <p className="briyaniStatLabel">Average Rating</p>
           </div>
         </div>
       </section>
+
+      {selectedOffer && (
+        <div
+          onClick={() => setSelectedOffer(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: "20px",
+              padding: "32px",
+              maxWidth: "420px",
+              width: "100%",
+              position: "relative",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+            }}
+          >
+            <button
+              onClick={() => setSelectedOffer(null)}
+              style={{
+                position: "absolute",
+                top: "12px",
+                right: "16px",
+                background: "none",
+                border: "none",
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "#999",
+                lineHeight: 1,
+              }}
+            >
+              ×
+            </button>
+
+            {selectedOffer === "first" ? (
+              <>
+                <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                  <div style={{ fontSize: "32px", fontWeight: "900", color: "#d4af37", fontFamily: "Georgia, serif" }}>Rs 175 OFF</div>
+                  <div style={{ fontSize: "18px", fontWeight: "700", color: "#6b0f0f", marginTop: "4px" }}>on FIRST ORDER</div>
+                </div>
+                <div style={{ background: "#fef9e7", borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
+                  <p style={{ margin: 0, fontSize: "14px", color: "#333", lineHeight: 1.6 }}>Get Rs 175 off on your first order. Valid for new customers only.</p>
+                </div>
+                <div style={{ background: "#f5f0eb", borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
+                  <p style={{ margin: 0, fontSize: "14px", color: "#6b0f0f", fontWeight: "700" }}>Min. order amount: Rs 699</p>
+                </div>
+                <div style={{ textAlign: "center", padding: "12px", borderRadius: "12px", border: "2px dashed #d4af37", background: "#fffdf5" }}>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#888", fontWeight: "600" }}>Use code at checkout</p>
+                  <p style={{ margin: "4px 0 0", fontSize: "24px", fontWeight: "900", color: "#d4af37", letterSpacing: "4px", fontFamily: "monospace" }}>{offers.first.code}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ textAlign: "center", marginBottom: "16px" }}>
+                  <div style={{ fontSize: "28px", fontWeight: "900", color: "#22c55e", fontFamily: "Georgia, serif" }}>FLAT 25% OFF</div>
+                  <div style={{ fontSize: "16px", fontWeight: "700", color: "#6b0f0f", marginTop: "4px" }}>on Take Away Orders</div>
+                </div>
+                <div style={{ background: "#f0fdf4", borderRadius: "12px", padding: "16px", marginBottom: "12px" }}>
+                  <p style={{ margin: 0, fontSize: "13px", color: "#333", lineHeight: 1.6 }}>No minimum order amount. Now get FLAT 25% OFF on all Take Away Orders for website and APP.</p>
+                </div>
+                <div style={{ textAlign: "center", padding: "12px", borderRadius: "12px", border: "2px dashed #22c55e", background: "#f0fdf4", marginBottom: "12px" }}>
+                  <p style={{ margin: 0, fontSize: "11px", color: "#888", fontWeight: "600" }}>Use code at checkout</p>
+                  <p style={{ margin: "4px 0 0", fontSize: "24px", fontWeight: "900", color: "#22c55e", letterSpacing: "4px", fontFamily: "monospace" }}>{offers.takeaway.code}</p>
+                </div>
+                <div>
+                  <p style={{ fontSize: "12px", fontWeight: "800", color: "#6b0f0f", textTransform: "uppercase", letterSpacing: "1px", margin: "0 0 10px 0" }}>Terms & Conditions</p>
+                  <ol style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "#666", lineHeight: 1.8 }}>
+                    {offers.takeaway.terms.map((t, i) => (
+                      <li key={i}>{t}</li>
+                    ))}
+                  </ol>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {showBookTable && (
+        <div
+          onClick={() => setShowBookTable(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            background: "rgba(0,0,0,0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: "20px",
+              padding: "32px",
+              maxWidth: "420px",
+              width: "100%",
+              position: "relative",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+            }}
+          >
+            <button
+              onClick={() => setShowBookTable(false)}
+              style={{
+                position: "absolute",
+                top: "12px",
+                right: "16px",
+                background: "none",
+                border: "none",
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "#999",
+                lineHeight: 1,
+              }}
+            >
+              ×
+            </button>
+            <div style={{ textAlign: "center", marginBottom: "24px" }}>
+              <div style={{ fontSize: "24px", fontWeight: "900", color: "#6b0f0f", fontFamily: "Georgia, serif" }}>Book a Table</div>
+              <p style={{ fontSize: "13px", color: "#888", margin: "4px 0 0" }}>Reserve your royal dining experience</p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              <input placeholder="Full Name" style={inputStyle} />
+              <input placeholder="Phone Number" type="tel" style={inputStyle} />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <input type="date" style={{ ...inputStyle, flex: 1 }} />
+                <input type="time" style={{ ...inputStyle, flex: 1 }} />
+              </div>
+              <select style={inputStyle}>
+                <option value="">Number of Guests</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                  <option key={n} value={n}>{n} {n === 1 ? "Guest" : "Guests"}</option>
+                ))}
+              </select>
+              <textarea placeholder="Special requests (optional)" rows={3} style={{ ...inputStyle, resize: "none" }} />
+              <button
+                onClick={() => {
+                  setShowBookTable(false);
+                  setNotification({ type: "success", message: "Table booked successfully! We'll contact you shortly." });
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  borderRadius: "12px",
+                  border: "none",
+                  background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
+                  color: "#f7c66b",
+                  fontWeight: "800",
+                  fontSize: "15px",
+                  cursor: "pointer",
+                  marginTop: "4px",
+                }}
+              >
+                Confirm Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {notification && (
+        <div
+          onClick={() => setNotification(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99999,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: "20px",
+              padding: "40px 32px 32px",
+              maxWidth: "360px",
+              width: "100%",
+              textAlign: "center",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+            }}
+          >
+            <div style={{ fontSize: "48px", marginBottom: "12px", lineHeight: 1 }}>👑</div>
+            <h3 style={{
+              fontSize: "18px",
+              fontWeight: "800",
+              color: "#16a34a",
+              margin: "0 0 8px",
+              fontFamily: "Georgia, serif",
+            }}>
+              Booked!
+            </h3>
+            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 20px", lineHeight: 1.6 }}>
+              {notification.message}
+            </p>
+            <button
+              onClick={() => setNotification(null)}
+              style={{
+                padding: "12px 32px",
+                borderRadius: "12px",
+                border: "none",
+                background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
+                color: "#f7c66b",
+                fontWeight: "800",
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+const inputStyle = {
+  padding: "12px 14px",
+  borderRadius: "12px",
+  border: "1px solid #e0d5c7",
+  fontSize: "14px",
+  color: "#333",
+  outline: "none",
+  width: "100%",
+  boxSizing: "border-box",
+};

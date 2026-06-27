@@ -148,7 +148,7 @@ const MENU_ITEMS = [
   },
 ];
 
-const CATEGORIES = ["All", "Chicken", "Mutton", "Veg", "Family"];
+const CATEGORIES = ["All", "Chicken", "Mutton", "Veg", "Family", "Special"];
 
 const menuStyles = `
 .menuContainer {
@@ -523,7 +523,10 @@ export default function Menu({
     return MENU_ITEMS.filter((item) => {
       const matchSearch = item.name.toLowerCase().includes(q);
       const matchCategory =
-        activeCategory === "All" ? true : item.category === activeCategory;
+        activeCategory === "All"
+          ? true
+          : item.category.toLowerCase() === activeCategory.toLowerCase() ||
+            item.name.toLowerCase().includes(activeCategory.toLowerCase());
       return matchSearch && matchCategory;
     });
   }, [searchQuery, activeCategory]);

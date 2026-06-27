@@ -44,6 +44,7 @@ const trackStyles = `
   .trackContent { padding: 20px 16px !important; }
   .trackStepRow { gap: 12px !important; }
   .trackDeliveryPartner { flex-direction: column !important; gap: 12px !important; }
+  .trackBody { gap: 24px !important; }
 }
 
 @media (max-width: 480px) {
