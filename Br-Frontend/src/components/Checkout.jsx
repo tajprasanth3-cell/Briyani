@@ -63,7 +63,7 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
     : 0;
   const deliveryCharge = 40;
   const packagingCharge = 20;
-  const total = subtotal - discount + deliveryCharge + packagingCharge;
+  const total = subtotal > 0 ? subtotal - discount + deliveryCharge + packagingCharge : 0;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -393,38 +393,82 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
             position: "fixed",
             inset: 0,
             zIndex: 9999,
-            background: "rgba(0,0,0,0.6)",
+            background: "rgba(0,0,0,0.55)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: "20px",
+            animation: "checkoutFadeIn 0.3s ease",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff",
-              borderRadius: "20px",
-              padding: "40px 32px 32px",
-              maxWidth: "360px",
+              background: "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))",
+              borderRadius: "24px",
+              padding: "48px 40px 40px",
+              maxWidth: "400px",
               width: "100%",
               textAlign: "center",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+              boxShadow: "0 32px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.2) inset",
+              animation: "checkoutPopIn 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <div style={{ fontSize: "48px", marginBottom: "12px", lineHeight: 1 }}>
-              {notification.type === "success" ? "👑" : "⚠️"}
+            <div style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: notification.type === "success"
+                ? "linear-gradient(90deg, #22c55e, #16a34a, #22c55e)"
+                : "linear-gradient(90deg, #ef4444, #dc2626, #ef4444)",
+            }} />
+
+            <div style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              background: notification.type === "success"
+                ? "linear-gradient(135deg, #dcfce7, #bbf7d0)"
+                : "linear-gradient(135deg, #fee2e2, #fecaca)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 20px",
+              boxShadow: notification.type === "success"
+                ? "0 8px 24px rgba(34,197,94,0.2)"
+                : "0 8px 24px rgba(239,68,68,0.2)",
+            }}>
+              {notification.type === "success" ? (
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" style={{ animation: "checkoutCheck1 0.4s 0.3s ease both" }} />
+                  <polyline points="22 4 12 14.01 9 11.01" style={{ animation: "checkoutCheck2 0.3s 0.6s ease both" }} />
+                </svg>
+              ) : (
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" style={{ animation: "checkoutCheck1 0.4s 0.3s ease both" }} />
+                  <line x1="15" y1="9" x2="9" y2="15" style={{ animation: "checkoutCheck2 0.3s 0.6s ease both" }} />
+                  <line x1="9" y1="9" x2="15" y2="15" style={{ animation: "checkoutCheck2 0.3s 0.6s ease both" }} />
+                </svg>
+              )}
             </div>
+
             <h3 style={{
-              fontSize: "18px",
+              fontSize: "22px",
               fontWeight: "800",
               color: notification.type === "success" ? "#16a34a" : "#dc2626",
               margin: "0 0 8px",
               fontFamily: "Georgia, serif",
+              letterSpacing: "0.5px",
             }}>
               {notification.type === "success" ? "Order Placed!" : "Oops!"}
             </h3>
-            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 20px", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 28px", lineHeight: 1.7, fontWeight: 500 }}>
               {notification.message}
             </p>
             <button
@@ -433,21 +477,36 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
                 if (notification.type === "success") navigate('/track-order');
               }}
               style={{
-                padding: "12px 32px",
-                borderRadius: "12px",
+                padding: "14px 40px",
+                borderRadius: "14px",
                 border: "none",
-                background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
-                color: "#f7c66b",
+                background: notification.type === "success"
+                  ? "linear-gradient(135deg, #6b0f0f, #8b1a1a)"
+                  : "linear-gradient(135deg, #dc2626, #b91c1c)",
+                color: notification.type === "success" ? "#f7c66b" : "#fff",
                 fontWeight: "800",
                 fontSize: "14px",
                 cursor: "pointer",
+                letterSpacing: "0.5px",
+                boxShadow: notification.type === "success"
+                  ? "0 8px 24px rgba(107,15,15,0.3)"
+                  : "0 8px 24px rgba(220,38,38,0.3)",
+                transition: "all 0.3s ease",
               }}
+              onMouseEnter={(e) => { e.target.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.target.style.transform = "translateY(0)"; }}
             >
               {notification.type === "success" ? "Track Order" : "Got it"}
             </button>
           </div>
         </div>
       )}
+      <style>{`
+        @keyframes checkoutFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes checkoutPopIn { from { opacity: 0; transform: scale(0.8) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes checkoutCheck1 { from { stroke-dasharray: 100; stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        @keyframes checkoutCheck2 { from { stroke-dasharray: 100; stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+      `}</style>
     </div>
   );
 }   

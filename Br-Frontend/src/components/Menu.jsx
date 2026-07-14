@@ -87,7 +87,7 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "chickenfull",
+    category: "Chicken",
     image: feastImg,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
@@ -98,7 +98,7 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "Oven",
+    category: "Veg",
     image: vegspecial,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
@@ -109,7 +109,7 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "usa grill",
+    category: "Chicken",
     image: feastImg3,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
@@ -120,7 +120,7 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "tandoori",
+    category: "Chicken",
     image: ton,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
@@ -131,7 +131,7 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "Chef",
+    category: "Chicken",
     image: feastImg5,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
@@ -142,17 +142,34 @@ const MENU_ITEMS = [
     reviews: "930",
     price: 679,
     qty: 1,
-    category: "mutton grill",
+    category: "Mutton",
     image: feastImg6,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
 ];
 
-const CATEGORIES = ["All", "Chicken", "Mutton", "Veg", "Family", "Special"];
+const SECTIONS = [
+  {
+    title: "Popular Biryani",
+    ids: [1, 2, 5, 6],
+  },
+  {
+    title: "Chicken Biryani",
+    ids: [7, 9, 10, 11],
+  },
+  {
+    title: "Mutton Biryani",
+    ids: [2, 12],
+  },
+  {
+    title: "Veg & Special",
+    ids: [3, 8, 4],
+  },
+];
 
 const menuStyles = `
 .menuContainer {
-  padding: 20px 9%;
+  padding: 20px 2%;
 }
 
 .menuBrandSection {
@@ -228,29 +245,29 @@ const menuStyles = `
   cursor: pointer;
 }
 
-.menuCategorySection {
+.menuSection {
+  margin-bottom: 40px;
+}
+
+.menuSectionHeader {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 24px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
-.menuCategoryButton {
-  padding: 12px 18px;
-  border-radius: 14px;
+.menuSectionTitle {
+  margin: 0;
+  color: #6b0f0f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(24px, 3vw, 32px);
+}
+
+.menuSectionLine {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #6b0f0f, transparent);
   border: none;
-  cursor: pointer;
-  font-weight: 600;
-  background: #fff;
-  color: #333;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.menuActiveCategory {
-  background: linear-gradient(135deg, #6b0f0f, #8b1a1a) !important;
-  color: #f7c66b !important;
-  box-shadow: 0 8px 24px rgba(107, 15, 15, 0.25) !important;
 }
 
 .menuItemCard {
@@ -262,8 +279,6 @@ const menuStyles = `
   box-shadow: 0 14px 32px rgba(44, 18, 9, 0.12);
   height: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  max-width: 380px;
-  margin: 0 auto;
   width: 100%;
 }
 
@@ -351,19 +366,25 @@ const menuStyles = `
   background: #6b0f0f;
   color: #fff;
   border: none;
-  padding: 12px; /* Changed from 10px 16px */
-  border-radius: 6px; /* Changed from 12px */
+  padding: 12px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 800; /* Added */
+  font-weight: 800;
 }
 
 .menuProductGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
 @media (max-width: 1024px) {
+  .menuProductGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
   .menuProductGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -403,7 +424,7 @@ const menuStyles = `
   }
 
   .menuContainer {
-    padding: 16px 4%;
+    padding: 16px 1%;
   }
 }
 
@@ -427,10 +448,6 @@ const menuStyles = `
 
   .menuSearchInput {
     width: 100%;
-  }
-
-  .menuCategorySection {
-    justify-content: center;
   }
 
   .menuItemActions {
@@ -462,16 +479,11 @@ const menuStyles = `
 
 @media (max-width: 480px) {
   .menuContainer {
-    padding: 12px 3%;
+    padding: 12px 1%;
   }
 
   .menuBrandTitle {
     font-size: 20px;
-  }
-
-  .menuCategoryButton {
-    padding: 10px 14px;
-    font-size: 13px;
   }
 
   .menuItemPrice {
@@ -487,8 +499,6 @@ export default function Menu({
   cartCount = 0,
 }) {
   const [location, setLocation] = useState("Mumbai");
-  const [activeCategory, setActiveCategory] = useState("All");
-
   const [qtyMap, setQtyMap] = useState({});
 
   const updateQty = (id, action) => {
@@ -518,18 +528,54 @@ export default function Menu({
     }
   };
 
-  const filteredItems = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return MENU_ITEMS.filter((item) => {
-      const matchSearch = item.name.toLowerCase().includes(q);
-      const matchCategory =
-        activeCategory === "All"
-          ? true
-          : item.category.toLowerCase() === activeCategory.toLowerCase() ||
-            item.name.toLowerCase().includes(activeCategory.toLowerCase());
-      return matchSearch && matchCategory;
-    });
-  }, [searchQuery, activeCategory]);
+  const q = searchQuery.toLowerCase();
+
+  const sections = useMemo(() => {
+    return SECTIONS.map((section) => ({
+      ...section,
+      items: MENU_ITEMS.filter(
+        (item) =>
+          section.ids.includes(item.id) &&
+          item.name.toLowerCase().includes(q)
+      ),
+    })).filter((section) => section.items.length > 0);
+  }, [q]);
+
+  const renderItem = (item) => (
+    <div key={item.id} className="menuItemCard">
+      <img src={item.image} alt={item.name} className="menuItemImage" />
+      <div className="menuItemBody">
+        <h3 className="menuItemTitle">{item.name}</h3>
+        <p className="menuItemDescription">{item.desc}</p>
+        <div className="menuItemActions">
+          <div className="menuQuantityControlGroup">
+            <strong className="menuItemPrice">Rs. {item.price}</strong>
+            <div className="menuQuantityControl">
+              <button
+                onClick={() => updateQty(item.id, "minus")}
+                className="menuQuantityButton"
+              >
+                -
+              </button>
+              <span className="menuQuantityDisplay">{getQty(item.id)}</span>
+              <button
+                onClick={() => updateQty(item.id, "plus")}
+                className="menuQuantityButton"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <button
+            onClick={() => addToCart(item)}
+            className="menuAddToCartButton"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="menuContainer">
@@ -569,57 +615,17 @@ export default function Menu({
         </div>
       </section>
 
-      <section className="menuCategorySection">
-        {CATEGORIES.map((category) => (
-          <button
-            key={category}
-            onClick={() => setActiveCategory(category)}
-            className={`menuCategoryButton ${
-              activeCategory === category ? "menuActiveCategory" : ""
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </section>
-
-      <section className="menuProductGrid"> {/* Changed className and removed inline style */}
-        {filteredItems.map((item) => (
-          <div key={item.id} className="menuItemCard">
-            <img src={item.image} alt={item.name} className="menuItemImage" />
-            <div className="menuItemBody">
-              <h3 className="menuItemTitle">{item.name}</h3>
-              <p className="menuItemDescription">{item.desc}</p>
-              <div className="menuItemActions">
-                <div className="menuQuantityControlGroup">
-                  <strong className="menuItemPrice">Rs. {item.price}</strong>
-                  <div className="menuQuantityControl">
-                    <button
-                      onClick={() => updateQty(item.id, "minus")}
-                      className="menuQuantityButton"
-                    >
-                      -
-                    </button>
-                    <span className="menuQuantityDisplay">{getQty(item.id)}</span>
-                    <button
-                      onClick={() => updateQty(item.id, "plus")}
-                      className="menuQuantityButton"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <button
-                  onClick={() => addToCart(item)}
-                  className="menuAddToCartButton"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
+      {sections.map((section) => (
+        <section key={section.title} className="menuSection">
+          <div className="menuSectionHeader">
+            <h2 className="menuSectionTitle">{section.title}</h2>
+            <hr className="menuSectionLine" />
           </div>
-        ))}
-      </section>
+          <div className="menuProductGrid">
+            {section.items.map(renderItem)}
+          </div>
+        </section>
+      ))}
 
       <div className="menuCartSummary">
         <h2 className="menuCartSummaryTitle">Cart Summary</h2>

@@ -31,7 +31,7 @@ const biryaniStyles = `
 
 .briyaniHero {
   position: relative;
-  height: 100vh;
+  height: 89vh;
   width: 100%;
   isolation: isolate;
   overflow: hidden;
@@ -1002,56 +1002,92 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
             position: "fixed",
             inset: 0,
             zIndex: 99999,
-            background: "rgba(0,0,0,0.6)",
+            background: "rgba(0,0,0,0.55)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             padding: "20px",
+            animation: "notifFadeIn 0.3s ease",
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff",
-              borderRadius: "20px",
-              padding: "40px 32px 32px",
-              maxWidth: "360px",
+              background: "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85))",
+              borderRadius: "24px",
+              padding: "48px 40px 40px",
+              maxWidth: "400px",
               width: "100%",
               textAlign: "center",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.3)",
+              boxShadow: "0 32px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.2) inset",
+              animation: "notifPopIn 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            <div style={{ fontSize: "48px", marginBottom: "12px", lineHeight: 1 }}>👑</div>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: "linear-gradient(90deg, #22c55e, #16a34a, #22c55e)" }} />
+
+            <div style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #dcfce7, #bbf7d0)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 20px",
+              boxShadow: "0 8px 24px rgba(34,197,94,0.2)",
+            }}>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" style={{ animation: "notifCheck1 0.4s 0.3s ease both" }} />
+                <polyline points="22 4 12 14.01 9 11.01" style={{ animation: "notifCheck2 0.3s 0.6s ease both" }} />
+              </svg>
+            </div>
+
             <h3 style={{
-              fontSize: "18px",
+              fontSize: "22px",
               fontWeight: "800",
               color: "#16a34a",
               margin: "0 0 8px",
               fontFamily: "Georgia, serif",
+              letterSpacing: "0.5px",
             }}>
               Booked!
             </h3>
-            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 20px", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "#666", margin: "0 0 28px", lineHeight: 1.7, fontWeight: 500 }}>
               {notification.message}
             </p>
             <button
               onClick={() => setNotification(null)}
               style={{
-                padding: "12px 32px",
-                borderRadius: "12px",
+                padding: "14px 40px",
+                borderRadius: "14px",
                 border: "none",
                 background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
                 color: "#f7c66b",
                 fontWeight: "800",
                 fontSize: "14px",
                 cursor: "pointer",
+                letterSpacing: "0.5px",
+                boxShadow: "0 8px 24px rgba(107,15,15,0.3)",
+                transition: "all 0.3s ease",
               }}
+              onMouseEnter={(e) => { e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0 12px 32px rgba(107,15,15,0.4)"; }}
+              onMouseLeave={(e) => { e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0 8px 24px rgba(107,15,15,0.3)"; }}
             >
               Got it
             </button>
           </div>
         </div>
       )}
+      <style>{`
+        @keyframes notifFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes notifPopIn { from { opacity: 0; transform: scale(0.8) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes notifCheck1 { from { stroke-dasharray: 100; stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+        @keyframes notifCheck2 { from { stroke-dasharray: 100; stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+      `}</style>
     </div>
   );
 }
