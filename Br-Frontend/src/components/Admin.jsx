@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -12,6 +12,12 @@ import {
   LogOut,
   RefreshCw,
   X,
+  Download,
+  Search,
+  BarChart3,
+  Settings,
+  Clock,
+  Eye,
 } from "lucide-react";
 
 const API = "http://localhost:5001/api";
@@ -399,6 +405,173 @@ const adminStyles = `
   opacity: 0.3;
 }
 
+.chartContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 160px;
+  padding: 16px 0;
+}
+
+.chartBar {
+  flex: 1;
+  min-width: 24px;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chartBar:hover {
+  opacity: 0.85;
+  transform: scaleY(1.02);
+  transform-origin: bottom;
+}
+
+.chartBarLabel {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #999;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.chartBarValue {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  color: #1a0404;
+  white-space: nowrap;
+}
+
+.chartLegend {
+  display: flex;
+  gap: 20px;
+  margin-top: 32px;
+  justify-content: center;
+}
+
+.chartLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+.chartLegendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.periodTabs {
+  display: flex;
+  gap: 4px;
+  background: #f0f0f0;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.periodTab {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: #666;
+  font-family: 'Poppins', sans-serif;
+}
+
+.periodTabActive {
+  background: #fff;
+  color: #1a0404;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.customerDetailCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.customerDetailHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.customerAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f7c66b, #d99523);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #5a0c0c;
+}
+
+.menuDetailCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.menuDetailImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.menuDetailBody {
+  padding: 24px;
+}
+
+.adminSettingsForm {
+  max-width: 500px;
+}
+
+.adminSettingsForm .adminFormGroup {
+  margin-bottom: 20px;
+}
+
+.menuItemRow {
+  cursor: pointer;
+}
+
+.menuItemRow:hover td {
+  background: #faf8f5;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+}
+
 @media (max-width: 1024px) {
   .statGrid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -439,6 +612,15 @@ export default function Admin() {
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState({});
   const [token] = useState(() => localStorage.getItem("adminToken") || "");
+  const [orderFilter, setOrderFilter] = useState("all");
+  const [orderSearch, setOrderSearch] = useState("");
+  const [revenueData, setRevenueData] = useState([]);
+  const [revenuePeriod, setRevenuePeriod] = useState("daily");
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [customerOrders, setCustomerOrders] = useState([]);
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const [adminPassword, setAdminPassword] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+  const [settingsMsg, setSettingsMsg] = useState("");
 
   const headers = {
     "Content-Type": "application/json",
@@ -451,6 +633,28 @@ export default function Admin() {
       const data = await res.json();
       if (data.success) setStats(data.data);
     } catch (e) { console.error(e); }
+  };
+
+  const fetchRevenue = async (period) => {
+    try {
+      const res = await fetch(`${API}/admin/reports/revenue?period=${period}`, { headers });
+      const data = await res.json();
+      if (data.success) setRevenueData(data.data);
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchCustomerOrders = async (userId) => {
+    try {
+      const res = await fetch(`${API}/admin/orders?search=${userId}`, { headers });
+      const data = await res.json();
+      if (data.success) setCustomerOrders(data.data.orders || data.data);
+    } catch (e) { console.error(e); }
+  };
+
+  const handleViewCustomer = (user) => {
+    setSelectedCustomer(user);
+    fetchCustomerOrders(user._id);
+    setTab("customers");
   };
 
   const fetchUsers = async () => {
@@ -479,11 +683,13 @@ export default function Admin() {
 
   const loadAll = async () => {
     setLoading(true);
-    await Promise.all([fetchDashboard(), fetchUsers(), fetchOrders(), fetchMenu()]);
+    await Promise.all([fetchDashboard(), fetchUsers(), fetchOrders(), fetchMenu(), fetchRevenue(revenuePeriod)]);
     setLoading(false);
   };
 
   useEffect(() => { loadAll(); }, []);
+
+  useEffect(() => { fetchRevenue(revenuePeriod); }, [revenuePeriod]);
 
   const handleDeleteUser = async (id) => {
     if (!confirm("Delete this user?")) return;
@@ -531,6 +737,40 @@ export default function Admin() {
     } catch (e) { console.error(e); }
   };
 
+  const handleToggleAvailability = async (id) => {
+    try {
+      await fetch(`${API}/admin/menu/${id}/toggle`, { method: "PUT", headers });
+      fetchMenu();
+    } catch (e) { console.error(e); }
+  };
+
+  const handleAdminPasswordChange = async (e) => {
+    e.preventDefault();
+    setSettingsMsg("");
+    if (adminPassword.newPassword !== adminPassword.confirmPassword) {
+      setSettingsMsg("New passwords do not match");
+      return;
+    }
+    if (adminPassword.newPassword.length < 6) {
+      setSettingsMsg("Password must be at least 6 characters");
+      return;
+    }
+    try {
+      const res = await fetch(`${API}/auth/change-password`, {
+        method: "PUT",
+        headers: { ...headers, Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ currentPassword: adminPassword.currentPassword, newPassword: adminPassword.newPassword }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSettingsMsg("Password changed successfully!");
+        setAdminPassword({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      } else {
+        setSettingsMsg(data.message || "Failed to change password");
+      }
+    } catch (e) { setSettingsMsg("Failed to change password"); }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -548,6 +788,31 @@ export default function Admin() {
       }
     } catch (e) { alert("Login failed"); }
   };
+
+  const handleExportCSV = async () => {
+    try {
+      const res = await fetch(`${API}/admin/export/orders`, { headers });
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "taj-biryani-orders.csv";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (e) { alert("Export failed"); }
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    if (orderFilter !== "all" && order.status !== orderFilter) return false;
+    if (orderSearch) {
+      const q = orderSearch.toLowerCase();
+      const name = order.user?.name?.toLowerCase() || "";
+      const email = order.user?.email?.toLowerCase() || "";
+      const id = order._id.toLowerCase();
+      if (!name.includes(q) && !email.includes(q) && !id.includes(q)) return false;
+    }
+    return true;
+  });
 
   if (!token) {
     return (
@@ -599,6 +864,8 @@ export default function Admin() {
           { id: "menu", label: "Menu Items", icon: <UtensilsCrossed size={18} /> },
           { id: "orders", label: "Orders", icon: <ShoppingBag size={18} /> },
           { id: "users", label: "Users", icon: <Users size={18} /> },
+          { id: "reports", label: "Reports", icon: <BarChart3 size={18} /> },
+          { id: "settings", label: "Settings", icon: <Settings size={18} /> },
         ].map((item) => (
           <button
             key={item.id}
@@ -657,6 +924,71 @@ export default function Admin() {
                   </div>
                 </div>
 
+                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24 }}>
+                  <div className="adminTableCard" style={{ padding: 24 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                      <h3 className="adminTableTitle">Revenue Overview</h3>
+                      <div className="periodTabs">
+                        {["daily", "weekly", "monthly"].map((p) => (
+                          <button key={p} className={`periodTab ${revenuePeriod === p ? "periodTabActive" : ""}`} onClick={() => setRevenuePeriod(p)}>
+                            {p.charAt(0).toUpperCase() + p.slice(1)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {revenueData.length > 0 ? (
+                      <div>
+                        <div className="chartContainer" style={{ marginLeft: 40, marginRight: 40 }}>
+                          {revenueData.slice(0, 12).reverse().map((item, i) => {
+                            const maxRev = Math.max(...revenueData.map((d) => d.revenue));
+                            const height = maxRev > 0 ? (item.revenue / maxRev) * 140 : 0;
+                            const label = revenuePeriod === "daily"
+                              ? `${item._id.day}/${item._id.month}`
+                              : revenuePeriod === "weekly"
+                              ? `W${item._id.week}`
+                              : `${item._id.month}/${item._id.year}`;
+                            return (
+                              <div key={i} className="chartBar" style={{ height: Math.max(height, 4), background: `linear-gradient(180deg, #f7c66b, #6b0f0f)` }}>
+                                <span className="chartBarLabel">{label}</span>
+                                <span className="chartBarValue">₹{item.revenue}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="chartLegend">
+                          <div className="chartLegendItem">
+                            <div className="chartLegendDot" style={{ background: "linear-gradient(135deg, #f7c66b, #6b0f0f)" }} />
+                            Revenue
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="adminEmpty" style={{ padding: 40 }}>
+                        <div className="adminEmptyIcon">📊</div>
+                        <p>No revenue data yet</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="adminTableCard" style={{ padding: 24 }}>
+                    <h3 className="adminTableTitle" style={{ marginBottom: 16 }}>Order Status</h3>
+                    {[
+                      { label: "Pending", count: stats.pendingOrders, color: "#d97706" },
+                      { label: "Delivered", count: orders.filter((o) => o.status === "delivered").length, color: "#16a34a" },
+                      { label: "Cancelled", count: orders.filter((o) => o.status === "cancelled").length, color: "#dc2626" },
+                      { label: "Preparation", count: orders.filter((o) => ["confirmed", "preparing", "ready"].includes(o.status)).length, color: "#4f46e5" },
+                    ].map((s, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0", borderBottom: i < 3 ? "1px solid #f0f0f0" : "none" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <div style={{ width: 8, height: 8, borderRadius: "50%", background: s.color }} />
+                          <span style={{ fontSize: 13, fontWeight: 600, color: "#333" }}>{s.label}</span>
+                        </div>
+                        <span style={{ fontSize: 16, fontWeight: 800, color: "#1a0404" }}>{s.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="adminTableCard">
                   <div className="adminTableHeader">
                     <h3 className="adminTableTitle">Recent Orders</h3>
@@ -707,12 +1039,28 @@ export default function Admin() {
                   </thead>
                   <tbody>
                     {menuItems.map((item) => (
-                      <tr key={item._id}>
+                      <tr key={item._id} className="menuItemRow" onClick={() => setSelectedMenuItem(item)}>
                         <td style={{ fontWeight: 600 }}>{item.name}</td>
                         <td>{item.category}</td>
                         <td style={{ fontWeight: 700, color: "#6b0f0f" }}>₹{item.price}</td>
-                        <td>{item.isAvailable ? <span className="statusBadge statusDelivered">Yes</span> : <span className="statusBadge statusCancelled">No</span>}</td>
-                        <td>
+                        <td onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={() => handleToggleAvailability(item._id)}
+                            style={{
+                              padding: "4px 10px",
+                              borderRadius: 20,
+                              border: "none",
+                              fontSize: 11,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              background: item.isAvailable ? "#dcfce7" : "#fee2e2",
+                              color: item.isAvailable ? "#16a34a" : "#dc2626",
+                            }}
+                          >
+                            {item.isAvailable ? "Active" : "Disabled"}
+                          </button>
+                        </td>
+                        <td onClick={(e) => e.stopPropagation()}>
                           <button className="adminActionBtn adminBtnEdit" onClick={() => { setForm(item); setModal("menu"); }}>
                             <Pencil size={12} /> Edit
                           </button>
@@ -730,7 +1078,29 @@ export default function Admin() {
             {tab === "orders" && (
               <div className="adminTableCard">
                 <div className="adminTableHeader">
-                  <h3 className="adminTableTitle">All Orders ({orders.length})</h3>
+                  <h3 className="adminTableTitle">All Orders ({filteredOrders.length})</h3>
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <div style={{ position: "relative" }}>
+                      <Search size={14} style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", color: "#999" }} />
+                      <input
+                        value={orderSearch}
+                        onChange={(e) => setOrderSearch(e.target.value)}
+                        placeholder="Search orders..."
+                        style={{ padding: "8px 12px 8px 32px", borderRadius: 8, border: "1px solid #ddd", fontSize: 12, width: 180 }}
+                      />
+                    </div>
+                    <select
+                      value={orderFilter}
+                      onChange={(e) => setOrderFilter(e.target.value)}
+                      style={{ padding: "8px 10px", borderRadius: 8, border: "1px solid #ddd", fontSize: 12, cursor: "pointer" }}
+                    >
+                      <option value="all">All Status</option>
+                      {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <button className="adminBtnSecondary" onClick={handleExportCSV} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <Download size={12} /> Export CSV
+                    </button>
+                  </div>
                 </div>
                 <table className="adminTable">
                   <thead>
@@ -745,7 +1115,7 @@ export default function Admin() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => (
+                    {filteredOrders.map((order) => (
                       <tr key={order._id}>
                         <td style={{ fontSize: 12, fontFamily: "monospace" }}>{order._id.slice(-6).toUpperCase()}</td>
                         <td style={{ fontWeight: 600 }}>{order.user?.name || "N/A"}</td>
@@ -766,6 +1136,12 @@ export default function Admin() {
                     ))}
                   </tbody>
                 </table>
+                {filteredOrders.length === 0 && (
+                  <div className="adminEmpty">
+                    <div className="adminEmptyIcon">📋</div>
+                    <p>No orders match your filters</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -795,15 +1171,169 @@ export default function Admin() {
                         <td style={{ fontSize: 12, color: "#999" }}>{new Date(user.createdAt).toLocaleDateString()}</td>
                         <td>
                           {!user.isAdmin && (
-                            <button className="adminActionBtn adminBtnDelete" onClick={() => handleDeleteUser(user._id)}>
-                              <Trash2 size={12} /> Delete
-                            </button>
+                            <>
+                              <button className="adminActionBtn adminBtnEdit" onClick={() => handleViewCustomer(user)} style={{ marginRight: 6 }}>
+                                <Eye size={12} /> View
+                              </button>
+                              <button className="adminActionBtn adminBtnDelete" onClick={() => handleDeleteUser(user._id)}>
+                                <Trash2 size={12} /> Delete
+                              </button>
+                            </>
                           )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {tab === "reports" && (
+              <div className="adminTableCard fadeIn" style={{ padding: 32 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+                  <h3 className="adminTableTitle" style={{ margin: 0 }}>Revenue Reports</h3>
+                  <div className="periodTabs">
+                    {["daily", "weekly", "monthly"].map((p) => (
+                      <button key={p} className={`periodTab ${revenuePeriod === p ? "periodTabActive" : ""}`} onClick={() => setRevenuePeriod(p)}>
+                        {p.charAt(0).toUpperCase() + p.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {revenueData.length > 0 ? (
+                  <div>
+                    <div className="chartContainer" style={{ marginLeft: 40, marginRight: 40, height: 220 }}>
+                      {revenueData.slice(0, 15).reverse().map((item, i) => {
+                        const maxRev = Math.max(...revenueData.map((d) => d.revenue));
+                        const height = maxRev > 0 ? (item.revenue / maxRev) * 200 : 0;
+                        const label = revenuePeriod === "daily"
+                          ? `${item._id.day}/${item._id.month}`
+                          : revenuePeriod === "weekly"
+                          ? `W${item._id.week}`
+                          : `${item._id.month}/${item._id.year}`;
+                        return (
+                          <div key={i} className="chartBar" style={{ height: Math.max(height, 4), background: `linear-gradient(180deg, #22c55e, #16a34a)` }}>
+                            <span className="chartBarLabel">{label}</span>
+                            <span className="chartBarValue">₹{item.revenue}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div style={{ marginTop: 36, borderTop: "1px solid #f0f0f0", paddingTop: 16 }}>
+                      <h4 style={{ fontSize: 14, fontWeight: 700, color: "#1a0404", margin: "0 0 12px" }}>Breakdown</h4>
+                      <table className="adminTable" style={{ maxWidth: 500 }}>
+                        <thead>
+                          <tr>
+                            <th>Period</th>
+                            <th>Orders</th>
+                            <th style={{ textAlign: "right" }}>Revenue</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {revenueData.map((item, i) => {
+                            const label = revenuePeriod === "daily"
+                              ? `${item._id.day}/${item._id.month}/${item._id.year}`
+                              : revenuePeriod === "weekly"
+                              ? `Week ${item._id.week}, ${item._id.year}`
+                              : `${item._id.month}/${item._id.year}`;
+                            return (
+                              <tr key={i}>
+                                <td style={{ fontWeight: 600 }}>{label}</td>
+                                <td>{item.count} orders</td>
+                                <td style={{ textAlign: "right", fontWeight: 700, color: "#16a34a" }}>₹{item.revenue.toLocaleString()}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="adminEmpty" style={{ padding: 60 }}>
+                    <div className="adminEmptyIcon">📊</div>
+                    <p>No revenue data available yet. Reports will appear once orders are placed.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {tab === "settings" && (
+              <div className="adminTableCard fadeIn" style={{ padding: 32 }}>
+                <h3 className="adminTableTitle" style={{ margin: "0 0 24px" }}>Admin Settings</h3>
+                <div className="adminSettingsForm">
+                  <h4 style={{ fontSize: 16, fontWeight: 700, color: "#1a0404", margin: "0 0 16px" }}>Change Password</h4>
+                  <form onSubmit={handleAdminPasswordChange}>
+                    <div className="adminFormGroup">
+                      <label className="adminFormLabel">Current Password</label>
+                      <input className="adminFormInput" type="password" value={adminPassword.currentPassword} onChange={(e) => setAdminPassword({ ...adminPassword, currentPassword: e.target.value })} required />
+                    </div>
+                    <div className="adminFormGroup">
+                      <label className="adminFormLabel">New Password</label>
+                      <input className="adminFormInput" type="password" value={adminPassword.newPassword} onChange={(e) => setAdminPassword({ ...adminPassword, newPassword: e.target.value })} required />
+                    </div>
+                    <div className="adminFormGroup">
+                      <label className="adminFormLabel">Confirm New Password</label>
+                      <input className="adminFormInput" type="password" value={adminPassword.confirmPassword} onChange={(e) => setAdminPassword({ ...adminPassword, confirmPassword: e.target.value })} required />
+                    </div>
+                    {settingsMsg && (
+                      <p style={{ fontSize: 13, fontWeight: 600, color: settingsMsg.includes("success") ? "#16a34a" : "#dc2626", margin: "0 0 16px" }}>
+                        {settingsMsg}
+                      </p>
+                    )}
+                    <button className="adminBtnPrimary" type="submit">Update Password</button>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {tab === "customers" && selectedCustomer && (
+              <div className="fadeIn">
+                <button className="adminBtnSecondary" onClick={() => { setSelectedCustomer(null); setTab("users"); }} style={{ marginBottom: 16 }}>
+                  ← Back to Users
+                </button>
+                <div className="customerDetailCard">
+                  <div className="customerDetailHeader">
+                    <div className="customerAvatar">{selectedCustomer.name?.charAt(0)?.toUpperCase() || "U"}</div>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1a0404" }}>{selectedCustomer.name}</h3>
+                      <p style={{ margin: "2px 0 0", fontSize: 13, color: "#999" }}>{selectedCustomer.email}</p>
+                      {selectedCustomer.phone && <p style={{ margin: "2px 0 0", fontSize: 13, color: "#999" }}>{selectedCustomer.phone}</p>}
+                    </div>
+                    <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                      <p style={{ margin: 0, fontSize: 12, color: "#999" }}>Member since</p>
+                      <p style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 600 }}>{new Date(selectedCustomer.createdAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, color: "#1a0404", margin: "0 0 12px" }}>Order History ({customerOrders.length} orders)</h4>
+                  {customerOrders.length > 0 ? (
+                    <table className="adminTable">
+                      <thead>
+                        <tr>
+                          <th>Order ID</th>
+                          <th>Items</th>
+                          <th>Total</th>
+                          <th>Status</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {customerOrders.map((order) => (
+                          <tr key={order._id}>
+                            <td style={{ fontSize: 12, fontFamily: "monospace" }}>{order._id.slice(-6).toUpperCase()}</td>
+                            <td>{order.items.map((i) => `${i.menuItem?.name || "Item"} x${i.quantity}`).join(", ")}</td>
+                            <td style={{ fontWeight: 700, color: "#6b0f0f" }}>₹{order.totalAmount}</td>
+                            <td><span className={`statusBadge ${getStatusClass(order.status)}`}>{order.status}</span></td>
+                            <td style={{ fontSize: 12, color: "#999" }}>{new Date(order.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <div className="adminEmpty" style={{ padding: 40 }}>
+                      <p>No orders found for this customer</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </>
@@ -865,6 +1395,50 @@ export default function Admin() {
                 <button type="submit" className="adminBtnPrimary">{form._id ? "Update Item" : "Create Item"}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {selectedMenuItem && (
+        <div className="adminModal" onClick={() => setSelectedMenuItem(null)}>
+          <div className="adminModalCard" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 560 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h3 className="adminModalTitle" style={{ margin: 0 }}>Menu Item Details</h3>
+              <button onClick={() => setSelectedMenuItem(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#999" }}><X size={20} /></button>
+            </div>
+            {selectedMenuItem.image && (
+              <div style={{ borderRadius: 12, overflow: "hidden", marginBottom: 16 }}>
+                <img src={selectedMenuItem.image} alt={selectedMenuItem.name} style={{ width: "100%", height: 180, objectFit: "cover" }} />
+              </div>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+              <div>
+                <h4 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#1a0404", fontFamily: "Georgia, serif" }}>{selectedMenuItem.name}</h4>
+                <p style={{ margin: "4px 0 0", fontSize: 13, color: "#999" }}>{selectedMenuItem.category}</p>
+              </div>
+              <span style={{ fontSize: 22, fontWeight: 900, color: "#6b0f0f" }}>₹{selectedMenuItem.price}</span>
+            </div>
+            <p style={{ fontSize: 14, color: "#555", lineHeight: 1.6, margin: "12px 0" }}>{selectedMenuItem.description || "No description available."}</p>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 16 }}>
+              <div style={{ background: "#f9f6f1", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                <p style={{ margin: 0, fontSize: 10, textTransform: "uppercase", letterSpacing: 1, color: "#999", fontWeight: 700 }}>Status</p>
+                <p style={{ margin: "4px 0 0", fontSize: 13, fontWeight: 700, color: selectedMenuItem.isAvailable ? "#16a34a" : "#dc2626" }}>{selectedMenuItem.isAvailable ? "Active" : "Disabled"}</p>
+              </div>
+              <div style={{ background: "#f9f6f1", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                <p style={{ margin: 0, fontSize: 10, textTransform: "uppercase", letterSpacing: 1, color: "#999", fontWeight: 700 }}>Spice Level</p>
+                <p style={{ margin: "4px 0 0", fontSize: 13, fontWeight: 700, color: "#1a0404" }}>{selectedMenuItem.spiceLevel || "Medium"}</p>
+              </div>
+              <div style={{ background: "#f9f6f1", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                <p style={{ margin: 0, fontSize: 10, textTransform: "uppercase", letterSpacing: 1, color: "#999", fontWeight: 700 }}>ID</p>
+                <p style={{ margin: "4px 0 0", fontSize: 12, fontWeight: 600, color: "#1a0404", fontFamily: "monospace" }}>{selectedMenuItem._id?.slice(-8).toUpperCase()}</p>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 8, marginTop: 20, justifyContent: "flex-end" }}>
+              <button className="adminBtnSecondary" onClick={() => { setSelectedMenuItem(null); setForm(selectedMenuItem); setModal("menu"); }}>
+                <Pencil size={14} /> Edit
+              </button>
+              <button className="adminBtnPrimary" onClick={() => setSelectedMenuItem(null)}>Close</button>
+            </div>
           </div>
         </div>
       )}

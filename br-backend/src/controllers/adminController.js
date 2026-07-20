@@ -46,11 +46,36 @@ const getAllUsers = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find()
+    const { status, search, startDate, endDate, page = 1, limit = 50 } = req.query;
+    const filter = {};
+
+    if (status) filter.status = status;
+    if (startDate || endDate) {
+      filter.createdAt = {};
+      if (startDate) filter.createdAt.$gte = new Date(startDate);
+      if (endDate) filter.createdAt.$lte = new Date(endDate + 'T23:59:59');
+    }
+
+    let query = Order.find(filter)
       .populate('user', 'name email phone')
       .populate('items.menuItem', 'name price image')
       .sort('-createdAt');
-    successResponse(res, orders);
+
+    const skip = (Number(page) - 1) * Number(limit);
+    let orders = await query.skip(skip).limit(Number(limit));
+    const total = await Order.countDocuments(filter);
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      orders = orders.filter((order) => {
+        const userName = order.user?.name?.toLowerCase() || '';
+        const userEmail = order.user?.email?.toLowerCase() || '';
+        const orderId = order._id.toString().toLowerCase();
+        return userName.includes(searchLower) || userEmail.includes(searchLower) || orderId.includes(searchLower);
+      });
+    }
+
+    successResponse(res, { orders, page: Number(page), pages: Math.ceil(total / Number(limit)), total });
   } catch (error) {
     errorResponse(res, error.message);
   }
@@ -90,4 +115,80 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getDashboardStats, getAllUsers, getAllOrders, updateOrderStatus, deleteUser };
+const exportOrdersCSV = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('user', 'name email phone')
+      .populate('items.menuItem', 'name price')
+      .sort('-createdAt');
+
+    const headers = ['Order ID', 'Customer', 'Email', 'Phone', 'Items', 'Total', 'Type', 'Status', 'Date'];
+    const rows = orders.map((order) => [
+      order._id.toString().slice(-8).toUpperCase(),
+      order.user?.name || 'N/A',
+      order.user?.email || 'N/A',
+      order.user?.phone || 'N/A',
+      order.items.map((i) => `${i.menuItem?.name || 'Item'} x${i.quantity}`).join('; '),
+      order.totalAmount,
+      order.orderType,
+      order.status,
+      new Date(order.createdAt).toLocaleDateString(),
+    ]);
+
+    let csv = headers.join(',') + '\n';
+    rows.forEach((row) => {
+      csv += row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',') + '\n';
+    });
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
+    res.send(csv);
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
+const getRevenueReports = async (req, res) => {
+  try {
+    const { period = 'daily' } = req.query;
+    let groupBy;
+
+    if (period === 'daily') {
+      groupBy = { year: { $year: '$createdAt' }, month: { $month: '$createdAt' }, day: { $dayOfMonth: '$createdAt' } };
+    } else if (period === 'weekly') {
+      groupBy = { year: { $year: '$createdAt' }, week: { $week: '$createdAt' } };
+    } else {
+      groupBy = { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } };
+    }
+
+    const reports = await Order.aggregate([
+      { $match: { status: { $nin: ['cancelled'] } } },
+      { $group: { _id: groupBy, revenue: { $sum: '$totalAmount' }, count: { $sum: 1 } } },
+      { $sort: { '_id.year': -1, '_id.month': -1, '_id.day': -1 } },
+      { $limit: 30 },
+    ]);
+
+    successResponse(res, reports);
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
+const toggleMenuAvailability = async (req, res) => {
+  try {
+    const item = await MenuItem.findById(req.params.id);
+    if (!item) {
+      return errorResponse(res, 'Menu item not found', 404);
+    }
+    item.isAvailable = !item.isAvailable;
+    await item.save();
+    successResponse(res, item, `Menu item ${item.isAvailable ? 'enabled' : 'disabled'}`);
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
+module.exports = {
+  getDashboardStats, getAllUsers, getAllOrders, updateOrderStatus,
+  deleteUser, exportOrdersCSV, getRevenueReports, toggleMenuAvailability,
+};

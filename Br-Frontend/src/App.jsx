@@ -1,13 +1,20 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { BrowserRouter, Routes, Route, NavLink, useNavigate, useLocation } from "react-router-dom";
-import { Search, MapPin, Phone, Mail, UtensilsCrossed } from "lucide-react";
+import { Search, MapPin, Phone, Mail, UtensilsCrossed, Moon, Sun, User, LogOut, History } from "lucide-react";
 import TajBiryani from "./components/Briyani.jsx";
 import Menu from "./components/Menu.jsx";
 import Cart from "./components/Cart.jsx";
 import Checkout from "./components/Checkout.jsx";
 import TrackOrder from "./components/Ordertrack.jsx";
 import Login from "./components/Login.jsx";
+import Register from "./components/Register.jsx";
 import Admin from "./components/Admin.jsx";
+import Profile from "./components/Profile.jsx";
+import OrderHistory from "./components/OrderHistory.jsx";
+import OrderConfirmation from "./components/OrderConfirmation.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { ThemeProvider, useTheme } from "./context/ThemeContext.jsx";
 
 const navItems = [
   { to: "/", label: "Home", end: true },
@@ -15,8 +22,6 @@ const navItems = [
   { to: "/cart", label: "Cart" },
   { to: "/checkout", label: "Checkout" },
   { to: "/track-order", label: "Track Order" },
-  { to: "/login", label: "Login" },
-  { to: "/admin", label: "Admin" },
 ];
 
 function AppContent() {
@@ -27,6 +32,8 @@ function AppContent() {
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
+  const { darkMode, toggleDark } = useTheme();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -77,13 +84,18 @@ function AppContent() {
 
   const handleClearCart = useCallback(() => setCartItems([]), []);
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f8f6f2",
-      }}
-    >
+    <div style={{
+      minHeight: "100vh",
+      background: darkMode ? "#1a0a0a" : "#f8f6f2",
+      color: darkMode ? "#f0e6d6" : "#2b140f",
+      transition: "background 0.3s, color 0.3s",
+    }}>
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap');
@@ -324,6 +336,7 @@ function AppContent() {
                 className="nav-search"
               />
             </div>
+
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -350,129 +363,96 @@ function AppContent() {
                 {item.label}
               </NavLink>
             ))}
+
+            <button
+              onClick={toggleDark}
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "50%",
+                border: "1px solid rgba(255,255,255,0.12)",
+                background: "rgba(255,255,255,0.05)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "all 0.3s",
+              }}
+              title={darkMode ? "Light Mode" : "Dark Mode"}
+            >
+              {darkMode ? <Sun size={14} color="#f7c66b" /> : <Moon size={14} color="rgba(255,255,255,0.7)" />}
+            </button>
+
+            {isAuthenticated ? (
+              <>
+                <NavLink to="/order-history" style={({ isActive }) => ({
+                  color: isActive ? "#f7c66b" : "rgba(255,255,255,0.85)",
+                  padding: "7px 12px", borderRadius: 50, fontWeight: 600, fontSize: "12px",
+                  border: "1px solid rgba(255,255,255,0.1)", textDecoration: "none",
+                  display: "flex", alignItems: "center", gap: "4px",
+                })}>
+                  <History size={14} /> Orders
+                </NavLink>
+                <NavLink to="/profile" style={({ isActive }) => ({
+                  color: isActive ? "#f7c66b" : "rgba(255,255,255,0.85)",
+                  padding: "7px 12px", borderRadius: 50, fontWeight: 600, fontSize: "12px",
+                  border: "1px solid rgba(255,255,255,0.1)", textDecoration: "none",
+                  display: "flex", alignItems: "center", gap: "4px",
+                })}>
+                  <User size={14} /> {user?.name?.split(" ")[0] || "Profile"}
+                </NavLink>
+                <button onClick={handleLogout} style={{
+                  padding: "7px 12px", borderRadius: 50, fontWeight: 600, fontSize: "12px",
+                  border: "1px solid rgba(239,68,68,0.3)", background: "rgba(239,68,68,0.1)",
+                  color: "#fca5a5", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px",
+                }}>
+                  <LogOut size={14} /> Logout
+                </button>
+              </>
+            ) : (
+              <NavLink to="/login" style={({ isActive }) => ({
+                color: isActive ? "#f7c66b" : "rgba(255,255,255,0.85)",
+                textDecoration: "none",
+                padding: "7px 14px",
+                borderRadius: 50,
+                background: isActive ? "rgba(247,198,107,0.12)" : "rgba(255,255,255,0.04)",
+                fontWeight: isActive ? 800 : 500,
+                border: isActive ? "1px solid rgba(247,198,107,0.25)" : "1px solid rgba(255,255,255,0.06)",
+                fontSize: "13px",
+              })}>
+                Login
+              </NavLink>
+            )}
           </nav>
         </header>
 
         <main style={{ padding: "0 0 40px 0" }}>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <TajBiryani
-                  onAddToCart={handleAddToCart}
-                  onApplyCoupon={handleApplyCoupon}
-                />
-              }
-            />
-            <Route
-              path="/menu"
-              element={
-                <Menu
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  onAddToCart={handleAddToCart}
-                  cartCount={cartCount}
-                />
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <Cart
-                  cartItems={cartItems}
-                  onUpdateQuantity={handleUpdateCartItem}
-                  onRemoveItem={handleRemoveCartItem}
-                  onClearCart={handleClearCart}
-                  appliedCoupon={appliedCoupon}
-                  onApplyCoupon={handleApplyCoupon}
-                />
-              }
-            />
-            <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} />} />
-            <Route path="/track-order" element={<TrackOrder />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route
-              path="*"
-              element={
-                <div style={{
-                  minHeight: "70vh",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "40px 20px",
-                  textAlign: "center",
-                }}>
-                  <style>{`
-                    @keyframes float404 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-                    @keyframes pulse404 { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-                  `}</style>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<TajBiryani onAddToCart={handleAddToCart} onApplyCoupon={handleApplyCoupon} />} />
+              <Route path="/menu" element={<Menu searchQuery={searchQuery} onSearchChange={setSearchQuery} onAddToCart={handleAddToCart} cartCount={cartCount} />} />
+              <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateCartItem} onRemoveItem={handleRemoveCartItem} onClearCart={handleClearCart} appliedCoupon={appliedCoupon} onApplyCoupon={handleApplyCoupon} />} />
+              <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} onClearCart={handleClearCart} />} />
+              <Route path="/track-order" element={<TrackOrder />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/order-history" element={<OrderHistory />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="*" element={
+                <div style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px", textAlign: "center" }}>
                   <div style={{ maxWidth: "480px", width: "100%" }}>
-                    <div style={{
-                      fontSize: "120px",
-                      fontWeight: "900",
-                      fontFamily: "Georgia, serif",
-                      background: "linear-gradient(135deg, #6b0f0f, #8b1a1a, #d99523)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      lineHeight: 1,
-                      marginBottom: "8px",
-                      animation: "float404 3s ease-in-out infinite",
-                      textShadow: "none",
-                      filter: "drop-shadow(0 8px 24px rgba(107,15,15,0.15))",
-                    }}>
-                      404
-                    </div>
-                    <div style={{
-                      width: "80px",
-                      height: "4px",
-                      background: "linear-gradient(90deg, transparent, #f7c66b, transparent)",
-                      margin: "0 auto 24px",
-                      borderRadius: "4px",
-                      animation: "pulse404 2s ease-in-out infinite",
-                    }} />
-                    <h2 style={{
-                      fontSize: "24px",
-                      fontWeight: "800",
-                      color: "#6b0f0f",
-                      margin: "0 0 12px",
-                      fontFamily: "Georgia, serif",
-                    }}>
-                      Page Not Found
-                    </h2>
-                    <p style={{
-                      fontSize: "15px",
-                      color: "#888",
-                      margin: "0 0 32px",
-                      lineHeight: 1.7,
-                    }}>
-                      The page you're looking for doesn't exist or has been moved.
-                    </p>
-                    <button
-                      onClick={() => navigate("/")}
-                      style={{
-                        padding: "14px 36px",
-                        borderRadius: "14px",
-                        border: "none",
-                        background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)",
-                        color: "#f7c66b",
-                        fontWeight: "800",
-                        fontSize: "14px",
-                        cursor: "pointer",
-                        letterSpacing: "0.5px",
-                        boxShadow: "0 8px 24px rgba(107,15,15,0.3)",
-                        transition: "all 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => { e.target.style.transform = "translateY(-2px)"; e.target.style.boxShadow = "0 12px 32px rgba(107,15,15,0.4)"; }}
-                      onMouseLeave={(e) => { e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0 8px 24px rgba(107,15,15,0.3)"; }}
-                    >
-                      Back to Home
-                    </button>
+                    <div style={{ fontSize: "120px", fontWeight: "900", fontFamily: "Georgia, serif", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a, #d99523)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: 1, marginBottom: "8px", filter: "drop-shadow(0 8px 24px rgba(107,15,15,0.15))" }}>404</div>
+                    <div style={{ width: "80px", height: "4px", background: "linear-gradient(90deg, transparent, #f7c66b, transparent)", margin: "0 auto 24px", borderRadius: "4px" }} />
+                    <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#6b0f0f", margin: "0 0 12px", fontFamily: "Georgia, serif" }}>Page Not Found</h2>
+                    <p style={{ fontSize: "15px", color: "#888", margin: "0 0 32px", lineHeight: 1.7 }}>The page you're looking for doesn't exist or has been moved.</p>
+                    <button onClick={() => navigate("/")} style={{ padding: "14px 36px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", fontWeight: "800", fontSize: "14px", cursor: "pointer", boxShadow: "0 8px 24px rgba(107,15,15,0.3)" }}>Back to Home</button>
                   </div>
                 </div>
-              }
-            />
-          </Routes>
+              } />
+            </Routes>
+          </ErrorBoundary>
         </main>
 
         <footer className="siteFooter">
@@ -487,12 +467,8 @@ function AppContent() {
                   <div className="footerLogoSub">BIRYANI</div>
                 </div>
               </div>
-              <p className="footerDesc">
-                Experience the royal taste of authentic Dum Biryani, crafted with
-                premium spices and aged basmati rice.
-              </p>
+              <p className="footerDesc">Experience the royal taste of authentic Dum Biryani, crafted with premium spices and aged basmati rice.</p>
             </div>
-
             <div className="footerCol">
               <h4 className="footerHeading">Quick Links</h4>
               <ul className="footerLinks">
@@ -502,10 +478,8 @@ function AppContent() {
                 <li><NavLink to="/checkout">Checkout</NavLink></li>
                 <li><NavLink to="/track-order">Track Order</NavLink></li>
                 <li><NavLink to="/login">Login</NavLink></li>
-                <li><NavLink to="/admin">Admin Panel</NavLink></li>
               </ul>
             </div>
-
             <div className="footerCol">
               <h4 className="footerHeading">Contact Us</h4>
               <ul className="footerLinks">
@@ -514,7 +488,6 @@ function AppContent() {
                 <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbiryani.com</span></li>
               </ul>
             </div>
-
             <div className="footerCol">
               <h4 className="footerHeading">Hours</h4>
               <ul className="footerLinks">
@@ -637,7 +610,11 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

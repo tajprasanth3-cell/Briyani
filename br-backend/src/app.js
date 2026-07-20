@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const { apiLimiter } = require('./middleware/rateLimiter');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/api', apiLimiter);
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));

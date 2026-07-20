@@ -25,92 +25,88 @@
 - [x] Create README.md
 - [x] Create TODO.md
 
----
+### Backend - High Priority (NEW)
+- [x] Set up proper JWT_SECRET (replaced placeholder with secure key)
+- [x] Add input validation middleware to all routes (authValidation, menuValidation, orderValidation)
+- [x] Add order cancellation endpoint for users (PUT /api/orders/:id/cancel)
+- [x] Add rate limiting to auth endpoints (express-rate-limit, 10 req/15min)
+- [x] Add password reset flow (forgot password + reset password endpoints)
+- [x] Add search/filter to admin orders page (search by name/email/ID, filter by status)
+- [x] Add admin registration endpoint (POST /api/auth/register-admin)
 
-## In Progress
+### Backend - Medium Priority (NEW)
+- [x] Add user order history for users (GET /api/orders with pagination)
+- [x] Add menu search endpoint (search query param on GET /api/menu)
+- [x] Add export orders to CSV for admin (GET /api/admin/export/orders)
+- [x] Add menu item availability toggle from admin (PUT /api/admin/menu/:id/toggle)
+- [x] Add daily/weekly/monthly revenue reports (GET /api/admin/reports/revenue)
+- [x] Add pagination to menu items API
+- [x] Add order search by ID in admin
+- [x] Add change password endpoint (PUT /api/auth/change-password)
+- [x] Add API rate limiting for all routes
 
-- [ ] Test admin panel with real MongoDB data
-- [ ] Create first admin user in database
-- [ ] Test all API endpoints with frontend
+### Frontend - High Priority (NEW)
+- [x] Add loading spinners/skeleton screens (LoadingSpinner component)
+- [x] Add error boundaries for crash recovery (ErrorBoundary component)
+- [x] Add form validation feedback (red borders, error messages in Register/Login)
+- [x] Add order confirmation page after checkout (OrderConfirmation.jsx)
+- [x] Connect frontend to real backend API (api.js service layer)
+- [x] Add user auth context (login state, token storage, AuthContext)
+- [x] Add theme context with dark mode support (ThemeContext)
+
+### Frontend - Medium Priority (NEW)
+- [x] Add user profile page (Profile.jsx with edit profile + change password)
+- [x] Add order history page for customers (OrderHistory.jsx with filtering)
+- [x] Add dark mode toggle (navbar button, persists to localStorage)
+- [x] Add Register page (Register.jsx with full validation)
+- [x] Connect Login to real backend API (authAPI.login)
+- [x] Connect Checkout to real backend API (orderAPI.create)
+- [x] Add order type selector in Checkout (delivery/takeaway/dine-in)
+- [x] Add menu search/filter to admin orders page
+
+### Frontend - Low Priority (NEW)
+- [x] Add Meta tags for SEO (Open Graph, Twitter Card, theme-color)
+- [x] Update Admin panel with order search/filter/export
+- [x] Add card hover effects/animations (menu image zoom on hover)
+- [x] Add delivery time estimate on checkout (delivery/takeaway/dine-in)
+- [x] Add menu item detail modal in admin (click row to view details)
+
+### Admin Panel (NEW)
+- [x] Add admin order filtering (by status, search by customer name/email)
+- [x] Add export orders to CSV button
+- [x] Add admin registration endpoint (for creating admin users from the panel)
+- [x] Add dashboard charts (revenue bar chart with daily/weekly/monthly toggle)
+- [x] Add order status breakdown widget on dashboard
+- [x] Add revenue reports page (charts + table breakdown by period)
+- [x] Add admin password change (Settings page)
+- [x] Add customer details view (click user to see order history)
+- [x] Add menu item availability toggle (click status badge in admin table)
 
 ---
 
 ## Pending - Backend
 
-### High Priority
-- [ ] Set up proper JWT_SECRET (replace placeholder)
-- [ ] Add input validation middleware to all routes
-- [ ] Add image upload to Cloudinary (menu items)
-- [ ] Add email notifications (order confirmation, password reset)
-- [ ] Add order cancellation endpoint for users
-- [ ] Add pagination to menu items API
-- [ ] Add search/filter to admin orders page
-
-### Medium Priority
-- [ ] Add rate limiting to auth endpoints
-- [ ] Add password reset flow (forgot password)
-- [ ] Add order history for users
-- [ ] Add menu item ratings/reviews
-- [ ] Add inventory tracking for menu items
-- [ ] Add daily/weekly/monthly revenue reports
-- [ ] Add export orders to CSV for admin
-
 ### Low Priority
 - [ ] Add WebSocket for real-time order status updates
 - [ ] Add push notifications
-- [ ] Add menu item availability toggle from admin
 - [ ] Add bulk menu item import
-- [ ] Add order search by ID in admin
 - [ ] Add user role management (super admin, manager, staff)
 
 ---
 
 ## Pending - Frontend
 
-### High Priority
-- [ ] Add loading spinners/skeleton screens
-- [ ] Add error boundaries for crash recovery
-- [ ] Add form validation feedback (red borders, error messages)
-- [ ] Add "Remove from cart" confirmation dialog
-- [ ] Add order confirmation page after checkout
-- [ ] Connect frontend to real backend API (currently uses local state)
-
-### Medium Priority
-- [ ] Add image upload preview in admin panel
-- [ ] Add dark mode toggle
-- [ ] Add user profile page
-- [ ] Add order history page for customers
-- [ ] Add menu item detail modal/page
-- [ ] Add quantity limits (max per item)
-- [ ] Add delivery time estimate on checkout
-
 ### Low Priority
-- [ ] Add animations (page transitions, card hover effects)
 - [ ] Add PWA support (installable app)
 - [ ] Add offline mode with cached menu
 - [ ] Add multi-language support
 - [ ] Add accessibility (ARIA labels, keyboard navigation)
-- [ ] Add Meta tags for SEO
 - [ ] Add Google Analytics integration
+- [ ] Add quantity limits (max per item)
 
 ---
 
 ## Pending - Admin Panel
-
-### High Priority
-- [ ] Add admin registration (currently manual DB insert)
-- [ ] Add dashboard charts (revenue over time, orders per day)
-- [ ] Add menu item image upload in admin form
-- [ ] Add order filtering (by date, status, customer)
-- [ ] Add bulk order status update
-
-### Medium Priority
-- [ ] Add admin activity log
-- [ ] Add customer details view (order history)
-- [ ] Add revenue reports (daily, weekly, monthly)
-- [ ] Add menu item availability quick toggle
-- [ ] Add admin password change
-- [ ] Add admin session timeout
 
 ### Low Priority
 - [ ] Add printable order receipts

@@ -292,6 +292,15 @@ const menuStyles = `
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.menuItemCard:hover .menuItemImage {
+  transform: scale(1.05);
+}
+
+.menuItemCard {
+  overflow: hidden;
 }
 
 .menuItemBody {

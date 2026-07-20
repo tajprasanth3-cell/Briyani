@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { ArrowLeft, MapPin, Phone, User, Package } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { ArrowLeft, MapPin, Phone, User, Package, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { orderAPI } from '../api';
+import { useAuth } from '../context/AuthContext';
 import checkoutBg from "./Images/background2.jpg";
 
 const checkoutStyles = `
@@ -43,8 +45,9 @@ const checkoutStyles = `
 }
 `;
 
-export default function Checkout({ cartItems = [], appliedCoupon }) {
+export default function Checkout({ cartItems = [], appliedCoupon, onClearCart }) {
   const navigate = useNavigate();
+  const { token } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -52,8 +55,10 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
     city: 'Mumbai',
     pincode: '',
     instructions: '',
+    orderType: 'delivery',
   });
   const [notification, setNotification] = useState(null);
+  const [placing, setPlacing] = useState(false);
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const discount = appliedCoupon
@@ -61,6 +66,13 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
       ? appliedCoupon.flat
       : Math.round(subtotal * appliedCoupon.discount)
     : 0;
+  const deliveryTimeEstimate = useMemo(() => {
+    if (formData.orderType === "dine-in") return "Ready in ~10 min";
+    if (formData.orderType === "takeaway") return "Ready in ~20 min";
+    const base = 30;
+    const extras = cartItems.reduce((sum, item) => sum + item.quantity, 0) > 3 ? 10 : 0;
+    return `${base + extras} - ${base + extras + 15} min`;
+  }, [formData.orderType, cartItems]);
   const deliveryCharge = 40;
   const packagingCharge = 20;
   const total = subtotal > 0 ? subtotal - discount + deliveryCharge + packagingCharge : 0;
@@ -70,23 +82,44 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!formData.fullName || !formData.phone || !formData.address || !formData.pincode) {
       setNotification({ type: "error", message: "Please fill in all required fields!" });
       return;
     }
-    setNotification({ type: "success", message: "Your royal order has been placed! 👑" });
-    setTimeout(() => navigate('/track-order'), 2000);
+
+    if (!token) {
+      setNotification({ type: "error", message: "Please login to place an order" });
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+
+    setPlacing(true);
+    try {
+      const orderData = {
+        items: cartItems.map((item) => ({ menuItem: item.id?.toString(), quantity: item.quantity })),
+        orderType: formData.orderType,
+        deliveryAddress: `${formData.address}, ${formData.city} - ${formData.pincode}`,
+        specialInstructions: formData.instructions,
+      };
+      const res = await orderAPI.create(orderData);
+      if (onClearCart) onClearCart();
+      navigate('/order-confirmation', { state: { order: res.data } });
+    } catch (err) {
+      setNotification({ type: "error", message: err.message || "Failed to place order" });
+    } finally {
+      setPlacing(false);
+    }
   };
 
   return (
     <div className="checkoutPage" style={{ minHeight: "100vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
       <style>{checkoutStyles}</style>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        
+
         {/* Header */}
         <div style={{ marginBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
-          <button 
+          <button
             onClick={() => navigate(-1)}
             style={{
               background: "rgba(107,15,15,0.08)",
@@ -116,7 +149,7 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
 
         {/* Main Content */}
         <div className="checkoutGrid responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
-          
+
           {/* Left: Form */}
           <div>
             <div className="checkoutFormCard" style={{ background: "#fff", borderRadius: "20px", padding: "32px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
@@ -125,7 +158,7 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
               </h2>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                
+
                 {/* Name */}
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#666", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Full Name</label>
@@ -285,13 +318,30 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
                     onBlur={(e) => e.target.style.borderColor = "#eee"}
                   />
                 </div>
+
+                {/* Order Type */}
+                <div>
+                  <label style={{ fontSize: "12px", fontWeight: "700", color: "#666", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Order Type</label>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {["delivery", "takeaway", "dine-in"].map((type) => (
+                      <button key={type} type="button" onClick={() => setFormData({ ...formData, orderType: type })} style={{
+                        flex: 1, padding: "10px", borderRadius: "10px", border: formData.orderType === type ? "2px solid #6b0f0f" : "2px solid #eee",
+                        background: formData.orderType === type ? "rgba(107,15,15,0.08)" : "#fff",
+                        color: formData.orderType === type ? "#6b0f0f" : "#666",
+                        fontSize: "13px", fontWeight: "700", cursor: "pointer", textTransform: "capitalize",
+                      }}>
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right: Order Summary */}
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            
+
             {/* Order Items Card */}
             <div className="checkoutBillCard" style={{ background: "#fff", borderRadius: "20px", padding: "24px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)", border: "1px solid rgba(107, 15, 15, 0.1)" }}>
               <h2 style={{ fontSize: "16px", fontWeight: "800", color: "#6b0f0f", marginBottom: "16px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -334,6 +384,25 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
                   <span>Packaging</span>
                   <span>₹{packagingCharge}</span>
                 </div>
+
+                {/* Delivery Time Estimate */}
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "12px 16px",
+                  background: "linear-gradient(135deg, rgba(107,15,15,0.06), rgba(247,198,107,0.1))",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(200,154,43,0.2)",
+                }}>
+                  <Clock size={18} color="#6b0f0f" />
+                  <div>
+                    <p style={{ margin: 0, fontSize: "12px", fontWeight: "700", color: "#6b0f0f", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      Estimated {formData.orderType === "delivery" ? "Delivery" : "Ready"} Time
+                    </p>
+                    <p style={{ margin: "2px 0 0", fontSize: "14px", fontWeight: "800", color: "#1a0404" }}>{deliveryTimeEstimate}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -351,6 +420,7 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
               </div>
               <button
                 onClick={handlePlaceOrder}
+                disabled={placing}
                 style={{
                   width: "100%",
                   padding: "16px",
@@ -360,21 +430,24 @@ export default function Checkout({ cartItems = [], appliedCoupon }) {
                   color: "#6b0f0f",
                   fontSize: "16px",
                   fontWeight: "800",
-                  cursor: "pointer",
+                  cursor: placing ? "not-allowed" : "pointer",
                   textTransform: "uppercase",
                   letterSpacing: "0.5px",
+                  opacity: placing ? 0.7 : 1,
                   transition: "all 0.3s ease",
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(107, 15, 15, 0.3)";
+                  if (!placing) {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 12px 32px rgba(107, 15, 15, 0.3)";
+                  }
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                Place Order
+                {placing ? "Placing Order..." : "Place Order"}
               </button>
 
               {/* Trust Badge */}
