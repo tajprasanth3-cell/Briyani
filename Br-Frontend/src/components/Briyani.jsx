@@ -95,7 +95,7 @@ const biryaniStyles = `
 
 .briyaniFeatures {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   padding: 40px 5%;
 }
@@ -144,19 +144,19 @@ const biryaniStyles = `
   margin: 0 0 30px;
   color: #6b0f0f;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(32px, 4vw, 46px);
+  font-size: clamp(28px, 5vw, 46px);
   text-align: center;
 }
 
 .briyaniProductGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
 }
 
 .briyaniCard {
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #fff;
   box-shadow: 0 14px 32px rgba(44, 18, 9, 0.12);
   display: flex;
@@ -181,7 +181,7 @@ const biryaniStyles = `
   width: 100%;
   margin-top: 15px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #6b0f0f;
   color: #fff;
   padding: 12px;
@@ -193,19 +193,19 @@ const biryaniStyles = `
   min-height: 52px;
   margin: 0 0 8px;
   color: #5f0e0b;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.25;
 }
 
 .briyaniPrice {
   color: #b27414;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 800;
 }
 
 .briyaniCatering {
-  margin: 26px 0 46px;
-  border-radius: 8px;
+  margin: 26px 4% 46px;
+  border-radius: 12px;
   padding: 70px 20px;
   background:
     linear-gradient(rgba(68, 8, 8, 0.88), rgba(68, 8, 8, 0.88)),
@@ -215,16 +215,16 @@ const biryaniStyles = `
 }
 
 .briyaniCateringTitle {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   color: #fff;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(22px, 5vw, 42px);
 }
 
 .briyaniSecondaryBtn {
   margin-top: 16px;
   border: 2px solid #f7c66b;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #f7c66b;
   color: #2a0705;
   padding: 13px 28px;
@@ -233,9 +233,9 @@ const biryaniStyles = `
 
 .briyaniStats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  padding: 12px 5% 50px;
+  padding: 12px 4% 50px;
   text-align: center;
 }
 
@@ -322,155 +322,115 @@ const biryaniStyles = `
   z-index: 1;
 }
 
-@media (max-width: 1024px) {
-  .briyaniStats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.briyaniOfferModal,
+.briyaniTableModal,
+.briyaniNotifModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.briyaniNotifModal { z-index: 99999; background: rgba(0,0,0,0.55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 
-  .briyaniHeroContent {
-    width: 50% !important;
-  }
+.briyaniModalCard {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  maxWidth: 420px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.briyaniNotifCard {
+  background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+  border-radius: 20px;
+  padding: 36px 24px 32px;
+  maxWidth: 380px;
+  width: 100%;
+  textAlign: center;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.briyaniHeroBtnRow {
+  display: flex;
+  gap: 10px;
 }
 
 @media (max-width: 1024px) {
-  .briyaniProductGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
+  .briyaniStats { grid-template-columns: repeat(2, 1fr); }
+  .briyaniProductGrid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 }
 
 @media (max-width: 900px) {
-  .briyaniHero {
-    height: 60vh;
-    min-height: 400px;
-  }
-
-  .briyaniHeroShade {
-    background: linear-gradient(180deg, rgba(20, 3, 3, 0.85), rgba(55, 7, 5, 0.7));
-  }
-
-  .briyaniFeatures {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .briyaniHeroContent {
-    width: 60% !important;
-    padding: 15px 30px !important;
-  }
+  .briyaniHero { height: 55vh; min-height: 380px; }
+  .briyaniHeroShade { background: linear-gradient(180deg, rgba(20, 3, 3, 0.85), rgba(55, 7, 5, 0.7)); }
+  .briyaniFeatures { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .briyaniProductGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
   .briyaniHero {
-    height: 50vh;
-    min-height: 350px;
+    height: auto;
+    min-height: auto;
+    padding: 50px 0 32px;
+    background-size: cover;
   }
-
-  .briyaniOfferBox {
-    width: 70px !important;
-    height: 70px !important;
-  }
-
-  .briyaniHeroContent {
-    width: 70% !important;
-    padding: 15px 20px !important;
-  }
+  .briyaniFeatures { padding: 28px 4%; gap: 12px; }
+  .briyaniFeatureCard { padding: 22px 16px; font-size: 15px; }
+  .briyaniFeatureIcon { font-size: 30px; margin-bottom: 10px; }
+  .briyaniProductsSection { padding: 24px 4% 40px; }
+  .briyaniCatering { padding: 48px 16px; margin: 20px 3% 36px; }
+  .briyaniCardTitle { font-size: 16px; min-height: auto; }
+  .briyaniCardBody { padding: 14px; }
+  .briyaniAddBtn { padding: 10px; font-size: 13px; border-radius: 8px; }
+  .briyaniStats { padding: 8px 4% 36px; gap: 12px; }
+  .briyaniStats > div { padding: 22px 12px; border-radius: 14px; }
+  .briyaniStatNumber { font-size: 28px; }
+  .briyaniStatIcon { font-size: 24px; }
+  .briyaniStatLabel { font-size: 12px; }
 }
 
 @media (max-width: 600px) {
-  .briyaniHero {
-    min-height: 320px;
-    height: auto;
-    padding: 40px 0;
-  }
-
-  .briyaniFeatures {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 24px 5%;
-  }
-
-  .briyaniFeatureCard {
-    padding: 20px 16px;
-    font-size: 15px;
-  }
-
-  .briyaniFeatureIcon {
-    font-size: 28px;
-    margin-bottom: 8px;
-  }
-
-  .briyaniStats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    padding: 8px 5% 36px;
-  }
-
-  .briyaniStats > div {
-    padding: 20px 12px;
-  }
-
-  .briyaniStatNumber {
-    font-size: 28px;
-  }
-
-  .briyaniStatLabel {
-    font-size: 12px;
-  }
-
-  .briyaniHeroContent {
-    width: 85% !important;
-    padding: 10px 16px !important;
-  }
-
-  .briyaniOfferBox {
-    width: 60px !important;
-    height: 60px !important;
-  }
-
-  .briyaniOfferIcon {
-    font-size: 18px !important;
-  }
+  .briyaniHero { padding: 40px 0 24px; }
+  .briyaniFeatures { grid-template-columns: 1fr; gap: 10px; padding: 16px 4%; }
+  .briyaniFeatureCard { padding: 16px 12px; font-size: 14px; }
+  .briyaniFeatureIcon { font-size: 24px; margin-bottom: 6px; }
+  .briyaniProductGrid { gap: 12px; }
+  .briyaniCardTitle { font-size: 15px; }
+  .briyaniPrice { font-size: 15px; }
+  .briyaniAddBtn { padding: 9px; font-size: 12px; }
+  .briyaniSectionTitle { margin-bottom: 20px; }
 }
 
 @media (max-width: 480px) {
-  .briyaniProductGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .briyaniHeroContent {
-    width: 92% !important;
-    padding: 10px 12px !important;
-  }
-
-  .briyaniOfferBox {
-    width: 55px !important;
-    height: 55px !important;
-  }
-
-  .briyaniOfferIcon {
-    font-size: 16px !important;
-  }
-
-  .briyaniOffersRow {
-    gap: 8px !important;
-  }
+  .briyaniProductGrid { grid-template-columns: 1fr; gap: 14px; max-width: 380px; margin: 0 auto; }
+  .briyaniStats { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 6px 3% 28px; }
+  .briyaniStats > div { padding: 18px 8px; border-radius: 12px; }
+  .briyaniStatNumber { font-size: 22px; }
+  .briyaniStatLabel { font-size: 11px; }
+  .briyaniCatering { padding: 32px 14px !important; margin: 12px 3% 24px !important; border-radius: 10px; }
+  .briyaniCateringTitle { font-size: 20px !important; }
+  .briyaniProductsSection { padding: 14px 3% 28px; }
+  .briyaniSectionTitle { font-size: 22px; }
+  .briyaniHeroBtnRow { flex-direction: column; width: 100%; }
+  .briyaniHeroBtnRow button { width: 100%; padding: 10px 16px; }
+  .briyaniModalCard { padding: 22px 18px; border-radius: 16px; }
+  .briyaniNotifCard { padding: 28px 18px 24px; border-radius: 16px; }
 }
 
-@media (max-width: 400px) {
-  .briyaniStats {
-    grid-template-columns: 1fr;
-  }
-
-  .briyaniOffersRow {
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-  }
+@media (max-width: 380px) {
+  .briyaniStats { grid-template-columns: 1fr; max-width: 240px; margin: 0 auto; }
+  .briyaniOfferBox { width: 54px !important; height: 54px !important; border-radius: 8px !important; }
+  .briyaniOfferIcon { font-size: 13px !important; }
+  .briyaniOffersRow { gap: 6px !important; }
 }
 `;
 
@@ -603,7 +563,9 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
             justifyContent: "space-evenly",
             alignItems: "center",
             height: "100%",
-            width: "35%",
+            width: "40%",
+            minWidth: "280px",
+            maxWidth: "500px",
             marginRight: "auto",
             padding: "15px 40px",
           }}

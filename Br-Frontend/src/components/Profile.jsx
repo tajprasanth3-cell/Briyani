@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, MapPin, Save, ArrowLeft, Lock } from "lucide-react";
-import { userAPI, authAPI } from "../api";
+import { userAPI } from "../api";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "./LoadingSpinner";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { user, updateUser, token } = useAuth();
+  const { updateUser, token } = useAuth();
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "" });
   const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "" });
   const [loading, setLoading] = useState(true);
@@ -51,7 +51,7 @@ export default function Profile() {
     setSaving(true);
     setMessage(null);
     try {
-      const res = await fetch("http://localhost:5001/api/auth/change-password", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5001/api"}/auth/change-password`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(passwordForm),
@@ -83,12 +83,16 @@ export default function Profile() {
 
   return (
     <div style={{ minHeight: "80vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
+      <style>{`
+        @media (max-width: 768px) { .profileCard { padding: 24px 18px !important; } .profileTitle { font-size: 24px !important; } }
+        @media (max-width: 480px) { .profileCard { padding: 18px 14px !important; border-radius: 16px !important; } .profileTitle { font-size: 20px !important; } }
+      `}</style>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <button onClick={() => navigate(-1)} style={{ background: "rgba(107,15,15,0.08)", color: "#6b0f0f", border: "none", cursor: "pointer", padding: "10px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
           <ArrowLeft size={20} /> Back
         </button>
 
-        <h1 style={{ fontSize: "32px", fontWeight: "900", color: "#6b0f0f", margin: "0 0 8px", fontFamily: "Georgia, serif" }}>My Profile</h1>
+        <h1 className="profileTitle" style={{ fontSize: "32px", fontWeight: "900", color: "#6b0f0f", margin: "0 0 8px", fontFamily: "Georgia, serif" }}>My Profile</h1>
         <p style={{ fontSize: "13px", color: "#c89a2b", marginBottom: "32px", fontWeight: "700" }}>MANAGE YOUR ACCOUNT</p>
 
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
@@ -117,7 +121,7 @@ export default function Profile() {
           </div>
         )}
 
-        <div style={{ background: "#fff", borderRadius: "20px", padding: "32px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)" }}>
+        <div className="profileCard" style={{ background: "#fff", borderRadius: "20px", padding: "32px", boxShadow: "0 12px 40px rgba(0,0,0,0.08)" }}>
           {activeTab === "profile" ? (
             <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {[

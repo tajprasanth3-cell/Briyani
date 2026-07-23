@@ -31,17 +31,22 @@ const checkoutStyles = `
 }
 
 @media (max-width: 768px) {
-  .checkoutPage { padding: 24px 12px !important; }
+  .checkoutPage { padding: 24px 14px !important; }
   .checkoutHeaderSpacer { display: none !important; }
-  .checkoutPageTitle { font-size: 24px !important; }
-  .checkoutFormCard { padding: 24px 16px !important; }
+  .checkoutPageTitle { font-size: 22px !important; }
+  .checkoutFormCard { padding: 20px 16px !important; border-radius: 16px !important; }
   .checkoutCityRow { grid-template-columns: 1fr !important; }
+  .checkoutHeader { flex-wrap: wrap !important; gap: 12px !important; }
+  .checkoutOrderType { flex-wrap: wrap !important; }
+  .checkoutBillCard { border-radius: 16px !important; padding: 20px !important; }
 }
 
 @media (max-width: 480px) {
-  .checkoutPageTitle { font-size: 20px !important; }
-  .checkoutFormCard { padding: 20px 12px !important; }
-  .checkoutBillCard { padding: 16px !important; }
+  .checkoutPage { padding: 16px 10px !important; }
+  .checkoutPageTitle { font-size: 18px !important; }
+  .checkoutFormCard { padding: 16px 12px !important; border-radius: 14px !important; }
+  .checkoutBillCard { padding: 16px !important; border-radius: 14px !important; }
+  .checkoutGrid { gap: 20px !important; }
 }
 `;
 
@@ -118,7 +123,7 @@ export default function Checkout({ cartItems = [], appliedCoupon, onClearCart })
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
 
         {/* Header */}
-        <div style={{ marginBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
+        <div className="checkoutHeader" style={{ marginBottom: "40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
           <button
             onClick={() => navigate(-1)}
             style={{
@@ -322,7 +327,7 @@ export default function Checkout({ cartItems = [], appliedCoupon, onClearCart })
                 {/* Order Type */}
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#666", display: "block", marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Order Type</label>
-                  <div style={{ display: "flex", gap: "8px" }}>
+                  <div className="checkoutOrderType" style={{ display: "flex", gap: "8px" }}>
                     {["delivery", "takeaway", "dine-in"].map((type) => (
                       <button key={type} type="button" onClick={() => setFormData({ ...formData, orderType: type })} style={{
                         flex: 1, padding: "10px", borderRadius: "10px", border: formData.orderType === type ? "2px solid #6b0f0f" : "2px solid #eee",

@@ -54,7 +54,7 @@ export default function Register() {
 
   return (
     <div style={{
-      minHeight: "10vh",
+      minHeight: "100vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -63,7 +63,16 @@ export default function Register() {
       color: "#f8f6f2",
       padding: "40px 20px",
     }}>
-      <div style={{
+      <style>{`
+        @media (max-width: 480px) {
+          .registerCard { padding: 28px 18px !important; border-radius: 20px !important; }
+          .registerTitle { font-size: 20px !important; letter-spacing: 2px !important; }
+        }
+        @media (max-width: 768px) {
+          .registerCard { padding: 36px 24px !important; }
+        }
+      `}</style>
+      <div className="registerCard" style={{
         width: "100%",
         maxWidth: "480px",
         backgroundColor: "rgba(22, 10, 8, 0.78)",
@@ -80,7 +89,7 @@ export default function Register() {
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
             <Crown size={28} color="#f7c66b" />
-            <span style={{ fontSize: "26px", fontWeight: "700", letterSpacing: "3px", fontFamily: "Georgia, serif" }}>ROYAL TAJ</span>
+            <span className="registerTitle" style={{ fontSize: "26px", fontWeight: "700", letterSpacing: "3px", fontFamily: "Georgia, serif" }}>ROYAL TAJ</span>
           </div>
           <p style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", textTransform: "uppercase" }}>Create your account</p>
         </div>

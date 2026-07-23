@@ -6,7 +6,6 @@ import {
   X, 
   Minus, 
   Plus, 
-  ChevronRight, 
   ShieldCheck
 } from 'lucide-react';
 import bgImage from "./Images/bacjgrund1.jpg";
@@ -51,29 +50,32 @@ const cartStyles = `
 }
 
 @media (max-width: 1024px) {
-  .cartHeader { flex-direction: column !important; text-align: center !important; }
+  .cartHeader { flex-direction: column; text-align: center; gap: 12px; }
   .cartMainGrid { grid-template-columns: 1fr !important; }
   .cartBillCard { position: static !important; }
 }
 
 @media (max-width: 768px) {
-  .cartPage { padding: 20px 12px !important; }
-  .cartPageTitle { font-size: 28px !important; }
+  .cartPage { padding: 24px 14px !important; }
+  .cartPageTitle { font-size: 24px !important; }
   .cartBillTotal { font-size: 28px !important; }
-  .cartItemCard { flex-direction: column !important; }
-  .cartItemImg { width: 100% !important; height: 160px !important; }
+  .cartItemCard { flex-direction: column; gap: 14px; padding: 16px; }
+  .cartItemImg { width: 100% !important; height: 160px !important; border-radius: 12px !important; }
   .cartEmptyEmoji { font-size: 48px !important; }
-  .cartEmptyTitle { font-size: 20px !important; }
+  .cartEmptyTitle { font-size: 18px !important; }
 }
 
 @media (max-width: 480px) {
   .cartPage { padding: 16px 10px !important; }
-  .cartBillCard { padding: 20px !important; }
-  .cartItemImg { height: 120px !important; }
+  .cartBillCard { padding: 18px !important; border-radius: 16px !important; }
+  .cartItemImg { height: 140px !important; }
   .cartEmptyEmoji { font-size: 40px !important; }
   .cartCouponRow { flex-direction: column !important; }
   .cartCouponInput { width: 100% !important; }
   .cartCouponBtn { width: 100% !important; }
+  .cartHeader { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+  .cartPageTitle { font-size: 20px !important; }
+  .cartItemCard { padding: 14px !important; border-radius: 16px !important; }
 }
 `;
 

@@ -22,11 +22,6 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
-  useEffect(() => {
-    if (!token) { navigate("/login"); return; }
-    loadOrders();
-  }, [token, navigate]);
-
   const loadOrders = async () => {
     try {
       const res = await orderAPI.getAll();
@@ -37,6 +32,11 @@ export default function OrderHistory() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!token) { navigate("/login"); return; }
+    loadOrders();
+  }, [token, navigate]);
 
   const handleCancel = async (orderId) => {
     if (!confirm("Are you sure you want to cancel this order?")) return;
@@ -54,15 +54,19 @@ export default function OrderHistory() {
 
   return (
     <div style={{ minHeight: "80vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <style>{`
+        @media (max-width: 768px) { .ohPage { padding: 24px 14px !important; } .ohTitle { font-size: 24px !important; } }
+        @media (max-width: 480px) { .ohPage { padding: 16px 10px !important; } .ohTitle { font-size: 20px !important; } .ohFilters { gap: 4px !important; } }
+      `}</style>
+      <div className="ohPage" style={{ maxWidth: "900px", margin: "0 auto" }}>
         <button onClick={() => navigate(-1)} style={{ background: "rgba(107,15,15,0.08)", color: "#6b0f0f", border: "none", cursor: "pointer", padding: "10px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
           <ArrowLeft size={20} /> Back
         </button>
 
-        <h1 style={{ fontSize: "32px", fontWeight: "900", color: "#6b0f0f", margin: "0 0 8px", fontFamily: "Georgia, serif" }}>Order History</h1>
+        <h1 className="ohTitle" style={{ fontSize: "32px", fontWeight: "900", color: "#6b0f0f", margin: "0 0 8px", fontFamily: "Georgia, serif" }}>Order History</h1>
         <p style={{ fontSize: "13px", color: "#c89a2b", marginBottom: "24px", fontWeight: "700" }}>ALL YOUR ORDERS</p>
 
-        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "24px" }}>
+        <div className="ohFilters" style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "24px" }}>
           {["all", "pending", "confirmed", "preparing", "delivered", "cancelled"].map((f) => (
             <button key={f} onClick={() => setFilter(f)} style={{
               padding: "8px 16px", borderRadius: "50px", border: "none",

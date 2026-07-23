@@ -57,7 +57,7 @@ export default function Login() {
   return (
     <div style={{
       position: "relative",
-      minHeight: "10vh",
+      minHeight: "100vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -67,11 +67,20 @@ export default function Login() {
       overflow: "hidden",
       padding: "20px",
     }}>
+      <style>{`
+        @media (max-width: 480px) {
+          .loginCard { padding: 32px 20px !important; border-radius: 20px !important; }
+          .loginTitle { font-size: 20px !important; letter-spacing: 2px !important; }
+        }
+        @media (max-width: 768px) {
+          .loginCard { padding: 40px 28px !important; }
+        }
+      `}</style>
       <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, rgba(18,5,3,0.45) 0%, rgba(18,5,3,0.9) 85%, #120503 100%)", zIndex: 2 }} />
 
       <div style={{ position: "relative", zIndex: 3, width: "100%", maxWidth: "500px" }}>
-        <div style={{
+        <div className="loginCard" style={{
           backgroundColor: "rgba(22, 10, 8, 0.78)",
           border: "1px solid rgba(247, 198, 107, 0.25)",
           borderRadius: "28px",
@@ -86,7 +95,7 @@ export default function Login() {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
             <Crown size={30} color="#f7c66b" style={{ filter: "drop-shadow(0 0 8px rgba(247, 198, 107, 0.4))" }} />
-            <span style={{ fontFamily: "'Cinzel', serif", fontSize: "28px", fontWeight: "700", letterSpacing: "4px" }}>ROYAL TAJ</span>
+            <span className="loginTitle" style={{ fontFamily: "'Cinzel', serif", fontSize: "28px", fontWeight: "700", letterSpacing: "4px" }}>ROYAL TAJ</span>
           </div>
           <p style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", margin: "0 0 36px", textTransform: "uppercase" }}>Sign in to continue your food journey</p>
 

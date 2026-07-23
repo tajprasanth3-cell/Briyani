@@ -232,11 +232,12 @@ const menuStyles = `
 
 .menuSearchInput,
 .menuLocationSelect {
-  width: 90%;
+  width: 100%;
   padding: 14px 18px;
   border-radius: 14px;
   border: 1px solid #ddd;
   outline: none;
+  box-sizing: border-box;
 }
 
 .menuLocationSelect {
@@ -391,18 +392,68 @@ const menuStyles = `
   .menuProductGrid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .menuBrandSection { padding: 16px 18px; }
+  .menuBrandTitle { font-size: 22px; }
+  .menuContainer { padding: 16px 1%; }
 }
 
 @media (max-width: 768px) {
   .menuProductGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
+  .menuBrandSection {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .menuSearchFilterSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .menuSearchInputWrapper,
+  .menuLocationSelectWrapper {
+    min-width: unset;
+    width: 100%;
+  }
+  .menuSearchInput { width: 100%; }
+  .menuCartItemActions {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .menuQuantityControlGroup {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .menuAddToCartButton { width: 100%; }
+  .menuItemTitle { font-size: 15px; min-height: auto; }
+  .menuItemBody { padding: 12px; }
+  .menuItemDescription { font-size: 12px; min-height: auto; }
+  .menuContainer { padding: 12px 2%; }
+  .menuSection { margin-bottom: 28px; }
 }
 
 @media (max-width: 600px) {
   .menuProductGrid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
+  .menuContainer { padding: 10px 2%; }
+  .menuBrandTitle { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .menuContainer { padding: 8px 2%; }
+  .menuBrandTitle { font-size: 18px; }
+  .menuItemPrice { font-size: 15px; }
+  .menuSectionTitle { font-size: 18px; }
+  .menuItemBody { padding: 10px; }
+  .menuBrandSection { padding: 12px 14px; border-radius: 14px; }
+  .menuLogoImg { width: 50px; height: 50px; }
 }
 
 .menuCartSummary {
@@ -423,81 +474,12 @@ const menuStyles = `
   color: #555;
 }
 
-@media (max-width: 1024px) {
-  .menuBrandSection {
-    padding: 16px 18px;
-  }
-
-  .menuBrandTitle {
-    font-size: 22px;
-  }
-
-  .menuContainer {
-    padding: 16px 1%;
-  }
-}
-
-@media (max-width: 768px) {
-  .menuBrandSection {
-    flex-direction: column;
-    text-align: center;
-    padding: 16px;
-  }
-
-  .menuSearchFilterSection {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .menuSearchInputWrapper,
-  .menuLocationSelectWrapper {
-    min-width: unset;
-    width: 100%;
-  }
-
-  .menuSearchInput {
-    width: 100%;
-  }
-
-  .menuItemActions {
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .menuQuantityControlGroup {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .menuAddToCartButton {
-    width: 100%;
-  }
-
-  .menuItemTitle {
-    font-size: 17px;
-    min-height: auto;
-  }
-
-  .menuItemBody {
-    padding: 14px;
-  }
-}
-
 @media (max-width: 480px) {
-  .menuContainer {
-    padding: 12px 1%;
-  }
-
-  .menuBrandTitle {
-    font-size: 20px;
-  }
-
-  .menuItemPrice {
-    font-size: 16px;
-  }
+  .menuContainer { padding: 12px 1%; }
+  .menuBrandTitle { font-size: 20px; }
+  .menuItemPrice { font-size: 16px; }
+  .menuSectionTitle { font-size: 20px; }
+  .menuItemBody { padding: 12px; }
 }
 `;
 

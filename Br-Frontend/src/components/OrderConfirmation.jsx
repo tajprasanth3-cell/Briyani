@@ -18,8 +18,10 @@ export default function OrderConfirmation() {
       <style>{`
         @keyframes confirmPopIn { from { opacity: 0; transform: scale(0.8) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         @keyframes confirmPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @media (max-width: 768px) { .confirmCard { padding: 36px 28px !important; } }
+        @media (max-width: 480px) { .confirmCard { padding: 28px 18px !important; border-radius: 18px !important; } }
       `}</style>
-      <div style={{
+      <div className="confirmCard" style={{
         maxWidth: "500px",
         width: "100%",
         background: "#fff",

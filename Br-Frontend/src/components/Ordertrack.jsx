@@ -48,9 +48,10 @@ const trackStyles = `
 }
 
 @media (max-width: 480px) {
-  .trackPageTitle { font-size: 17px !important; }
+  .trackPageTitle { font-size: 16px !important; }
   .trackContainer { border-radius: 12px !important; }
-  .trackContent { padding: 16px 12px !important; }
+  .trackContent { padding: 16px 10px !important; }
+  .trackStepRow { gap: 10px !important; margin-bottom: 20px !important; }
 }
 `;
 
@@ -173,21 +174,19 @@ export default function TrackOrder() {
                 <h2 style={{ fontSize: "16px", fontWeight: "800", color: "#333", margin: "0" }}>Delivery Status</h2>
                 <p style={{ fontSize: "12px", color: "#999", margin: "4px 0 0 0" }}>Placed on {orderInfo.date}</p>
               </div>
-              <span className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">
+              <span style={{ display: "inline-block", padding: "4px 10px", borderRadius: "50px", fontSize: "11px", fontWeight: 700, background: "#d1fae5", border: "1px solid #a7f3d0", color: "#059669", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>
                 {orderInfo.status}
               </span>
             </div>
 
             {/* Vertical Custom Timeline Tracker */}
-            <div className="relative pl-2 space-y-5 mt-4">
+            <div style={{ paddingLeft: "8px", display: "flex", flexDirection: "column", gap: "20px", marginTop: "16px" }}>
               {steps.map((step, index) => (
                 <div key={index} className="trackStepRow" style={{ display: "flex", gap: "20px", alignItems: "start", position: "relative", marginBottom: "28px" }}>
                   
                   {/* Vertical Connection Line connecting the steps */}
                   {index !== steps.length - 1 && (
-                    <div className={`absolute left-3.5 top-7 bottom-[-24px] w-[2px] ${
-                      step.status === 'completed' ? 'bg-emerald-600' : 'bg-stone-200'
-                    }`} />
+                    <div style={{ position: "absolute", left: "14px", top: "28px", bottom: "-24px", width: "2px", background: step.status === 'completed' ? '#059669' : '#e7e5e4' }} />
                   )}
 
                   {/* Icon Node Indicator */}

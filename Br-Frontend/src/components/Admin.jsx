@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   UtensilsCrossed,
@@ -8,7 +7,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  ChevronDown,
   LogOut,
   RefreshCw,
   X,
@@ -16,11 +14,10 @@ import {
   Search,
   BarChart3,
   Settings,
-  Clock,
   Eye,
 } from "lucide-react";
 
-const API = "http://localhost:5001/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 
 const adminStyles = `
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
@@ -577,11 +574,48 @@ const adminStyles = `
 }
 
 @media (max-width: 768px) {
-  .adminSidebar { display: none; }
-  .adminMain { margin-left: 0; padding: 16px; }
-  .statGrid { grid-template-columns: 1fr; }
+  .adminSidebar {
+    display: none;
+  }
+
+  .adminSidebar.open {
+    display: flex;
+    width: 260px;
+    z-index: 200;
+  }
+
+  .adminOverlay {
+    display: block;
+  }
+
+  .adminMain { margin-left: 0; padding: 14px; }
+  .statGrid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .statCard { padding: 16px; }
+  .statValue { font-size: 24px; }
+  .statLabel { font-size: 11px; }
   .adminTable { font-size: 12px; }
-  .adminTable th, .adminTable td { padding: 10px 12px; }
+  .adminTable th, .adminTable td { padding: 10px 10px; }
+  .adminTableCard { overflow-x: auto; border-radius: 12px; }
+  .adminHeader { flex-wrap: wrap; gap: 12px; }
+  .adminTableHeader { flex-wrap: wrap; gap: 10px; padding: 14px 16px; }
+  .adminTableTitle { font-size: 15px; }
+  .mobile-menu-btn { display: block !important; }
+  .adminModalCard { padding: 24px; margin: 10px; border-radius: 16px; }
+  .adminTitle { font-size: 22px; }
+  .adminSettingsForm { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .adminMain { padding: 10px; }
+  .statGrid { grid-template-columns: 1fr; gap: 10px; }
+  .statCard { padding: 14px; }
+  .statValue { font-size: 22px; }
+  .adminTable th, .adminTable td { padding: 8px 8px; font-size: 11px; }
+  .adminModalCard { padding: 18px; border-radius: 14px; max-height: 95vh; }
+  .adminTitle { font-size: 18px; }
+  .adminFormActions { flex-direction: column; }
+  .adminFormActions button { width: 100%; justify-content: center; }
+  .periodTabs { flex-wrap: wrap; }
 }
 `;
 
@@ -602,7 +636,6 @@ function getStatusClass(status) {
 }
 
 export default function Admin() {
-  const navigate = useNavigate();
   const [tab, setTab] = useState("dashboard");
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
@@ -611,7 +644,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(null);
   const [form, setForm] = useState({});
-  const [token] = useState(() => localStorage.getItem("adminToken") || "");
+  const [token] = useState(() => localStorage.getItem("adminToken") || localStorage.getItem("taj_token") || "");
   const [orderFilter, setOrderFilter] = useState("all");
   const [orderSearch, setOrderSearch] = useState("");
   const [revenueData, setRevenueData] = useState([]);
@@ -621,6 +654,7 @@ export default function Admin() {
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
   const [adminPassword, setAdminPassword] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [settingsMsg, setSettingsMsg] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const headers = {
     "Content-Type": "application/json",
@@ -669,7 +703,7 @@ export default function Admin() {
     try {
       const res = await fetch(`${API}/admin/orders`, { headers });
       const data = await res.json();
-      if (data.success) setOrders(data.data);
+      if (data.success) setOrders(data.data.orders || data.data);
     } catch (e) { console.error(e); }
   };
 
@@ -677,7 +711,7 @@ export default function Admin() {
     try {
       const res = await fetch(`${API}/menu`);
       const data = await res.json();
-      if (data.success) setMenuItems(data.data.items);
+      if (data.success) setMenuItems(data.data.items || data.data);
     } catch (e) { console.error(e); }
   };
 
@@ -768,7 +802,7 @@ export default function Admin() {
       } else {
         setSettingsMsg(data.message || "Failed to change password");
       }
-    } catch (e) { setSettingsMsg("Failed to change password"); }
+    } catch { setSettingsMsg("Failed to change password"); }
   };
 
   const handleLogin = async (e) => {
@@ -782,11 +816,13 @@ export default function Admin() {
       const data = await res.json();
       if (data.success && data.data.isAdmin) {
         localStorage.setItem("adminToken", data.data.token);
+        localStorage.setItem("taj_token", data.data.token);
+        localStorage.setItem("taj_user", JSON.stringify(data.data));
         window.location.reload();
       } else {
         alert(data.message || "Not an admin account");
       }
-    } catch (e) { alert("Login failed"); }
+    } catch { alert("Login failed"); }
   };
 
   const handleExportCSV = async () => {
@@ -799,7 +835,7 @@ export default function Admin() {
       a.download = "taj-biryani-orders.csv";
       a.click();
       window.URL.revokeObjectURL(url);
-    } catch (e) { alert("Export failed"); }
+    } catch { alert("Export failed"); }
   };
 
   const filteredOrders = orders.filter((order) => {
@@ -848,7 +884,9 @@ export default function Admin() {
     <div className="adminPage">
       <style>{adminStyles}</style>
 
-      <aside className="adminSidebar">
+      {sidebarOpen && <div className="adminOverlay" onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 150 }} />}
+
+      <aside className={`adminSidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="adminSidebarLogo">
           <div className="adminLogoCircle">
             <UtensilsCrossed size={20} color="#5a0c0c" />
@@ -887,9 +925,14 @@ export default function Admin() {
 
       <main className="adminMain">
         <div className="adminHeader">
-          <div>
-            <h1 className="adminTitle">{tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
-            <p className="adminSubtitle">Manage your restaurant</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ display: 'none', background: 'linear-gradient(135deg, #6b0f0f, #8b1a1a)', color: '#f7c66b', border: 'none', borderRadius: 10, padding: '10px 14px', cursor: 'pointer', fontWeight: 700, fontSize: 13 }} className="mobile-menu-btn">
+              ☰
+            </button>
+            <div>
+              <h1 className="adminTitle">{tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
+              <p className="adminSubtitle">Manage your restaurant</p>
+            </div>
           </div>
           <button className="adminBtnSecondary" onClick={loadAll} style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <RefreshCw size={14} /> Refresh
