@@ -195,114 +195,7 @@ function AppContent() {
           .auth-link-item { padding: 6px 10px !important; font-size: 11px !important; }
         }
 
-        /* Awwwards / Behance style Navbar brand capsule */
-        .nav-brand {
-          background: rgba(18, 5, 4, 0.6) !important;
-          border: 1px solid rgba(247, 198, 107, 0.25) !important;
-          backdrop-filter: blur(16px) !important;
-          -webkit-backdrop-filter: blur(16px) !important;
-          padding: 6px 20px 6px 8px !important;
-          border-radius: 30px !important;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-          cursor: pointer;
-        }
 
-        .nav-brand-icon {
-          position: relative;
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          padding: 2px;
-          background: linear-gradient(135deg, rgba(247, 198, 107, 0.3), rgba(217, 149, 35, 0.1));
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .nav-brand-icon::after {
-          content: '';
-          position: absolute;
-          inset: -3px;
-          border-radius: 50%;
-          border: 1px dashed rgba(247, 198, 107, 0.45);
-          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .nav-brand-icon img {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          object-fit: cover;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Hover effects */
-        .nav-brand:hover {
-          background: rgba(26, 8, 6, 0.8) !important;
-          border-color: rgba(247, 198, 107, 0.65) !important;
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(247, 198, 107, 0.15);
-        }
-
-        .nav-brand:hover .nav-brand-icon {
-          transform: scale(1.05);
-          background: linear-gradient(135deg, #f7c66b, #d99523);
-        }
-
-        .nav-brand:hover .nav-brand-icon::after {
-          transform: rotate(180deg);
-          border-color: #f7c66b;
-          inset: -5px;
-        }
-
-        .nav-brand:hover .nav-brand-icon img {
-          transform: scale(1.1);
-        }
-
-        .nav-brand-text {
-          font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
-          font-size: 19px;
-          font-weight: 800;
-          letter-spacing: 2px;
-          line-height: 1;
-          background: linear-gradient(90deg, #f7c66b 0%, #ffe8b5 50%, #f7c66b 100%);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          transition: all 0.5s ease;
-          animation: gold-shimmer-fast 4s linear infinite;
-        }
-
-        @keyframes gold-shimmer-fast {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-
-        .nav-brand:hover .nav-brand-text {
-          text-shadow: 0 0 15px rgba(247, 198, 107, 0.5);
-          letter-spacing: 2.5px;
-        }
-
-        .nav-brand-sub {
-          font-family: 'Poppins', sans-serif;
-          font-size: 8px;
-          font-weight: 700;
-          letter-spacing: 3px;
-          color: rgba(255, 255, 255, 0.6);
-          text-transform: uppercase;
-          transition: all 0.5s ease;
-          margin-top: 2px;
-        }
-
-        .nav-brand:hover .nav-brand-sub {
-          color: #fff;
-          letter-spacing: 4.5px;
-        }
       `}</style>
       <header
         className="navbar"
@@ -353,14 +246,14 @@ function AppContent() {
               boxShadow: "0 4px 12px rgba(247,198,107,0.3)",
             }}
           >
-            <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div>
-            <div className="nav-brand-text" style={{ fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>
+            <div className="nav-brand-text" style={{ color: "#f7c66b", fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>
               TAJ
             </div>
-            <div className="nav-brand-sub" style={{ fontSize: "9px", fontWeight: "700", lineHeight: 1, letterSpacing: "2px" }}>
-              BIRYANI
+            <div className="nav-brand-sub" style={{ color: "rgba(255,255,255,0.9)", fontSize: "9px", fontWeight: "700", lineHeight: 1, letterSpacing: "2px", opacity: 0.9 }}>
+              BRIYANI
             </div>
           </div>
         </NavLink>
@@ -452,7 +345,7 @@ function AppContent() {
             </div>
             <div>
               <div style={{ color: "#f7c66b", fontSize: 14, fontWeight: 900, fontFamily: "Georgia, serif" }}>TAJ</div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 7, fontWeight: 700, letterSpacing: 2 }}>BIRYANI</div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 7, fontWeight: 700, letterSpacing: 2 }}>BRIYANI</div>
             </div>
           </div>
           <button className="mm-close" onClick={() => setMobileMenuOpen(false)}>
@@ -496,7 +389,7 @@ function AppContent() {
         </div>
       </div>
 
-        <Analytics />
+      <Analytics />
       <main style={{ padding: "0 0 40px 0" }} role="main" aria-label="Main content">
         {toast && (
           <div style={{
@@ -548,78 +441,78 @@ function AppContent() {
           }
         `}</style>
         <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<TajBiryani onAddToCart={handleAddToCart} onApplyCoupon={handleApplyCoupon} />} />
-              <Route path="/menu" element={<Menu searchQuery={searchQuery} onSearchChange={setSearchQuery} onAddToCart={handleAddToCart} cartCount={cartCount} />} />
-              <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateCartItem} onRemoveItem={handleRemoveCartItem} onClearCart={handleClearCart} appliedCoupon={appliedCoupon} onApplyCoupon={handleApplyCoupon} />} />
-              <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} onClearCart={handleClearCart} />} />
-              <Route path="/track-order/:orderId?" element={<TrackOrder />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/order-history" element={<OrderHistory />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation />} />
-              <Route path="*" element={
-                <div style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px", textAlign: "center" }}>
-                  <div style={{ maxWidth: "480px", width: "100%" }}>
-                    <div style={{ fontSize: "120px", fontWeight: "900", fontFamily: "Georgia, serif", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a, #d99523)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: 1, marginBottom: "8px", filter: "drop-shadow(0 8px 24px rgba(107,15,15,0.15))" }}>404</div>
-                    <div style={{ width: "80px", height: "4px", background: "linear-gradient(90deg, transparent, #f7c66b, transparent)", margin: "0 auto 24px", borderRadius: "4px" }} />
-                    <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#6b0f0f", margin: "0 0 12px", fontFamily: "Georgia, serif" }}>Page Not Found</h2>
-                    <p style={{ fontSize: "15px", color: "#888", margin: "0 0 32px", lineHeight: 1.7 }}>The page you're looking for doesn't exist or has been moved.</p>
-                    <button onClick={() => navigate("/")} style={{ padding: "14px 36px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", fontWeight: "800", fontSize: "14px", cursor: "pointer", boxShadow: "0 8px 24px rgba(107,15,15,0.3)" }}>Back to Home</button>
-                  </div>
-                </div>
-              } />
-            </Routes>
-          </ErrorBoundary>
-        </main>
-
-        <footer className="siteFooter">
-          <div className="footerInner">
-            <div className="footerCol brandCol">
-              <div className="footerLogo">
-                <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.2)" }}>
-                  <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
-                <div>
-                  <div className="footerLogoTitle">TAJ</div>
-                  <div className="footerLogoSub">BIRYANI</div>
+          <Routes>
+            <Route path="/" element={<TajBiryani onAddToCart={handleAddToCart} onApplyCoupon={handleApplyCoupon} />} />
+            <Route path="/menu" element={<Menu searchQuery={searchQuery} onSearchChange={setSearchQuery} onAddToCart={handleAddToCart} cartCount={cartCount} />} />
+            <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateCartItem} onRemoveItem={handleRemoveCartItem} onClearCart={handleClearCart} appliedCoupon={appliedCoupon} onApplyCoupon={handleApplyCoupon} />} />
+            <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} onClearCart={handleClearCart} />} />
+            <Route path="/track-order/:orderId?" element={<TrackOrder />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="*" element={
+              <div style={{ minHeight: "70vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px", textAlign: "center" }}>
+                <div style={{ maxWidth: "480px", width: "100%" }}>
+                  <div style={{ fontSize: "120px", fontWeight: "900", fontFamily: "Georgia, serif", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a, #d99523)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", lineHeight: 1, marginBottom: "8px", filter: "drop-shadow(0 8px 24px rgba(107,15,15,0.15))" }}>404</div>
+                  <div style={{ width: "80px", height: "4px", background: "linear-gradient(90deg, transparent, #f7c66b, transparent)", margin: "0 auto 24px", borderRadius: "4px" }} />
+                  <h2 style={{ fontSize: "24px", fontWeight: "800", color: "#6b0f0f", margin: "0 0 12px", fontFamily: "Georgia, serif" }}>Page Not Found</h2>
+                  <p style={{ fontSize: "15px", color: "#888", margin: "0 0 32px", lineHeight: 1.7 }}>The page you're looking for doesn't exist or has been moved.</p>
+                  <button onClick={() => navigate("/")} style={{ padding: "14px 36px", borderRadius: "14px", border: "none", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", fontWeight: "800", fontSize: "14px", cursor: "pointer", boxShadow: "0 8px 24px rgba(107,15,15,0.3)" }}>Back to Home</button>
                 </div>
               </div>
-              <p className="footerDesc">Experience the royal taste of authentic Dum Biryani, crafted with premium spices and aged basmati rice.</p>
+            } />
+          </Routes>
+        </ErrorBoundary>
+      </main>
+
+      <footer className="siteFooter">
+        <div className="footerInner">
+          <div className="footerCol brandCol">
+            <div className="footerLogo">
+              <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.2)" }}>
+                <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div>
+                <div className="footerLogoTitle">TAJ</div>
+                <div className="footerLogoSub">BRIYANI</div>
+              </div>
             </div>
-            <div className="footerCol">
-              <h4 className="footerHeading">Quick Links</h4>
-              <ul className="footerLinks">
-                <li><NavLink to="/">Home</NavLink></li>
-                <li><NavLink to="/menu">Menu</NavLink></li>
-                <li><NavLink to="/cart">Cart</NavLink></li>
-                <li><NavLink to="/checkout">Checkout</NavLink></li>
-                <li><NavLink to="/track-order">Track Order</NavLink></li>
-                <li><NavLink to="/login">Login</NavLink></li>
-              </ul>
-            </div>
-            <div className="footerCol">
-              <h4 className="footerHeading">Contact Us</h4>
-              <ul className="footerLinks">
-                <li><span className="footerContactItem"><MapPin size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> 123, Bhendi Bazaar, Mumbai</span></li>
-                <li><span className="footerContactItem"><Phone size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> +91 98765 43210</span></li>
-                <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbiryani.com</span></li>
-              </ul>
-            </div>
-            <div className="footerCol">
-              <h4 className="footerHeading">Hours</h4>
-              <ul className="footerLinks">
-                <li><span className="footerContactItem">Mon - Sat: 11 AM - 11 PM</span></li>
-                <li><span className="footerContactItem">Sun: 12 PM - 10 PM</span></li>
-              </ul>
-            </div>
+            <p className="footerDesc">Experience the royal taste of authentic Dum Biryani, crafted with premium spices and aged basmati rice.</p>
           </div>
-          <div className="footerBottom">
-            <p>&copy; 2026 Taj Biryani. All rights reserved.</p>
+          <div className="footerCol">
+            <h4 className="footerHeading">Quick Links</h4>
+            <ul className="footerLinks">
+              <li><NavLink to="/">Home</NavLink></li>
+              <li><NavLink to="/menu">Menu</NavLink></li>
+              <li><NavLink to="/cart">Cart</NavLink></li>
+              <li><NavLink to="/checkout">Checkout</NavLink></li>
+              <li><NavLink to="/track-order">Track Order</NavLink></li>
+              <li><NavLink to="/login">Login</NavLink></li>
+            </ul>
           </div>
-        </footer>
+          <div className="footerCol">
+            <h4 className="footerHeading">Contact Us</h4>
+            <ul className="footerLinks">
+              <li><span className="footerContactItem"><MapPin size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> 123, Bhendi Bazaar, Mumbai</span></li>
+              <li><span className="footerContactItem"><Phone size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> +91 98765 43210</span></li>
+              <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbriyani.com</span></li>
+            </ul>
+          </div>
+          <div className="footerCol">
+            <h4 className="footerHeading">Hours</h4>
+            <ul className="footerLinks">
+              <li><span className="footerContactItem">Mon - Sat: 11 AM - 11 PM</span></li>
+              <li><span className="footerContactItem">Sun: 12 PM - 10 PM</span></li>
+            </ul>
+          </div>
+        </div>
+        <div className="footerBottom">
+          <p>&copy; 2026 Taj Briyani. All rights reserved.</p>
+        </div>
+      </footer>
 
       <style>{`
         .siteFooter {

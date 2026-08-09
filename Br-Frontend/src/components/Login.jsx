@@ -100,7 +100,7 @@ export default function Login() {
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
             <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 12px rgba(247, 198, 107, 0.3)" }}>
-              <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
             <span className="loginTitle" style={{ fontFamily: "'Cinzel', serif", fontSize: "28px", fontWeight: "700", letterSpacing: "4px" }}>ROYAL TAJ</span>
           </div>
@@ -152,7 +152,7 @@ export default function Login() {
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px", margin: "32px 0 24px", color: "rgba(201, 189, 168, 0.3)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "2px", fontWeight: "600" }}>
             <div style={{ flex: 1, height: "1px", background: "rgba(201, 189, 168, 0.15)" }} />
-            <span>Taj Biryani</span>
+            <span>Taj Briyani</span>
             <div style={{ flex: 1, height: "1px", background: "rgba(201, 189, 168, 0.15)" }} />
           </div>
 

@@ -55,7 +55,7 @@ export default function Register() {
 
   return (
     <div style={{
-      minHeight: "100vh",
+      Height: "40vh",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -94,7 +94,7 @@ export default function Register() {
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
             <div style={{ width: 40, height: 40, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 12px rgba(247, 198, 107, 0.3)" }}>
-              <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
             <span className="registerTitle" style={{ fontSize: "26px", fontWeight: "700", letterSpacing: "3px", fontFamily: "Georgia, serif" }}>ROYAL TAJ</span>
           </div>

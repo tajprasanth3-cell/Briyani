@@ -750,7 +750,7 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
       </section>
 
       <section className="briyaniCatering">
-        <h2 className="briyaniCateringTitle">TAJ BIRYANI CATERING SERVICES</h2>
+        <h2 className="briyaniCateringTitle">TAJ BRIYANI CATERING SERVICES</h2>
         <p>Weddings, Corporate Events, Parties, Get-Togethers</p>
         <button className="briyaniSecondaryBtn" onClick={() => navigate("/menu")}>
           Enquire Now
