@@ -194,6 +194,74 @@ function AppContent() {
           .nav-link-item { padding: 6px 10px !important; font-size: 12px !important; }
           .auth-link-item { padding: 6px 10px !important; font-size: 11px !important; }
         }
+
+        /* Navbar brand logo & name animations */
+        .nav-brand {
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .nav-brand::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.15),
+            transparent
+          );
+          transform: skewX(-25deg);
+          transition: 0.75s;
+        }
+
+        .nav-brand:hover::before {
+          left: 150%;
+        }
+
+        .nav-brand:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(247, 198, 107, 0.25);
+          border-color: rgba(247, 198, 107, 0.4) !important;
+          background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .nav-brand-icon img {
+          transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-brand:hover .nav-brand-icon img {
+          transform: rotate(360deg) scale(1.1);
+        }
+
+        .nav-brand-text {
+          position: relative;
+          background: linear-gradient(90deg, #f7c66b, #fff, #f7c66b);
+          background-size: 200% auto;
+          color: #f7c66b;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gold-shimmer 3s linear infinite;
+        }
+
+        @keyframes gold-shimmer {
+          0% { background-position: 0% center; }
+          100% { background-position: 200% center; }
+        }
+
+        .nav-brand-sub {
+          transition: letter-spacing 0.4s ease, color 0.4s ease;
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-brand:hover .nav-brand-sub {
+          letter-spacing: 3.5px !important;
+          color: #f7c66b !important;
+        }
       `}</style>
       <header
         className="navbar"
@@ -247,10 +315,10 @@ function AppContent() {
             <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div>
-            <div className="nav-brand-text" style={{ color: "#f7c66b", fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>
+            <div className="nav-brand-text" style={{ fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>
               TAJ
             </div>
-            <div className="nav-brand-sub" style={{ color: "rgba(255,255,255,0.9)", fontSize: "9px", fontWeight: "700", lineHeight: 1, letterSpacing: "2px", opacity: 0.9 }}>
+            <div className="nav-brand-sub" style={{ fontSize: "9px", fontWeight: "700", lineHeight: 1, letterSpacing: "2px" }}>
               BIRYANI
             </div>
           </div>
