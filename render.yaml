@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: taj-briyani-backend
+    runtime: node
+    region: oregon
+    rootDir: br-backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/menu
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5001
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        fromService:
+          name: taj-briyani-frontend
+          type: web
+          property: url
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  - type: static
+    name: taj-briyani-frontend
+    region: oregon
+    rootDir: Br-Frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: taj-briyani-backend
+          type: web
+          property: url
+      - key: VITE_WS_URL
+        fromService:
+          name: taj-briyani-backend
+          type: web
+          property: url
+      - key: VITE_GA_ID
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

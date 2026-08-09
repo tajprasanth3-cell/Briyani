@@ -1,0 +1,21 @@
+{
+  "name": "Taj Biryani - Authentic Dum Biryani Restaurant",
+  "short_name": "Taj Biryani",
+  "description": "Experience the royal taste of authentic Dum Biryani. Order online for delivery, takeaway, or dine-in.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a0a0a",
+  "theme_color": "#5a0c0c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "restaurant", "ordering"],
+  "lang": "en",
+  "dir": "ltr"
+}

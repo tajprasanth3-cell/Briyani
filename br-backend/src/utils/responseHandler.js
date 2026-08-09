@@ -1,9 +1,11 @@
 const successResponse = (res, data, message = 'Success', statusCode = 200) => {
-  res.status(statusCode).json({ success: true, message, data });
+  if (res.headersSent) return res;
+  return res.status(statusCode).json({ success: true, message, data });
 };
 
 const errorResponse = (res, message = 'Server Error', statusCode = 500) => {
-  res.status(statusCode).json({ success: false, message });
+  if (res.headersSent) return res;
+  return res.status(statusCode).json({ success: false, message });
 };
 
 module.exports = { successResponse, errorResponse };

@@ -13,8 +13,11 @@ import Profile from "./components/Profile.jsx";
 import OrderHistory from "./components/OrderHistory.jsx";
 import OrderConfirmation from "./components/OrderConfirmation.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import Analytics from "./components/Analytics.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import { ThemeProvider, useTheme } from "./context/ThemeContext.jsx";
+import { LanguageProvider, useLanguage } from "./context/LanguageContext.jsx";
+import tajLogo from "./components/Images/taj_logo.png";
 
 const navItems = [
   { to: "/", label: "Home", end: true },
@@ -30,11 +33,13 @@ function AppContent() {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toast, setToast] = useState(null);
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const { darkMode, toggleDark } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -70,8 +75,9 @@ function AppContent() {
       }
       return [...prev, { ...product }];
     });
-    navigate("/cart");
-  }, [navigate]);
+    setToast({ message: `"${product.name}" added to cart!`, type: "success" });
+    setTimeout(() => setToast(null), 2500);
+  }, []);
 
   const handleUpdateCartItem = useCallback((id, change) => {
     setCartItems((prev) =>
@@ -230,7 +236,7 @@ function AppContent() {
               width: 40,
               height: 40,
               borderRadius: "50%",
-              background: "linear-gradient(135deg, #f7c66b, #d99523)",
+              overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -238,7 +244,7 @@ function AppContent() {
               boxShadow: "0 4px 12px rgba(247,198,107,0.3)",
             }}
           >
-            <UtensilsCrossed size={18} color="#5a0c0c" strokeWidth={2.5} />
+            <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div>
             <div className="nav-brand-text" style={{ color: "#f7c66b", fontSize: "20px", fontWeight: "900", lineHeight: 1.1, letterSpacing: "1.5px", fontFamily: "Georgia, serif" }}>
@@ -381,14 +387,64 @@ function AppContent() {
         </div>
       </div>
 
-        <main style={{ padding: "0 0 40px 0" }}>
-          <ErrorBoundary>
+        <Analytics />
+      <main style={{ padding: "0 0 40px 0" }} role="main" aria-label="Main content">
+        {toast && (
+          <div style={{
+            position: "fixed",
+            top: 80,
+            right: 20,
+            zIndex: 9999,
+            background: "linear-gradient(135deg, #065f46, #047857)",
+            color: "#fff",
+            padding: "14px 24px",
+            borderRadius: 12,
+            fontWeight: 700,
+            fontSize: 14,
+            boxShadow: "0 8px 32px rgba(6,95,70,0.4)",
+            animation: "slideInRight 0.35s ease",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            maxWidth: "90vw",
+          }}>
+            <span style={{ fontSize: 18 }}>✓</span>
+            {toast.message}
+            <button
+              onClick={() => setToast(null)}
+              style={{
+                background: "rgba(255,255,255,0.2)",
+                border: "none",
+                color: "#fff",
+                marginLeft: 8,
+                cursor: "pointer",
+                width: 24,
+                height: 24,
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 14,
+                fontWeight: 900,
+              }}
+            >
+              ×
+            </button>
+          </div>
+        )}
+        <style>{`
+          @keyframes slideInRight {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+        `}</style>
+        <ErrorBoundary>
             <Routes>
               <Route path="/" element={<TajBiryani onAddToCart={handleAddToCart} onApplyCoupon={handleApplyCoupon} />} />
               <Route path="/menu" element={<Menu searchQuery={searchQuery} onSearchChange={setSearchQuery} onAddToCart={handleAddToCart} cartCount={cartCount} />} />
               <Route path="/cart" element={<Cart cartItems={cartItems} onUpdateQuantity={handleUpdateCartItem} onRemoveItem={handleRemoveCartItem} onClearCart={handleClearCart} appliedCoupon={appliedCoupon} onApplyCoupon={handleApplyCoupon} />} />
               <Route path="/checkout" element={<Checkout cartItems={cartItems} appliedCoupon={appliedCoupon} onClearCart={handleClearCart} />} />
-              <Route path="/track-order" element={<TrackOrder />} />
+              <Route path="/track-order/:orderId?" element={<TrackOrder />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/admin" element={<Admin />} />
@@ -414,8 +470,8 @@ function AppContent() {
           <div className="footerInner">
             <div className="footerCol brandCol">
               <div className="footerLogo">
-                <div style={{ width: 50, height: 40, borderRadius: "50%", background: "linear-gradient(135deg, #f7c66b, #d99523)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <UtensilsCrossed size={18} color="#5a0c0c" strokeWidth={2.5} />
+                <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.2)" }}>
+                  <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
                 <div>
                   <div className="footerLogoTitle">TAJ</div>
@@ -579,7 +635,9 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <ThemeProvider>
-          <AppContent />
+          <LanguageProvider>
+            <AppContent />
+          </LanguageProvider>
         </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>

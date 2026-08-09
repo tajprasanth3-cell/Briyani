@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, Mail, Lock, User, Phone } from "lucide-react";
+import { Mail, Lock, User, Phone } from "lucide-react";
 import { authAPI } from "../api";
 import { useAuth } from "../context/AuthContext";
+import tajLogo from "./Images/taj_logo.png";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -64,12 +65,16 @@ export default function Register() {
       padding: "40px 20px",
     }}>
       <style>{`
-        @media (max-width: 480px) {
-          .registerCard { padding: 28px 18px !important; border-radius: 20px !important; }
-          .registerTitle { font-size: 20px !important; letter-spacing: 2px !important; }
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .registerCard { padding: 40px 32px !important; max-width: 440px !important; }
         }
         @media (max-width: 768px) {
           .registerCard { padding: 36px 24px !important; }
+          .registerTitle { font-size: 22px !important; letter-spacing: 2px !important; }
+        }
+        @media (max-width: 480px) {
+          .registerCard { padding: 28px 18px !important; border-radius: 20px !important; }
+          .registerTitle { font-size: 20px !important; letter-spacing: 2px !important; }
         }
       `}</style>
       <div className="registerCard" style={{
@@ -88,7 +93,9 @@ export default function Register() {
 
         <div style={{ textAlign: "center", marginBottom: "28px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
-            <Crown size={28} color="#f7c66b" />
+            <div style={{ width: 40, height: 40, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 12px rgba(247, 198, 107, 0.3)" }}>
+              <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
             <span className="registerTitle" style={{ fontSize: "26px", fontWeight: "700", letterSpacing: "3px", fontFamily: "Georgia, serif" }}>ROYAL TAJ</span>
           </div>
           <p style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", textTransform: "uppercase" }}>Create your account</p>

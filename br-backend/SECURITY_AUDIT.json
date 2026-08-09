@@ -1,0 +1,830 @@
+{
+  "date": "2026-07-27T17:52:45.565Z",
+  "checks": [
+    {
+      "category": "Environment",
+      "name": ".env not in .gitignore",
+      "passed": true,
+      "details": ".env file exists - ensure it is gitignored"
+    },
+    {
+      "category": "Environment",
+      "name": "JWT_SECRET is strong",
+      "passed": true,
+      "details": "Secret length: 42"
+    },
+    {
+      "category": "Environment",
+      "name": "JWT_SECRET is not default",
+      "passed": false,
+      "details": "JWT appears to use default value"
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "app.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "app.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cloudinary.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cloudinary.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "db.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "db.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminAuthController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminAuthController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "branchController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "branchController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "bulkImportController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "bulkImportController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cartController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cartController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "notificationController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "notificationController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "paymentController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "paymentController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "userController.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "userController.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminMiddleware.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminMiddleware.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authMiddleware.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authMiddleware.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "errorMiddleware.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "errorMiddleware.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "rateLimiter.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "rateLimiter.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "securityMiddleware.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "securityMiddleware.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "uploadMiddleware.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "uploadMiddleware.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Branch.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Branch.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Cart.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Cart.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "MenuItem.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "MenuItem.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Notification.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Notification.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Order.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Order.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Payment.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "Payment.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "User.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "User.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "adminRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "branchRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "branchRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "bulkImportRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "bulkImportRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cartRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "cartRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "notificationRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "notificationRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "paymentRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "paymentRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "userRoutes.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "userRoutes.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "server.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "server.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "generateToken.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "generateToken.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "logger.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "logger.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "responseHandler.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "responseHandler.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "sendEmail.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "sendEmail.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authValidation.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authValidation.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuValidation.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuValidation.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderValidation.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderValidation.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "websocket.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "websocket.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authController.test.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "authController.test.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuController.test.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "menuController.test.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderController.test.js - No raw queries",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "SQL/NoSQL Injection",
+      "name": "orderController.test.js - No eval",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "api.js - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "App.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Admin.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Analytics.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Briyani.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Cart.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Checkout.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "ErrorBoundary.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "LoadingSpinner.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Login.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Menu.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "OrderConfirmation.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "OrderHistory.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Ordertrack.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Profile.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Register.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "AuthContext.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "LanguageContext.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "ThemeContext.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "useOffline.js - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "useQuantityLimit.js - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "useWebSocket.js - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "main.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "ErrorBoundary.test.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "LanguageContext.test.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "LoadingSpinner.test.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "XSS",
+      "name": "Menu.test.jsx - No dangerouslySetInnerHTML",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "CSRF",
+      "name": "CORS configured",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "CSRF",
+      "name": "Security headers middleware",
+      "passed": false,
+      "details": ""
+    },
+    {
+      "category": "Rate Limiting",
+      "name": "Auth rate limiter configured",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Rate Limiting",
+      "name": "API rate limiter configured",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Authentication",
+      "name": "Passwords are hashed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Authentication",
+      "name": "Passwords compared securely",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Authentication",
+      "name": "JWT verification used",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Dependencies",
+      "name": "express-rate-limit installed",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "category": "Dependencies",
+      "name": "helmet should be installed",
+      "passed": false,
+      "details": "helmet not found - consider adding"
+    }
+  ],
+  "passed": 134,
+  "failed": 3,
+  "score": "97.8%"
+}

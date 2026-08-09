@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const MenuItem = require('../models/MenuItem');
 const { successResponse, errorResponse } = require('../utils/responseHandler');
+const { emitOrderUpdate, emitNewOrder } = require('../websocket');
 
 const createOrder = async (req, res) => {
   try {
@@ -57,7 +58,10 @@ const createOrder = async (req, res) => {
     );
 
     const populated = await Order.findById(order._id)
-      .populate('items.menuItem', 'name price image category');
+      .populate('items.menuItem', 'name price image category')
+      .populate('user', 'name email phone');
+
+    emitNewOrder(populated);
 
     successResponse(res, populated, 'Order placed successfully', 201);
   } catch (error) {
@@ -134,6 +138,8 @@ const updateOrderStatus = async (req, res) => {
     order.status = status;
     const updatedOrder = await order.save();
 
+    emitOrderUpdate(order._id, { status: updatedOrder.status, updatedAt: updatedOrder.updatedAt });
+
     successResponse(res, updatedOrder, 'Order status updated successfully');
   } catch (error) {
     errorResponse(res, error.message);
@@ -157,6 +163,8 @@ const cancelOrder = async (req, res) => {
 
     order.status = 'cancelled';
     await order.save();
+
+    emitOrderUpdate(order._id, { status: 'cancelled', updatedAt: order.updatedAt });
 
     successResponse(res, order, 'Order cancelled successfully');
   } catch (error) {

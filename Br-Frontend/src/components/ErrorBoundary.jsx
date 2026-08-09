@@ -13,7 +13,7 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{
+        <div className="errorBoundary" style={{
           minHeight: "60vh",
           display: "flex",
           alignItems: "center",
@@ -21,6 +21,14 @@ export default class ErrorBoundary extends Component {
           padding: "40px 20px",
           textAlign: "center",
         }}>
+          <style>{`
+            @media (max-width: 768px) {
+              .errorBoundary { padding: 32px 16px !important; }
+            }
+            @media (max-width: 480px) {
+              .errorBoundary { padding: 24px 12px !important; }
+            }
+          `}</style>
           <div style={{ maxWidth: "480px", width: "100%" }}>
             <div style={{
               width: "80px",

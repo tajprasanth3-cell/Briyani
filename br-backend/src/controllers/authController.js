@@ -24,6 +24,7 @@ const register = async (req, res) => {
       email: user.email,
       phone: user.phone,
       isAdmin: user.isAdmin,
+      role: user.role,
       token: generateToken(user._id),
     }, 'Account created successfully', 201);
   } catch (error) {
@@ -52,6 +53,7 @@ const login = async (req, res) => {
       phone: user.phone,
       address: user.address,
       isAdmin: user.isAdmin,
+      role: user.role,
       token: generateToken(user._id),
     }, 'Login successful');
   } catch (error) {

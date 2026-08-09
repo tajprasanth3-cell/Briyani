@@ -25,11 +25,26 @@ const validateLogin = (req, res, next) => {
 };
 
 const validatePasswordReset = (req, res, next) => {
-  const { password } = req.body;
-  if (!password || password.length < 6) {
-    return errorResponse(res, 'Password must be at least 6 characters', 400);
-  }
+  const { email, code, password } = req.body;
+  const errors = [];
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Valid email is required');
+  if (!code) errors.push('Reset code is required');
+  if (!password || password.length < 6) errors.push('Password must be at least 6 characters');
+
+  if (errors.length > 0) return errorResponse(res, errors.join(', '), 400);
   next();
 };
 
-module.exports = { validateRegister, validateLogin, validatePasswordReset };
+const validateChangePassword = (req, res, next) => {
+  const { currentPassword, newPassword } = req.body;
+  const errors = [];
+
+  if (!currentPassword) errors.push('Current password is required');
+  if (!newPassword || newPassword.length < 6) errors.push('New password must be at least 6 characters');
+
+  if (errors.length > 0) return errorResponse(res, errors.join(', '), 400);
+  next();
+};
+
+module.exports = { validateRegister, validateLogin, validatePasswordReset, validateChangePassword };

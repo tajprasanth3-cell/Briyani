@@ -55,8 +55,20 @@ export default function OrderHistory() {
   return (
     <div style={{ minHeight: "80vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
       <style>{`
-        @media (max-width: 768px) { .ohPage { padding: 24px 14px !important; } .ohTitle { font-size: 24px !important; } }
-        @media (max-width: 480px) { .ohPage { padding: 16px 10px !important; } .ohTitle { font-size: 20px !important; } .ohFilters { gap: 4px !important; } }
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .ohPage { padding: 32px 18px !important; }
+          .ohTitle { font-size: 28px !important; }
+        }
+        @media (max-width: 768px) {
+          .ohPage { padding: 24px 14px !important; }
+          .ohTitle { font-size: 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .ohPage { padding: 16px 10px !important; }
+          .ohTitle { font-size: 20px !important; }
+          .ohFilters { gap: 4px !important; }
+          .ohFilters button { padding: 6px 12px !important; font-size: 11px !important; }
+        }
       `}</style>
       <div className="ohPage" style={{ maxWidth: "900px", margin: "0 auto" }}>
         <button onClick={() => navigate(-1)} style={{ background: "rgba(107,15,15,0.08)", color: "#6b0f0f", border: "none", cursor: "pointer", padding: "10px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
@@ -122,7 +134,7 @@ export default function OrderHistory() {
                           Cancel
                         </button>
                       )}
-                      <button onClick={() => navigate("/track-order")} style={{ padding: "8px 16px", borderRadius: "8px", border: "none", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
+                      <button onClick={() => navigate(`/track-order/${order._id}`)} style={{ padding: "8px 16px", borderRadius: "8px", border: "none", background: "linear-gradient(135deg, #6b0f0f, #8b1a1a)", color: "#f7c66b", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
                         Track
                       </button>
                     </div>

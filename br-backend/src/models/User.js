@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, trim: true },
     address: { type: String, trim: true },
     isAdmin: { type: Boolean, default: false },
+    role: {
+      type: String,
+      enum: ['customer', 'staff', 'manager', 'admin', 'super-admin'],
+      default: 'customer',
+    },
     resetPasswordToken: { type: String },
     resetPasswordExpire: { type: Date },
   },

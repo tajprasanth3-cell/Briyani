@@ -84,8 +84,18 @@ export default function Profile() {
   return (
     <div style={{ minHeight: "80vh", background: "linear-gradient(135deg, #faf6f0 0%, #f3ede4 100%)", padding: "40px 20px" }}>
       <style>{`
-        @media (max-width: 768px) { .profileCard { padding: 24px 18px !important; } .profileTitle { font-size: 24px !important; } }
-        @media (max-width: 480px) { .profileCard { padding: 18px 14px !important; border-radius: 16px !important; } .profileTitle { font-size: 20px !important; } }
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .profileCard { padding: 28px 22px !important; }
+          .profileTitle { font-size: 28px !important; }
+        }
+        @media (max-width: 768px) {
+          .profileCard { padding: 24px 18px !important; }
+          .profileTitle { font-size: 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .profileCard { padding: 18px 14px !important; border-radius: 16px !important; }
+          .profileTitle { font-size: 20px !important; }
+        }
       `}</style>
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <button onClick={() => navigate(-1)} style={{ background: "rgba(107,15,15,0.08)", color: "#6b0f0f", border: "none", cursor: "pointer", padding: "10px 20px", borderRadius: "12px", fontSize: "14px", fontWeight: "700", display: "flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>

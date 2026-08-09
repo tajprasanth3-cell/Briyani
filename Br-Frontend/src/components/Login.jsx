@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, Mail, Lock } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import { authAPI } from "../api";
 import { useAuth } from "../context/AuthContext";
 import One from "./Images/one.jpg";
+import tajLogo from "./Images/taj_logo.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -68,12 +69,16 @@ export default function Login() {
       padding: "20px",
     }}>
       <style>{`
-        @media (max-width: 480px) {
-          .loginCard { padding: 32px 20px !important; border-radius: 20px !important; }
-          .loginTitle { font-size: 20px !important; letter-spacing: 2px !important; }
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .loginCard { padding: 44px 36px !important; max-width: 440px !important; }
         }
         @media (max-width: 768px) {
           .loginCard { padding: 40px 28px !important; }
+          .loginTitle { font-size: 24px !important; letter-spacing: 3px !important; }
+        }
+        @media (max-width: 480px) {
+          .loginCard { padding: 32px 20px !important; border-radius: 20px !important; }
+          .loginTitle { font-size: 20px !important; letter-spacing: 2px !important; }
         }
       `}</style>
       <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }} />
@@ -94,7 +99,9 @@ export default function Login() {
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "4px", background: "linear-gradient(90deg, transparent, #f7c66b, transparent)" }} />
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "8px" }}>
-            <Crown size={30} color="#f7c66b" style={{ filter: "drop-shadow(0 0 8px rgba(247, 198, 107, 0.4))" }} />
+            <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 12px rgba(247, 198, 107, 0.3)" }}>
+              <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
             <span className="loginTitle" style={{ fontFamily: "'Cinzel', serif", fontSize: "28px", fontWeight: "700", letterSpacing: "4px" }}>ROYAL TAJ</span>
           </div>
           <p style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", margin: "0 0 36px", textTransform: "uppercase" }}>Sign in to continue your food journey</p>

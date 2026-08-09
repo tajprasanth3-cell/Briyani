@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema(
     tableNumber: { type: Number },
     deliveryAddress: { type: String, trim: true },
     specialInstructions: { type: String, trim: true, maxlength: 500 },
+    branch: { type: mongoose.Schema.Types.ObjectId, ref: 'Branch' },
   },
   { timestamps: true }
 );

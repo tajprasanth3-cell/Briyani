@@ -50,7 +50,7 @@ const cartStyles = `
 }
 
 @media (max-width: 1024px) {
-  .cartHeader { flex-direction: column; text-align: center; gap: 12px; }
+  .cartHeader { flex-direction: row; flex-wrap: wrap; text-align: left; gap: 12px; justify-content: flex-start; align-items: center; }
   .cartMainGrid { grid-template-columns: 1fr !important; }
   .cartBillCard { position: static !important; }
 }
@@ -73,8 +73,8 @@ const cartStyles = `
   .cartCouponRow { flex-direction: column !important; }
   .cartCouponInput { width: 100% !important; }
   .cartCouponBtn { width: 100% !important; }
-  .cartHeader { flex-direction: column !important; align-items: center !important; text-align: center !important; }
-  .cartPageTitle { font-size: 20px !important; }
+  .cartHeader { flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; text-align: left !important; justify-content: space-between !important; }
+  .cartPageTitle { font-size: 20px !important; text-align: right; }
   .cartItemCard { padding: 14px !important; border-radius: 16px !important; }
 }
 `;

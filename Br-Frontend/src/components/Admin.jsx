@@ -15,7 +15,14 @@ import {
   BarChart3,
   Settings,
   Eye,
+  Printer,
+  Bell,
+  Building2,
+  Shield,
+  AlertTriangle,
+  Package,
 } from "lucide-react";
+import tajLogo from "./Images/taj_logo.png";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 
@@ -655,6 +662,13 @@ export default function Admin() {
   const [adminPassword, setAdminPassword] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [settingsMsg, setSettingsMsg] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [inventoryAlerts, setInventoryAlerts] = useState(null);
+  const [branches, setBranches] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [staffRoles, setStaffRoles] = useState([]);
+  const [branchForm, setBranchForm] = useState({});
+  const [notifSettings, setNotifSettings] = useState({ email: true, sms: false, push: true });
+  const [receiptOrder, setReceiptOrder] = useState(null);
 
   const headers = {
     "Content-Type": "application/json",
@@ -715,9 +729,111 @@ export default function Admin() {
     } catch (e) { console.error(e); }
   };
 
+  const fetchInventoryAlerts = async () => {
+    try {
+      const res = await fetch(`${API}/admin/inventory/alerts`, { headers });
+      const data = await res.json();
+      if (data.success) setInventoryAlerts(data.data);
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchBranches = async () => {
+    try {
+      const res = await fetch(`${API}/branches/all`, { headers });
+      const data = await res.json();
+      if (data.success) setBranches(data.data);
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch(`${API}/notifications?limit=50`, { headers });
+      const data = await res.json();
+      if (data.success) setNotifications(data.data.notifications || []);
+    } catch (e) { console.error(e); }
+  };
+
+  const handleCreateBranch = async (e) => {
+    e.preventDefault();
+    try {
+      await fetch(`${API}/branches`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(branchForm),
+      });
+      setBranchForm({});
+      setModal(null);
+      fetchBranches();
+    } catch (e) { console.error(e); }
+  };
+
+  const handleDeleteBranch = async (id) => {
+    if (!confirm("Delete this branch?")) return;
+    try {
+      await fetch(`${API}/branches/${id}`, { method: "DELETE", headers });
+      fetchBranches();
+    } catch (e) { console.error(e); }
+  };
+
+  const handleUpdateStock = async (itemId, qty) => {
+    try {
+      await fetch(`${API}/admin/menu/${itemId}/stock`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ stockQuantity: qty }),
+      });
+      fetchMenu();
+      fetchInventoryAlerts();
+    } catch (e) { console.error(e); }
+  };
+
+  const handleUpdateUserRole = async (userId, role) => {
+    try {
+      await fetch(`${API}/admin/users/${userId}/role`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ role }),
+      });
+      fetchUsers();
+    } catch (e) { console.error(e); }
+  };
+
+  const handlePrintReceipt = (order) => {
+    setReceiptOrder(order);
+    setTimeout(() => {
+      const printWindow = window.open("", "_blank", "width=400,height=600");
+      printWindow.document.write(`
+        <html><head><title>Order Receipt - #${order._id.slice(-6).toUpperCase()}</title>
+        <style>
+          body { font-family: monospace; padding: 20px; max-width: 350px; margin: 0 auto; }
+          .header { text-align: center; border-bottom: 2px dashed #333; padding-bottom: 10px; margin-bottom: 10px; }
+          .header h2 { margin: 0; font-size: 18px; }
+          .header p { margin: 2px 0; font-size: 11px; color: #666; }
+          .item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; border-bottom: 1px dotted #ddd; }
+          .total { font-weight: bold; font-size: 16px; border-top: 2px solid #333; padding-top: 8px; margin-top: 8px; }
+          .footer { text-align: center; margin-top: 16px; font-size: 10px; color: #999; border-top: 2px dashed #333; padding-top: 10px; }
+        </style></head><body>
+        <div class="header">
+          <h2>TAJ BIRYANI</h2>
+          <p>Order #${order._id.slice(-6).toUpperCase()}</p>
+          <p>${new Date(order.createdAt).toLocaleString()}</p>
+          <p>${order.orderType?.toUpperCase() || "DINE-IN"}</p>
+        </div>
+        ${order.items.map((i) => `<div class="item"><span>${i.menuItem?.name || "Item"} x${i.quantity}</span><span>₹${(i.price * i.quantity).toFixed(2)}</span></div>`).join("")}
+        <div class="total">TOTAL: ₹${order.totalAmount.toFixed(2)}</div>
+        <p style="font-size: 12px; margin: 8px 0;">Status: ${order.status}</p>
+        ${order.deliveryAddress ? `<p style="font-size: 11px;">Delivery: ${order.deliveryAddress}</p>` : ""}
+        <div class="footer">Thank you for ordering!<br/>Taj Biryani - Royal Taste</div>
+        </body></html>
+      `);
+      printWindow.document.close();
+      printWindow.print();
+    }, 100);
+  };
+
   const loadAll = async () => {
     setLoading(true);
-    await Promise.all([fetchDashboard(), fetchUsers(), fetchOrders(), fetchMenu(), fetchRevenue(revenuePeriod)]);
+    await Promise.all([fetchDashboard(), fetchUsers(), fetchOrders(), fetchMenu(), fetchRevenue(revenuePeriod), fetchInventoryAlerts(), fetchBranches(), fetchNotifications()]);
     setLoading(false);
   };
 
@@ -857,8 +973,8 @@ export default function Admin() {
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
           <div className="adminModalCard" style={{ maxWidth: 400 }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <div className="adminLogoCircle" style={{ width: 60, height: 60, margin: "0 auto 16px" }}>
-                <UtensilsCrossed size={28} color="#5a0c0c" />
+              <div className="adminLogoCircle" style={{ width: 60, height: 60, margin: "0 auto 16px", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
               <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#1a0404", fontFamily: "Georgia, serif" }}>Admin Panel</h2>
               <p style={{ fontSize: 13, color: "#999", margin: "4px 0 0" }}>Sign in with admin credentials</p>
@@ -888,8 +1004,8 @@ export default function Admin() {
 
       <aside className={`adminSidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="adminSidebarLogo">
-          <div className="adminLogoCircle">
-            <UtensilsCrossed size={20} color="#5a0c0c" />
+          <div className="adminLogoCircle" style={{ overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src={tajLogo} alt="Taj Biryani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div>
             <div className="adminLogoText">TAJ</div>
@@ -903,6 +1019,10 @@ export default function Admin() {
           { id: "orders", label: "Orders", icon: <ShoppingBag size={18} /> },
           { id: "users", label: "Users", icon: <Users size={18} /> },
           { id: "reports", label: "Reports", icon: <BarChart3 size={18} /> },
+          { id: "inventory", label: "Inventory", icon: <Package size={18} /> },
+          { id: "branches", label: "Branches", icon: <Building2 size={18} /> },
+          { id: "staff", label: "Staff Roles", icon: <Shield size={18} /> },
+          { id: "notifications", label: "Notifications", icon: <Bell size={18} /> },
           { id: "settings", label: "Settings", icon: <Settings size={18} /> },
         ].map((item) => (
           <button
@@ -1167,13 +1287,18 @@ export default function Admin() {
                         <td><span style={{ fontSize: 11, textTransform: "capitalize" }}>{order.orderType}</span></td>
                         <td><span className={`statusBadge ${getStatusClass(order.status)}`}>{order.status}</span></td>
                         <td>
-                          <select
-                            value={order.status}
-                            onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                            style={{ padding: "6px 10px", borderRadius: 8, border: "1px solid #ddd", fontSize: 12, cursor: "pointer" }}
-                          >
-                            {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
-                          </select>
+                          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                            <select
+                              value={order.status}
+                              onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                              style={{ padding: "6px 10px", borderRadius: 8, border: "1px solid #ddd", fontSize: 12, cursor: "pointer" }}
+                            >
+                              {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                            <button className="adminActionBtn adminBtnEdit" onClick={() => handlePrintReceipt(order)} title="Print Receipt">
+                              <Printer size={12} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -1300,6 +1425,211 @@ export default function Admin() {
               </div>
             )}
 
+            {tab === "inventory" && (
+              <div className="adminTableCard fadeIn">
+                <div className="adminTableHeader">
+                  <h3 className="adminTableTitle">
+                    <AlertTriangle size={18} style={{ display: "inline", verticalAlign: "middle", marginRight: 8, color: "#d97706" }} />
+                    Inventory Alerts
+                    {inventoryAlerts && inventoryAlerts.totalLowStock > 0 && (
+                      <span className="statusBadge statusPending" style={{ marginLeft: 8 }}>{inventoryAlerts.totalLowStock} low stock</span>
+                    )}
+                  </h3>
+                </div>
+                {inventoryAlerts && inventoryAlerts.lowStockItems.length > 0 ? (
+                  <table className="adminTable">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Threshold</th>
+                        <th>Status</th>
+                        <th>Update Stock</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {inventoryAlerts.lowStockItems.map((item) => (
+                        <tr key={item._id}>
+                          <td style={{ fontWeight: 600 }}>{item.name}</td>
+                          <td>{item.category}</td>
+                          <td style={{ fontWeight: 700, color: item.stockQuantity === 0 ? "#dc2626" : "#d97706" }}>{item.stockQuantity}</td>
+                          <td>{item.lowStockThreshold}</td>
+                          <td>
+                            <span className={`statusBadge ${item.stockQuantity === 0 ? "statusCancelled" : "statusPending"}`}>
+                              {item.stockQuantity === 0 ? "Out of Stock" : "Low Stock"}
+                            </span>
+                          </td>
+                          <td>
+                            <div style={{ display: "flex", gap: 4 }}>
+                              <input
+                                type="number"
+                                min="0"
+                                defaultValue={item.stockQuantity}
+                                style={{ width: 70, padding: "4px 8px", borderRadius: 6, border: "1px solid #ddd", fontSize: 12 }}
+                                onBlur={(e) => handleUpdateStock(item._id, Number(e.target.value))}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="adminEmpty" style={{ padding: 60 }}>
+                    <div className="adminEmptyIcon">📦</div>
+                    <p>No inventory alerts. All items are well stocked.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {tab === "branches" && (
+              <div className="adminTableCard fadeIn">
+                <div className="adminTableHeader">
+                  <h3 className="adminTableTitle">Branches ({branches.length})</h3>
+                  <button className="adminBtnPrimary" onClick={() => { setBranchForm({}); setModal("branch"); }}>
+                    <Plus size={16} /> Add Branch
+                  </button>
+                </div>
+                {branches.length > 0 ? (
+                  <table className="adminTable">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Phone</th>
+                        <th>Hours</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {branches.map((b) => (
+                        <tr key={b._id}>
+                          <td style={{ fontWeight: 600 }}>{b.name}</td>
+                          <td>{b.address}</td>
+                          <td>{b.city}</td>
+                          <td>{b.phone || "-"}</td>
+                          <td style={{ fontSize: 12 }}>{b.openingHours?.open || "11:00"} - {b.openingHours?.close || "23:00"}</td>
+                          <td><span className={`statusBadge ${b.isActive ? "statusDelivered" : "statusCancelled"}`}>{b.isActive ? "Active" : "Inactive"}</span></td>
+                          <td>
+                            <button className="adminActionBtn adminBtnDelete" onClick={() => handleDeleteBranch(b._id)}>
+                              <Trash2 size={12} /> Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="adminEmpty" style={{ padding: 60 }}>
+                    <div className="adminEmptyIcon">🏢</div>
+                    <p>No branches configured yet.</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {tab === "staff" && (
+              <div className="adminTableCard fadeIn">
+                <div className="adminTableHeader">
+                  <h3 className="adminTableTitle">Staff Role Management</h3>
+                </div>
+                <table className="adminTable">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Current Role</th>
+                      <th>Change Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((u) => (
+                      <tr key={u._id}>
+                        <td style={{ fontWeight: 600 }}>{u.name}</td>
+                        <td>{u.email}</td>
+                        <td>
+                          <span className={`statusBadge ${u.role === "super-admin" ? "statusOut" : u.role === "admin" ? "statusConfirmed" : u.role === "manager" ? "statusPreparing" : u.role === "staff" ? "statusReady" : "statusPending"}`}>
+                            {u.role || "customer"}
+                          </span>
+                        </td>
+                        <td>
+                          <select
+                            value={u.role || "customer"}
+                            onChange={(e) => handleUpdateUserRole(u._id, e.target.value)}
+                            style={{ padding: "6px 10px", borderRadius: 8, border: "1px solid #ddd", fontSize: 12, cursor: "pointer" }}
+                          >
+                            <option value="customer">Customer</option>
+                            <option value="staff">Staff</option>
+                            <option value="manager">Manager</option>
+                            <option value="admin">Admin</option>
+                            <option value="super-admin">Super Admin</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {tab === "notifications" && (
+              <div className="adminTableCard fadeIn">
+                <div className="adminTableHeader">
+                  <h3 className="adminTableTitle">Notification Settings</h3>
+                </div>
+                <div style={{ padding: 24 }}>
+                  <h4 style={{ fontSize: 16, fontWeight: 700, color: "#1a0404", margin: "0 0 16px" }}>Email / SMS / Push Notifications</h4>
+                  {[
+                    { key: "email", label: "Email Notifications", desc: "Receive order updates via email" },
+                    { key: "sms", label: "SMS Notifications", desc: "Receive order updates via SMS" },
+                    { key: "push", label: "Push Notifications", desc: "Receive browser push notifications" },
+                  ].map((s) => (
+                    <div key={s.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #f0f0f0" }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: "#1a0404" }}>{s.label}</p>
+                        <p style={{ margin: "2px 0 0", fontSize: 12, color: "#999" }}>{s.desc}</p>
+                      </div>
+                      <button
+                        onClick={() => setNotifSettings({ ...notifSettings, [s.key]: !notifSettings[s.key] })}
+                        style={{
+                          width: 48, height: 26, borderRadius: 13, border: "none", cursor: "pointer",
+                          background: notifSettings[s.key] ? "#16a34a" : "#ddd",
+                          position: "relative", transition: "all 0.3s",
+                        }}
+                        role="switch"
+                        aria-checked={notifSettings[s.key]}
+                        aria-label={`Toggle ${s.label}`}
+                      >
+                        <div style={{
+                          width: 20, height: 20, borderRadius: "50%", background: "#fff",
+                          position: "absolute", top: 3, left: notifSettings[s.key] ? 25 : 3,
+                          transition: "left 0.3s", boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                        }} />
+                      </button>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 24 }}>
+                    <h4 style={{ fontSize: 16, fontWeight: 700, color: "#1a0404", margin: "0 0 16px" }}>Recent Notifications ({notifications.length})</h4>
+                    {notifications.length > 0 ? (
+                      notifications.slice(0, 10).map((n) => (
+                        <div key={n._id} style={{ padding: "12px 0", borderBottom: "1px solid #f0f0f0", opacity: n.read ? 0.6 : 1 }}>
+                          <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#1a0404" }}>{n.title}</p>
+                          <p style={{ margin: "2px 0 0", fontSize: 12, color: "#666" }}>{n.message}</p>
+                          <p style={{ margin: "2px 0 0", fontSize: 10, color: "#999" }}>{new Date(n.createdAt).toLocaleString()}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p style={{ fontSize: 13, color: "#999" }}>No notifications yet</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {tab === "settings" && (
               <div className="adminTableCard fadeIn" style={{ padding: 32 }}>
                 <h3 className="adminTableTitle" style={{ margin: "0 0 24px" }}>Admin Settings</h3>
@@ -1382,6 +1712,55 @@ export default function Admin() {
           </>
         )}
       </main>
+
+      {modal === "branch" && (
+        <div className="adminModal" onClick={() => setModal(null)}>
+          <div className="adminModalCard" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <h3 className="adminModalTitle" style={{ margin: 0 }}>Add New Branch</h3>
+              <button onClick={() => setModal(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#999" }}><X size={20} /></button>
+            </div>
+            <form onSubmit={handleCreateBranch}>
+              <div className="adminFormGroup">
+                <label className="adminFormLabel">Branch Name</label>
+                <input className="adminFormInput" value={branchForm.name || ""} onChange={(e) => setBranchForm({ ...branchForm, name: e.target.value })} placeholder="e.g. Taj Biryani - Andheri" required />
+              </div>
+              <div className="adminFormGroup">
+                <label className="adminFormLabel">Address</label>
+                <textarea className="adminFormTextarea" value={branchForm.address || ""} onChange={(e) => setBranchForm({ ...branchForm, address: e.target.value })} placeholder="Full address" required />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="adminFormGroup">
+                  <label className="adminFormLabel">City</label>
+                  <input className="adminFormInput" value={branchForm.city || ""} onChange={(e) => setBranchForm({ ...branchForm, city: e.target.value })} required />
+                </div>
+                <div className="adminFormGroup">
+                  <label className="adminFormLabel">Phone</label>
+                  <input className="adminFormInput" value={branchForm.phone || ""} onChange={(e) => setBranchForm({ ...branchForm, phone: e.target.value })} />
+                </div>
+              </div>
+              <div className="adminFormGroup">
+                <label className="adminFormLabel">Email</label>
+                <input className="adminFormInput" type="email" value={branchForm.email || ""} onChange={(e) => setBranchForm({ ...branchForm, email: e.target.value })} />
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="adminFormGroup">
+                  <label className="adminFormLabel">Opening Time</label>
+                  <input className="adminFormInput" type="time" value={branchForm.openingHours?.open || "11:00"} onChange={(e) => setBranchForm({ ...branchForm, openingHours: { ...branchForm.openingHours, open: e.target.value } })} />
+                </div>
+                <div className="adminFormGroup">
+                  <label className="adminFormLabel">Closing Time</label>
+                  <input className="adminFormInput" type="time" value={branchForm.openingHours?.close || "23:00"} onChange={(e) => setBranchForm({ ...branchForm, openingHours: { ...branchForm.openingHours, close: e.target.value } })} />
+                </div>
+              </div>
+              <div className="adminFormActions">
+                <button type="button" className="adminBtnSecondary" onClick={() => setModal(null)}>Cancel</button>
+                <button type="submit" className="adminBtnPrimary">Create Branch</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {modal === "menu" && (
         <div className="adminModal" onClick={() => setModal(null)}>

@@ -36,7 +36,7 @@ const checkoutStyles = `
   .checkoutPageTitle { font-size: 22px !important; }
   .checkoutFormCard { padding: 20px 16px !important; border-radius: 16px !important; }
   .checkoutCityRow { grid-template-columns: 1fr !important; }
-  .checkoutHeader { flex-wrap: wrap !important; gap: 12px !important; }
+  .checkoutHeader { flex-wrap: nowrap !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; }
   .checkoutOrderType { flex-wrap: wrap !important; }
   .checkoutBillCard { border-radius: 16px !important; padding: 20px !important; }
 }

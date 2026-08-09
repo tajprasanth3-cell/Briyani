@@ -24,6 +24,8 @@ const menuItemSchema = new mongoose.Schema(
     isAvailable: { type: Boolean, default: true },
     isVegetarian: { type: Boolean, default: false },
     spiceLevel: { type: String, enum: ['Mild', 'Medium', 'Spicy'], default: 'Medium' },
+    stockQuantity: { type: Number, default: 100, min: 0 },
+    lowStockThreshold: { type: Number, default: 10 },
   },
   { timestamps: true }
 );

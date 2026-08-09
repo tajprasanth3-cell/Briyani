@@ -81,9 +81,16 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+const VALID_STATUSES = ['pending', 'confirmed', 'preparing', 'ready', 'out-for-delivery', 'delivered', 'cancelled'];
+
+const { emitOrderUpdate } = require('../websocket');
+
 const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
+    if (!status || !VALID_STATUSES.includes(status)) {
+      return errorResponse(res, `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`, 400);
+    }
     const order = await Order.findById(req.params.id);
     if (!order) {
       return errorResponse(res, 'Order not found', 404);
@@ -93,6 +100,9 @@ const updateOrderStatus = async (req, res) => {
     const updated = await Order.findById(order._id)
       .populate('user', 'name email phone')
       .populate('items.menuItem', 'name price image');
+
+    emitOrderUpdate(order._id, { status: updated.status, updatedAt: updated.updatedAt, totalAmount: updated.totalAmount });
+
     successResponse(res, updated, 'Order status updated');
   } catch (error) {
     errorResponse(res, error.message);
@@ -174,6 +184,76 @@ const getRevenueReports = async (req, res) => {
   }
 };
 
+const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const validRoles = ['customer', 'staff', 'manager', 'admin', 'super-admin'];
+    if (!role || !validRoles.includes(role)) {
+      return errorResponse(res, `Invalid role. Must be one of: ${validRoles.join(', ')}`, 400);
+    }
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return errorResponse(res, 'User not found', 404);
+    }
+    if (role === 'super-admin' && req.user.role !== 'super-admin') {
+      return errorResponse(res, 'Only super-admin can assign super-admin role', 403);
+    }
+    user.role = role;
+    if (role === 'admin' || role === 'manager' || role === 'staff' || role === 'super-admin') {
+      user.isAdmin = true;
+    } else {
+      user.isAdmin = false;
+    }
+    await user.save();
+    const updated = await User.findById(user._id).select('-password');
+    successResponse(res, updated, 'User role updated');
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
+const getInventoryAlerts = async (req, res) => {
+  try {
+    const lowStockItems = await MenuItem.find({
+      $expr: { $lte: ['$stockQuantity', '$lowStockThreshold'] },
+    }).sort('stockQuantity');
+
+    const outOfStockItems = await MenuItem.find({ stockQuantity: 0 });
+    const totalLowStock = lowStockItems.length;
+    const totalOutOfStock = outOfStockItems.length;
+
+    successResponse(res, {
+      lowStockItems,
+      outOfStockItems,
+      totalLowStock,
+      totalOutOfStock,
+    });
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
+const updateStock = async (req, res) => {
+  try {
+    const { stockQuantity } = req.body;
+    if (stockQuantity === undefined || stockQuantity < 0) {
+      return errorResponse(res, 'Invalid stock quantity', 400);
+    }
+    const item = await MenuItem.findById(req.params.id);
+    if (!item) {
+      return errorResponse(res, 'Menu item not found', 404);
+    }
+    item.stockQuantity = stockQuantity;
+    if (stockQuantity <= item.lowStockThreshold) {
+      item.isAvailable = false;
+    }
+    await item.save();
+    successResponse(res, item, 'Stock updated successfully');
+  } catch (error) {
+    errorResponse(res, error.message);
+  }
+};
+
 const toggleMenuAvailability = async (req, res) => {
   try {
     const item = await MenuItem.findById(req.params.id);
@@ -191,4 +271,5 @@ const toggleMenuAvailability = async (req, res) => {
 module.exports = {
   getDashboardStats, getAllUsers, getAllOrders, updateOrderStatus,
   deleteUser, exportOrdersCSV, getRevenueReports, toggleMenuAvailability,
+  updateUserRole, getInventoryAlerts, updateStock,
 };

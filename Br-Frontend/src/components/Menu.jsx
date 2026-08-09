@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useQuantityLimit } from "../hooks/useQuantityLimit.js";
 import chickenImg from "./Images/chicken dum.jpg";
 import muttonImg from "./Images/motton bry (1).jpg";
 import vegImg from "./Images/veg.jpg";
@@ -11,7 +12,12 @@ import feastImg3 from "./Images/gril briyani (2).jpg";
 import feastImg5 from "./Images/chicken dum.jpg";
 import ton from "./Images/ton.jpg";
 import feastImg6 from "./Images/veg11.jpg";
-import logoImg from "./Images/logo (1).jpg";
+import logoImg from "./Images/taj_logo.png";
+import paneerTikkaImg from "./Images/veg special.jpg";
+import eggDumImg from "./Images/bri.jpg";
+import prawnsImg from "./Images/ciiii.jpg";
+import awadhiImg from "./Images/chicken full.jpg";
+import fishTikkaImg from "./Images/one.jpg";
 
 const MENU_ITEMS = [
   {
@@ -146,24 +152,200 @@ const MENU_ITEMS = [
     image: feastImg6,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
+  {
+    id: 13,
+    name: "Paneer Tikka Biryani",
+    rating: 4.6,
+    reviews: "450",
+    price: 399,
+    qty: 1,
+    category: "Veg",
+    image: paneerTikkaImg,
+    desc: "Smoky paneer tikka layered with aromatic basmati rice.",
+  },
+  {
+    id: 14,
+    name: "Egg Dum Biryani",
+    rating: 4.5,
+    reviews: "320",
+    price: 299,
+    qty: 1,
+    category: "Special",
+    image: eggDumImg,
+    desc: "Spiced boiled eggs nestled in flavorful saffron rice.",
+  },
+  {
+    id: 15,
+    name: "Prawns Biryani",
+    rating: 4.9,
+    reviews: "890",
+    price: 799,
+    qty: 1,
+    category: "Special",
+    image: prawnsImg,
+    desc: "Fresh prawns marinated in coastal spices cooked with dum.",
+  },
+  {
+    id: 16,
+    name: "Awadhi Chicken Biryani",
+    rating: 4.8,
+    reviews: "1.1K",
+    price: 649,
+    qty: 1,
+    category: "Chicken",
+    image: awadhiImg,
+    desc: "Mildly spiced, aromatic biryani from the Nawabs of Lucknow.",
+  },
+  {
+    id: 17,
+    name: "Fish Tikka Biryani",
+    rating: 4.7,
+    reviews: "560",
+    price: 749,
+    qty: 1,
+    category: "Special",
+    image: fishTikkaImg,
+    desc: "Juicy fish tikka chunks cooked with fragrant basmati rice.",
+  },
+  {
+    id: 18,
+    name: "Mushroom Dum Biryani",
+    rating: 4.6,
+    reviews: "210",
+    price: 349,
+    qty: 1,
+    category: "Veg",
+    image: vegImg,
+    desc: "Fresh mushrooms cooked with aromatic spices and basmati rice.",
+  },
+  {
+    id: 19,
+    name: "Soya Chaap Biryani",
+    rating: 4.5,
+    reviews: "180",
+    price: 329,
+    qty: 1,
+    category: "Veg",
+    image: vegspecial,
+    desc: "Protein-rich soya chaap layered with spicy rice.",
+  },
+  {
+    id: 20,
+    name: "Keema Biryani",
+    rating: 4.8,
+    reviews: "670",
+    price: 699,
+    qty: 1,
+    category: "Mutton",
+    image: muttonImg,
+    desc: "Minced mutton cooked with aromatic spices and layered with rice.",
+  },
+  {
+    id: 21,
+    name: "Ambur Mutton Biryani",
+    rating: 4.9,
+    reviews: "950",
+    price: 849,
+    qty: 1,
+    category: "Mutton",
+    image: royalImg,
+    desc: "Famous South Indian biryani made with seeraga samba rice.",
+  },
+  {
+    id: 22,
+    name: "Tandoori Chicken Biryani",
+    rating: 4.7,
+    reviews: "820",
+    price: 599,
+    qty: 1,
+    category: "Chicken",
+    image: chickenImg,
+    desc: "Smoky tandoori chicken pieces in flavorful biryani rice.",
+  },
+  {
+    id: 23,
+    name: "Sindhi Chicken Biryani",
+    rating: 4.8,
+    reviews: "540",
+    price: 649,
+    qty: 1,
+    category: "Chicken",
+    image: feastImg3,
+    desc: "Spicy and tangy biryani with potatoes and dried plums.",
+  },
+  {
+    id: 24,
+    name: "Kalyani Biryani",
+    rating: 4.6,
+    reviews: "410",
+    price: 499,
+    qty: 1,
+    category: "Special",
+    image: specialImg,
+    desc: "A flavorful and affordable alternative to the traditional biryani.",
+  },
+  {
+    id: 25,
+    name: "Thalappakatti Biryani",
+    rating: 4.9,
+    reviews: "1.2K",
+    price: 799,
+    qty: 1,
+    category: "Special",
+    image: feastImg,
+    desc: "Signature biryani from Dindigul made with short-grain rice.",
+  },
+  {
+    id: 26,
+    name: "Malabar Roast Biryani",
+    rating: 4.8,
+    reviews: "880",
+    price: 749,
+    qty: 1,
+    category: "Special",
+    image: familyImg,
+    desc: "Kerala style biryani with roasted spices and ghee rice.",
+  },
+  {
+    id: 27,
+    name: "Chicken Tikka Dum Biryani",
+    rating: 4.9,
+    reviews: "1.5K",
+    price: 689,
+    qty: 1,
+    category: "Chicken",
+    image: chickenImg,
+    desc: "Spicy chicken tikka pieces layered with dum cooked rice.",
+  },
+  {
+    id: 28,
+    name: "Murgh Afghani Biryani",
+    rating: 4.7,
+    reviews: "920",
+    price: 729,
+    qty: 1,
+    category: "Chicken",
+    image: awadhiImg,
+    desc: "Creamy, mild chicken cooked in rich Afghani style.",
+  },
 ];
 
 const SECTIONS = [
   {
     title: "Popular Biryani",
-    ids: [1, 2, 5, 6],
+    ids: [1, 2, 5, 6, 15, 24, 25, 26],
   },
   {
     title: "Chicken Biryani",
-    ids: [7, 9, 10, 11],
+    ids: [7, 9, 10, 11, 16, 22, 23, 27, 28],
   },
   {
     title: "Mutton Biryani",
-    ids: [2, 12],
+    ids: [2, 12, 20, 21],
   },
   {
     title: "Veg & Special",
-    ids: [3, 8, 4],
+    ids: [3, 8, 4, 13, 14, 17, 18, 19],
   },
 ];
 
@@ -490,19 +672,7 @@ export default function Menu({
   cartCount = 0,
 }) {
   const [location, setLocation] = useState("Mumbai");
-  const [qtyMap, setQtyMap] = useState({});
-
-  const updateQty = (id, action) => {
-    setQtyMap((prev) => {
-      const current = prev[id] ?? 1;
-      let next = current;
-      if (action === "plus") next = current + 1;
-      if (action === "minus" && current > 1) next = current - 1;
-      return { ...prev, [id]: next };
-    });
-  };
-
-  const getQty = (id) => qtyMap[id] ?? 1;
+  const { getQty, updateQty, isAtMax, isAtMin } = useQuantityLimit(10);
 
   const addToCart = (item) => {
     const product = {
@@ -533,25 +703,29 @@ export default function Menu({
   }, [q]);
 
   const renderItem = (item) => (
-    <div key={item.id} className="menuItemCard">
-      <img src={item.image} alt={item.name} className="menuItemImage" />
+    <div key={item.id} className="menuItemCard" role="article" aria-label={item.name}>
+      <img src={item.image} alt={item.name} className="menuItemImage" loading="lazy" />
       <div className="menuItemBody">
         <h3 className="menuItemTitle">{item.name}</h3>
         <p className="menuItemDescription">{item.desc}</p>
         <div className="menuItemActions">
           <div className="menuQuantityControlGroup">
             <strong className="menuItemPrice">Rs. {item.price}</strong>
-            <div className="menuQuantityControl">
+            <div className="menuQuantityControl" role="group" aria-label={`Quantity controls for ${item.name}`}>
               <button
                 onClick={() => updateQty(item.id, "minus")}
                 className="menuQuantityButton"
+                disabled={isAtMin(item.id)}
+                aria-label="Decrease quantity"
               >
                 -
               </button>
-              <span className="menuQuantityDisplay">{getQty(item.id)}</span>
+              <span className="menuQuantityDisplay" aria-label={`Quantity: ${getQty(item.id)}`}>{getQty(item.id)}</span>
               <button
                 onClick={() => updateQty(item.id, "plus")}
                 className="menuQuantityButton"
+                disabled={isAtMax(item.id)}
+                aria-label="Increase quantity"
               >
                 +
               </button>
@@ -560,6 +734,7 @@ export default function Menu({
           <button
             onClick={() => addToCart(item)}
             className="menuAddToCartButton"
+            aria-label={`Add ${item.name} to cart`}
           >
             Add to Cart
           </button>
@@ -569,11 +744,11 @@ export default function Menu({
   );
 
   return (
-    <div className="menuContainer">
+    <div className="menuContainer" role="region" aria-label="Menu">
       <style>{menuStyles}</style>
 
       <div className="menuBrandSection">
-        <img src={logoImg} alt="Taj Biryani" className="menuLogoImg" />
+        <img src={logoImg} alt="Taj Biryani" className="menuLogoImg" loading="eager" />
         <div>
           <h1 className="menuBrandTitle">TAJ BIRYANI</h1>
           <p className="menuBrandSub">Authentic Dum Biryani Since 1998</p>
@@ -589,6 +764,8 @@ export default function Menu({
             }}
             placeholder="Search for biryani..."
             className="menuSearchInput"
+            aria-label="Search menu items"
+            role="searchbox"
           />
         </div>
 
