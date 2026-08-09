@@ -195,72 +195,113 @@ function AppContent() {
           .auth-link-item { padding: 6px 10px !important; font-size: 11px !important; }
         }
 
-        /* Navbar brand logo & name animations */
+        /* Awwwards / Behance style Navbar brand capsule */
         .nav-brand {
-          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-          position: relative;
-          overflow: hidden;
+          background: rgba(18, 5, 4, 0.6) !important;
+          border: 1px solid rgba(247, 198, 107, 0.25) !important;
+          backdrop-filter: blur(16px) !important;
+          -webkit-backdrop-filter: blur(16px) !important;
+          padding: 6px 20px 6px 8px !important;
+          border-radius: 30px !important;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+          cursor: pointer;
         }
-        
-        .nav-brand::before {
+
+        .nav-brand-icon {
+          position: relative;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          padding: 2px;
+          background: linear-gradient(135deg, rgba(247, 198, 107, 0.3), rgba(217, 149, 35, 0.1));
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .nav-brand-icon::after {
           content: '';
           position: absolute;
-          top: 0;
-          left: -100%;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.15),
-            transparent
-          );
-          transform: skewX(-25deg);
-          transition: 0.75s;
-        }
-
-        .nav-brand:hover::before {
-          left: 150%;
-        }
-
-        .nav-brand:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(247, 198, 107, 0.25);
-          border-color: rgba(247, 198, 107, 0.4) !important;
-          background: rgba(255, 255, 255, 0.15) !important;
+          inset: -3px;
+          border-radius: 50%;
+          border: 1px dashed rgba(247, 198, 107, 0.45);
+          transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .nav-brand-icon img {
-          transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Hover effects */
+        .nav-brand:hover {
+          background: rgba(26, 8, 6, 0.8) !important;
+          border-color: rgba(247, 198, 107, 0.65) !important;
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(247, 198, 107, 0.15);
+        }
+
+        .nav-brand:hover .nav-brand-icon {
+          transform: scale(1.05);
+          background: linear-gradient(135deg, #f7c66b, #d99523);
+        }
+
+        .nav-brand:hover .nav-brand-icon::after {
+          transform: rotate(180deg);
+          border-color: #f7c66b;
+          inset: -5px;
         }
 
         .nav-brand:hover .nav-brand-icon img {
-          transform: rotate(360deg) scale(1.1);
+          transform: scale(1.1);
         }
 
         .nav-brand-text {
-          position: relative;
-          background: linear-gradient(90deg, #f7c66b, #fff, #f7c66b);
+          font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+          font-size: 19px;
+          font-weight: 800;
+          letter-spacing: 2px;
+          line-height: 1;
+          background: linear-gradient(90deg, #f7c66b 0%, #ffe8b5 50%, #f7c66b 100%);
           background-size: 200% auto;
-          color: #f7c66b;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: gold-shimmer 3s linear infinite;
+          transition: all 0.5s ease;
+          animation: gold-shimmer-fast 4s linear infinite;
         }
 
-        @keyframes gold-shimmer {
+        @keyframes gold-shimmer-fast {
           0% { background-position: 0% center; }
           100% { background-position: 200% center; }
         }
 
+        .nav-brand:hover .nav-brand-text {
+          text-shadow: 0 0 15px rgba(247, 198, 107, 0.5);
+          letter-spacing: 2.5px;
+        }
+
         .nav-brand-sub {
-          transition: letter-spacing 0.4s ease, color 0.4s ease;
-          color: rgba(255, 255, 255, 0.8);
+          font-family: 'Poppins', sans-serif;
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 3px;
+          color: rgba(255, 255, 255, 0.6);
+          text-transform: uppercase;
+          transition: all 0.5s ease;
+          margin-top: 2px;
         }
 
         .nav-brand:hover .nav-brand-sub {
-          letter-spacing: 3.5px !important;
-          color: #f7c66b !important;
+          color: #fff;
+          letter-spacing: 4.5px;
         }
       `}</style>
       <header
