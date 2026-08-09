@@ -468,51 +468,53 @@ function AppContent() {
         </ErrorBoundary>
       </main>
 
-      <footer className="siteFooter">
-        <div className="footerInner">
-          <div className="footerCol brandCol">
-            <div className="footerLogo">
-              <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.2)" }}>
-                <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      {location.pathname !== "/login" && (
+        <footer className="siteFooter">
+          <div className="footerInner">
+            <div className="footerCol brandCol">
+              <div className="footerLogo">
+                <div style={{ width: 45, height: 45, borderRadius: "50%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(247,198,107,0.2)" }}>
+                  <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+                <div>
+                  <div className="footerLogoTitle">TAJ</div>
+                  <div className="footerLogoSub">BRIYANI</div>
+                </div>
               </div>
-              <div>
-                <div className="footerLogoTitle">TAJ</div>
-                <div className="footerLogoSub">BRIYANI</div>
-              </div>
+              <p className="footerDesc">Experience the royal taste of authentic Dum Biryani, crafted with premium spices and aged basmati rice.</p>
             </div>
-            <p className="footerDesc">Experience the royal taste of authentic Dum Biryani, crafted with premium spices and aged basmati rice.</p>
+            <div className="footerCol">
+              <h4 className="footerHeading">Quick Links</h4>
+              <ul className="footerLinks">
+                <li><NavLink to="/">Home</NavLink></li>
+                <li><NavLink to="/menu">Menu</NavLink></li>
+                <li><NavLink to="/cart">Cart</NavLink></li>
+                <li><NavLink to="/checkout">Checkout</NavLink></li>
+                <li><NavLink to="/track-order">Track Order</NavLink></li>
+                <li><NavLink to="/login">Login</NavLink></li>
+              </ul>
+            </div>
+            <div className="footerCol">
+              <h4 className="footerHeading">Contact Us</h4>
+              <ul className="footerLinks">
+                <li><span className="footerContactItem"><MapPin size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> 123, Bhendi Bazaar, Mumbai</span></li>
+                <li><span className="footerContactItem"><Phone size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> +91 98765 43210</span></li>
+                <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbriyani.com</span></li>
+              </ul>
+            </div>
+            <div className="footerCol">
+              <h4 className="footerHeading">Hours</h4>
+              <ul className="footerLinks">
+                <li><span className="footerContactItem">Mon - Sat: 11 AM - 11 PM</span></li>
+                <li><span className="footerContactItem">Sun: 12 PM - 10 PM</span></li>
+              </ul>
+            </div>
           </div>
-          <div className="footerCol">
-            <h4 className="footerHeading">Quick Links</h4>
-            <ul className="footerLinks">
-              <li><NavLink to="/">Home</NavLink></li>
-              <li><NavLink to="/menu">Menu</NavLink></li>
-              <li><NavLink to="/cart">Cart</NavLink></li>
-              <li><NavLink to="/checkout">Checkout</NavLink></li>
-              <li><NavLink to="/track-order">Track Order</NavLink></li>
-              <li><NavLink to="/login">Login</NavLink></li>
-            </ul>
+          <div className="footerBottom">
+            <p>&copy; 2026 Taj Briyani. All rights reserved.</p>
           </div>
-          <div className="footerCol">
-            <h4 className="footerHeading">Contact Us</h4>
-            <ul className="footerLinks">
-              <li><span className="footerContactItem"><MapPin size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> 123, Bhendi Bazaar, Mumbai</span></li>
-              <li><span className="footerContactItem"><Phone size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> +91 98765 43210</span></li>
-              <li><span className="footerContactItem"><Mail size={14} style={{ marginRight: 6, verticalAlign: "middle", color: "#f7c66b", flexShrink: 0 }} /> info@tajbriyani.com</span></li>
-            </ul>
-          </div>
-          <div className="footerCol">
-            <h4 className="footerHeading">Hours</h4>
-            <ul className="footerLinks">
-              <li><span className="footerContactItem">Mon - Sat: 11 AM - 11 PM</span></li>
-              <li><span className="footerContactItem">Sun: 12 PM - 10 PM</span></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footerBottom">
-          <p>&copy; 2026 Taj Briyani. All rights reserved.</p>
-        </div>
-      </footer>
+        </footer>
+      )}
 
       <style>{`
         .siteFooter {

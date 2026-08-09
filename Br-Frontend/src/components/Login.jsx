@@ -69,27 +69,24 @@ export default function Login() {
       padding: "20px",
     }}>
       <style>{`
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .loginCard { padding: 44px 36px !important; max-width: 440px !important; }
-        }
         @media (max-width: 768px) {
-          .loginCard { padding: 40px 28px !important; }
+          .loginCard { padding: 36px 28px !important; }
           .loginTitle { font-size: 24px !important; letter-spacing: 3px !important; }
         }
         @media (max-width: 480px) {
-          .loginCard { padding: 32px 20px !important; border-radius: 20px !important; }
+          .loginCard { padding: 28px 20px !important; border-radius: 20px !important; }
           .loginTitle { font-size: 20px !important; letter-spacing: 2px !important; }
         }
       `}</style>
       <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, rgba(18,5,3,0.45) 0%, rgba(18,5,3,0.9) 85%, #120503 100%)", zIndex: 2 }} />
 
-      <div style={{ position: "relative", zIndex: 3, width: "100%", maxWidth: "500px" }}>
+      <div style={{ position: "relative", zIndex: 3, width: "100%", maxWidth: "420px" }}>
         <div className="loginCard" style={{
           backgroundColor: "rgba(22, 10, 8, 0.78)",
           border: "1px solid rgba(247, 198, 107, 0.25)",
           borderRadius: "28px",
-          padding: "55px 45px",
+          padding: "42px 36px",
           boxShadow: "0 30px 80px rgba(0, 0, 0, 0.75)",
           backdropFilter: "blur(20px)",
           textAlign: "center",
