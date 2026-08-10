@@ -58,7 +58,8 @@ export default function Login() {
   return (
     <div style={{
       position: "relative",
-      minHeight: "100vh",
+      height: "calc(100vh - 80px)",
+      minHeight: "calc(100vh - 80px)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -67,26 +68,41 @@ export default function Login() {
       color: "#f8f6f2",
       overflow: "hidden",
       padding: "20px",
+      boxSizing: "border-box",
     }}>
       <style>{`
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.95) translateY(15px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes slideInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 1024px) {
+          .loginCard { padding: 30px 32px !important; }
+        }
         @media (max-width: 768px) {
-          .loginCard { padding: 36px 28px !important; }
-          .loginTitle { font-size: 24px !important; letter-spacing: 3px !important; }
+          .loginCard { padding: 26px 24px !important; }
+          .loginTitle { font-size: 22px !important; letter-spacing: 2.5px !important; }
         }
         @media (max-width: 480px) {
-          .loginCard { padding: 28px 20px !important; border-radius: 20px !important; }
-          .loginTitle { font-size: 20px !important; letter-spacing: 2px !important; }
+          .loginCard { padding: 22px 18px !important; border-radius: 20px !important; }
+          .loginTitle { font-size: 19px !important; letter-spacing: 2px !important; }
+          .loginSubtitle { font-size: 11px !important; }
+          .loginInput { font-size: 13px !important; padding: 10px 35px 10px 14px !important; }
+          .loginButton { font-size: 14px !important; padding: 12px 24px !important; }
         }
       `}</style>
-      <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }} />
+      <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, animation: "fadeInScale 1.5s ease-out" }} />
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle, rgba(18,5,3,0.45) 0%, rgba(18,5,3,0.9) 85%, #120503 100%)", zIndex: 2 }} />
 
-      <div style={{ position: "relative", zIndex: 3, width: "100%", maxWidth: "420px" }}>
+      <div style={{ position: "relative", zIndex: 3, width: "100%", maxWidth: "420px", animation: "slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}>
         <div className="loginCard" style={{
           backgroundColor: "rgba(22, 10, 8, 0.78)",
           border: "1px solid rgba(247, 198, 107, 0.25)",
           borderRadius: "28px",
-          padding: "42px 36px",
+          padding: "30px 36px",
           boxShadow: "0 30px 80px rgba(0, 0, 0, 0.75)",
           backdropFilter: "blur(20px)",
           textAlign: "center",
@@ -101,7 +117,7 @@ export default function Login() {
             </div>
             <span className="loginTitle" style={{ fontFamily: "'Cinzel', serif", fontSize: "28px", fontWeight: "700", letterSpacing: "4px" }}>ROYAL TAJ</span>
           </div>
-          <p style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", margin: "0 0 36px", textTransform: "uppercase" }}>Sign in to continue your food journey</p>
+          <p className="loginSubtitle" style={{ color: "#c9bda8", fontSize: "13px", letterSpacing: "1px", margin: "0 0 36px", textTransform: "uppercase" }}>Sign in to continue your food journey</p>
 
           {error && (
             <div style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: "10px", padding: "10px 14px", marginBottom: "16px", fontSize: "13px", color: "#fca5a5" }}>
@@ -114,7 +130,7 @@ export default function Login() {
               <label style={{ display: "block", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "8px", color: "#f7c66b", fontWeight: "600" }}>Email Address</label>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                 <Mail style={{ position: "absolute", left: "16px", color: isEmailFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "color 0.3s" }} size={18} />
-                <input type="email" placeholder="Enter your email" style={inputStyle(isEmailFocused)} value={email} onChange={(e) => setEmail(e.target.value)} onFocus={() => setIsEmailFocused(true)} onBlur={() => setIsEmailFocused(false)} required />
+                <input className="loginInput" type="email" placeholder="Enter your email" style={inputStyle(isEmailFocused)} value={email} onChange={(e) => setEmail(e.target.value)} onFocus={() => setIsEmailFocused(true)} onBlur={() => setIsEmailFocused(false)} required />
               </div>
             </div>
 
@@ -122,11 +138,11 @@ export default function Login() {
               <label style={{ display: "block", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "8px", color: "#f7c66b", fontWeight: "600" }}>Password</label>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                 <Lock style={{ position: "absolute", left: "16px", color: isPasswordFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "color 0.3s" }} size={18} />
-                <input type="password" placeholder="Enter your password" style={inputStyle(isPasswordFocused)} value={password} onChange={(e) => setPassword(e.target.value)} onFocus={() => setIsPasswordFocused(true)} onBlur={() => setIsPasswordFocused(false)} required />
+                <input className="loginInput" type="password" placeholder="Enter your password" style={inputStyle(isPasswordFocused)} value={password} onChange={(e) => setPassword(e.target.value)} onFocus={() => setIsPasswordFocused(true)} onBlur={() => setIsPasswordFocused(false)} required />
               </div>
             </div>
 
-            <button type="submit" disabled={loading} onMouseEnter={() => setIsSubmitHovered(true)} onMouseLeave={() => setIsSubmitHovered(false)} style={{
+            <button className="loginButton" type="submit" disabled={loading} onMouseEnter={() => setIsSubmitHovered(true)} onMouseLeave={() => setIsSubmitHovered(false)} style={{
               background: "linear-gradient(135deg, #f7c66b 0%, #d99523 100%)",
               color: "#120503",
               padding: "16px",

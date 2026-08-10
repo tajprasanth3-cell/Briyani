@@ -201,19 +201,17 @@ function AppContent() {
         className="navbar"
         style={{
           background: "linear-gradient(135deg, rgba(90,12,12,0.92) 0%, rgba(107,15,15,0.92) 50%, rgba(74,10,10,0.92) 100%)",
-          backdropFilter: "blur(24px) saturate(180%)",
-          WebkitBackdropFilter: "blur(24px) saturate(180%)",
           color: "#fff",
-          padding: "10px 2%",
+          padding: "10px 2px ",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          gap: "12px",
+          gap: "6px",
           position: "sticky",
           top: 0,
           zIndex: 999,
-          borderBottom: "2px solid rgba(247,198,107,0.12)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+          
+         
         }}
       >
         <NavLink
@@ -223,10 +221,7 @@ function AppContent() {
             display: "flex",
             alignItems: "center",
             gap: 10,
-            background: "rgba(255,255,255,0.1)",
-            padding: "6px 22px 6px 10px",
-            borderRadius: 50,
-            border: "1px solid rgba(255,255,255,0.2)",
+            padding: "2px 15px 5px 10px",
             backdropFilter: "blur(4px)",
             textDecoration: "none",
             flexShrink: 0,
@@ -243,7 +238,7 @@ function AppContent() {
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
-              boxShadow: "0 4px 12px rgba(247,198,107,0.3)",
+              
             }}
           >
             <img src={tajLogo} alt="Taj Briyani Logo" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -390,7 +385,7 @@ function AppContent() {
       </div>
 
       <Analytics />
-      <main style={{ padding: "0 0 40px 0" }} role="main" aria-label="Main content">
+      <main style={{ padding: location.pathname === "/login" ? "0" : "0 0 40px 0" }} role="main" aria-label="Main content">
         {toast && (
           <div style={{
             position: "fixed",

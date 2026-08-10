@@ -111,6 +111,7 @@ export default function TrackOrder() {
   const navigate = useNavigate();
   const { orderId: urlOrderId } = useParams();
   const { token } = useAuth();
+  const [searchInput, setSearchInput] = useState('');
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -155,12 +156,15 @@ export default function TrackOrder() {
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
+    if (urlOrderId) {
+      fetchOrderById(urlOrderId);
     }
-    fetchOrders();
-  }, [token, navigate]);
+    if (token) {
+      fetchOrders();
+    } else {
+      setLoading(false);
+    }
+  }, [token, urlOrderId]);
 
   useEffect(() => {
     if (!token || !selectedOrder?._id) return;
@@ -262,11 +266,31 @@ export default function TrackOrder() {
           </div>
 
           {orders.length === 0 ? (
-            <div style={{ background: '#fff', borderRadius: 20, padding: 60, textAlign: 'center', boxShadow: '0 12px 40px rgba(0,0,0,0.06)' }}>
+            <div style={{ background: '#fff', borderRadius: 20, padding: 40, textAlign: 'center', boxShadow: '0 12px 40px rgba(0,0,0,0.06)' }}>
               <ShoppingBag size={48} color="#ddd" style={{ marginBottom: 16 }} />
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#6b0f0f', margin: '0 0 8px' }}>No active orders</h3>
-              <p style={{ fontSize: 14, color: '#888', marginBottom: 24 }}>Place an order to start tracking</p>
-              <button onClick={() => navigate('/menu')} style={{ background: 'linear-gradient(135deg, #6b0f0f, #8b1a1a)', color: '#f7c66b', border: 'none', padding: '12px 28px', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#6b0f0f', margin: '0 0 8px' }}>Track by Order ID</h3>
+              <p style={{ fontSize: 14, color: '#888', marginBottom: 24 }}>Enter your Order ID to track it as a guest</p>
+              <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
+                <input 
+                  type="text" 
+                  placeholder="Order ID" 
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  style={{ padding: '12px 16px', borderRadius: 12, border: '1px solid #ddd', outline: 'none', width: '100%', maxWidth: 250 }}
+                />
+                <button 
+                  onClick={() => {
+                    if (searchInput.trim()) {
+                      navigate(`/track-order/${searchInput.trim()}`);
+                    }
+                  }} 
+                  style={{ background: 'linear-gradient(135deg, #6b0f0f, #8b1a1a)', color: '#f7c66b', border: 'none', padding: '12px 28px', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}
+                >
+                  Track
+                </button>
+              </div>
+              <p style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>Or place a new order</p>
+              <button onClick={() => navigate('/menu')} style={{ background: '#f3ede4', color: '#6b0f0f', border: 'none', padding: '10px 24px', borderRadius: 12, fontWeight: 700, cursor: 'pointer' }}>
                 Browse Menu
               </button>
             </div>
@@ -279,7 +303,7 @@ export default function TrackOrder() {
                 };
                 const color = statusColors[order.status] || '#999';
                 return (
-                  <div key={order._id} className="trackSelectCard" onClick={() => setSelectedOrder(order)} style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 8px 24px rgba(0,0,0,0.06)', cursor: 'pointer', border: '1px solid rgba(107,15,15,0.05)', transition: 'all 0.2s', animation: 'slideUp 0.3s ease' }}
+                  <div key={order._id} className="trackSelectCard" onClick={() => setSelectedOrder(order)} style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 8px 24px rgba(0,0,0,0.06)', cursor: 'pointer', border: '1px solid rgba(107,15,15,0.05)', transition: 'all 0.2s', animation: 'slideUp 0.3s ease forwards', opacity: 0, animationDelay: `${0.1 * orders.indexOf(order)}s` }}
                     onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.06)'; }}
                   >

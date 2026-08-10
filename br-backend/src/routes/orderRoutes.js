@@ -7,7 +7,7 @@ const { validateOrder } = require('../validations/orderValidation');
 
 router.post('/', protect, validateOrder, createOrder);
 router.get('/', protect, getOrders);
-router.get('/:id', protect, getOrderById);
+router.get('/:id', getOrderById);
 router.put('/:id/status', protect, admin, updateOrderStatus);
 router.put('/:id/cancel', protect, cancelOrder);
 

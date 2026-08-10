@@ -32,6 +32,12 @@ const biryaniStyles = `
   overflow-x: hidden;
 }
 
+@keyframes moveSmoke {
+  0% { background-position: 0% 50%; background-size: 110%; }
+  50% { background-position: 100% 50%; background-size: 115%; }
+  100% { background-position: 0% 50%; background-size: 110%; }
+}
+
 /* ── HERO ── */
 .briyaniHero {
   position: relative;
@@ -43,6 +49,9 @@ const biryaniStyles = `
   background: #1a0404;
   display: flex;
   align-items: center;
+  animation: moveSmoke 25s ease-in-out infinite;
+  background-size: 110%;
+  background-position: center;
 }
 
 .briyaniHeroContent {
@@ -156,6 +165,11 @@ const biryaniStyles = `
   gap: 24px;
 }
 
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .briyaniCard {
   overflow: hidden;
   border-radius: 12px;
@@ -163,6 +177,13 @@ const biryaniStyles = `
   box-shadow: 0 14px 32px rgba(44, 18, 9, 0.12);
   display: flex;
   flex-direction: column;
+  animation: cardSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.briyaniCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(44, 18, 9, 0.2);
 }
 
 .briyaniCardImg {
@@ -395,20 +416,15 @@ const biryaniStyles = `
    ═══════════════════════════════════════ */
 
 @media (max-width: 1024px) {
-  .briyaniStats { grid-template-columns: repeat(2, 1fr); }
+  .briyaniStats { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .briyaniProductGrid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .briyaniHeroContent { width: 50%; }
-}
-
-@media (max-width: 900px) {
-  .briyaniHero { height: auto; min-height: auto; padding: 80px 0 40px; }
-  .briyaniHeroContent { width: 90%; max-width: none; min-width: 0; }
+  .briyaniHeroContent { width: 60%; }
   .briyaniFeatures { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 32px 4%; }
-  .briyaniFeatureCard { padding: 22px 16px; font-size: 15px; }
-  .briyaniFeatureIcon { font-size: 30px; margin-bottom: 10px; }
 }
 
 @media (max-width: 768px) {
+  .briyaniHero { height: auto; min-height: auto; padding: 80px 0 40px; }
+  .briyaniHeroContent { width: 90%; max-width: none; min-width: 0; }
   .briyaniProductsSection { padding: 24px 4% 40px; }
   .briyaniCatering { padding: 50px 20px; margin: 20px 3% 36px; }
   .briyaniStats { padding: 8px 4% 36px; gap: 12px; }
@@ -421,46 +437,34 @@ const biryaniStyles = `
   .briyaniCardBody { padding: 14px; }
   .briyaniPrice { font-size: 15px; }
   .briyaniAddBtn { padding: 10px; font-size: 13px; }
-}
-
-@media (max-width: 600px) {
-  .briyaniHero { padding: 70px 0 32px; }
-  .briyaniHeroContent { width: 95%; padding: 16px; gap: 14px; }
-  .briyaniFeatures { grid-template-columns: 1fr; gap: 10px; padding: 20px 4%; }
-  .briyaniFeatureCard { padding: 16px 14px; font-size: 14px; }
-  .briyaniFeatureIcon { font-size: 26px; margin-bottom: 8px; }
-  .briyaniProductsSection { padding: 20px 4% 32px; }
-  .briyaniSectionTitle { margin-bottom: 20px; }
-  .briyaniCatering { padding: 40px 16px; margin: 16px 3% 28px; }
-  .briyaniStats { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 6px 3% 28px; }
-  .briyaniStats > div { padding: 18px 10px; border-radius: 12px; }
-  .briyaniStatNumber { font-size: 24px; }
-  .briyaniStatLabel { font-size: 11px; }
-  .briyaniOfferBox { width: 65px; height: 65px; border-radius: 10px; }
-  .briyaniOfferIcon { font-size: 18px; }
-  .briyaniOffersRow { gap: 8px; }
-  .briyaniProductGrid { gap: 12px; }
-  .briyaniCardTitle { font-size: 14px; }
-  .briyaniPrice { font-size: 14px; }
-  .briyaniAddBtn { padding: 9px; font-size: 12px; }
+  .briyaniFormRow { flex-direction: column; }
 }
 
 @media (max-width: 480px) {
   .briyaniHero { padding: 60px 0 24px; }
   .briyaniHeroContent { width: 100%; padding: 12px; gap: 12px; }
-  .briyaniProductGrid { grid-template-columns: 1fr; gap: 14px; max-width: 360px; margin: 0 auto; }
+  .briyaniFeatures { grid-template-columns: 1fr; gap: 10px; padding: 20px 4%; }
+  .briyaniFeatureCard { padding: 16px 14px; font-size: 14px; }
+  .briyaniFeatureIcon { font-size: 26px; margin-bottom: 8px; }
+  .briyaniProductsSection { padding: 14px 3% 24px; }
+  .briyaniSectionTitle { font-size: 22px; margin-bottom: 16px; }
+  .briyaniCatering { padding: 32px 14px; margin: 12px 3% 20px; border-radius: 10px; }
+  .briyaniCateringTitle { font-size: 20px; }
+  .briyaniStats { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 6px 3% 28px; }
+  .briyaniStats > div { padding: 18px 10px; border-radius: 12px; }
+  .briyaniStatNumber { font-size: 24px; }
+  .briyaniStatLabel { font-size: 11px; }
   .briyaniOfferBox { width: 58px; height: 58px; border-radius: 8px; }
   .briyaniOfferIcon { font-size: 16px; }
   .briyaniOffersRow { gap: 6px; }
-  .briyaniCatering { padding: 32px 14px; margin: 12px 3% 20px; border-radius: 10px; }
-  .briyaniCateringTitle { font-size: 20px; }
-  .briyaniProductsSection { padding: 14px 3% 24px; }
-  .briyaniSectionTitle { font-size: 22px; margin-bottom: 16px; }
+  .briyaniProductGrid { grid-template-columns: 1fr; gap: 14px; max-width: 360px; margin: 0 auto; }
+  .briyaniCardTitle { font-size: 14px; }
+  .briyaniPrice { font-size: 14px; }
+  .briyaniAddBtn { padding: 9px; font-size: 12px; }
   .briyaniHeroBtnRow { flex-direction: column; }
   .briyaniHeroBtnRow button { width: 100%; padding: 10px 16px; }
   .briyaniModalCard { padding: 22px 18px; border-radius: 16px; }
   .briyaniNotifCard { padding: 32px 20px 28px; border-radius: 16px; }
-  .briyaniFormRow { flex-direction: column; }
 }
 
 @media (max-width: 380px) {
@@ -583,8 +587,6 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
             ),
             url(${bgImage})
           `,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
       >
@@ -729,7 +731,7 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
         <h2 className="briyaniSectionTitle">Popular Biryanis</h2>
         <div className="briyaniProductGrid">
           {items.map((item, index) => (
-            <div key={item.name} className="briyaniCard">
+            <div key={item.name} className="briyaniCard" style={{ animationDelay: `${index * 0.1}s`, opacity: 0 }}>
               <img src={item.image} alt={item.name} className="briyaniCardImg" />
               <div className="briyaniCardBody">
                 <h3 className="briyaniCardTitle">{item.name}</h3>
@@ -758,28 +760,28 @@ export default function TajBiryani({ onAddToCart, onApplyCoupon }) {
       </section>
 
       <section className="briyaniStats">
-        <div style={{"--statBg": `url(${statBg1})`}}>
+        <div style={{ "--statBg": `url(${statBg1})` }}>
           <div className="briyaniStatContent">
             <Utensils size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">50K+</div>
             <p className="briyaniStatLabel">Orders Delivered</p>
           </div>
         </div>
-        <div style={{"--statBg": `url(${statBg2})`}}>
+        <div style={{ "--statBg": `url(${statBg2})` }}>
           <div className="briyaniStatContent">
             <Smile size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">20K+</div>
             <p className="briyaniStatLabel">Happy Customers</p>
           </div>
         </div>
-        <div style={{"--statBg": `url(${statBg3})`}}>
+        <div style={{ "--statBg": `url(${statBg3})` }}>
           <div className="briyaniStatContent">
             <Store size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px" }} />
             <div className="briyaniStatNumber">12+</div>
             <p className="briyaniStatLabel">Branches</p>
           </div>
         </div>
-        <div style={{"--statBg": `url(${statBg4})`}}>
+        <div style={{ "--statBg": `url(${statBg4})` }}>
           <div className="briyaniStatContent">
             <Star size={28} className="briyaniStatIcon" style={{ margin: "0 auto 8px", fill: "#f7c66b" }} />
             <div className="briyaniStatNumber">4.8</div>

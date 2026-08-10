@@ -17,7 +17,35 @@ import paneerTikkaImg from "./Images/veg special.jpg";
 import eggDumImg from "./Images/bri.jpg";
 import prawnsImg from "./Images/ciiii.jpg";
 import awadhiImg from "./Images/chicken full.jpg";
-import fishTikkaImg from "./Images/one.jpg";
+import fishTikkaImg from "./Images/Fish tikka biryani.jpg";
+import iceCreamImg from "./Images/ice_cream.png";
+import sodaImg from "./Images/soda.png";
+import colaImg from "./Images/cola_img.png";
+import lemonSodaImg from "./Images/lemon_soda_img.png";
+import orangeSodaImg from "./Images/orange_soda_img.png";
+import gingerAleImg from "./Images/ginger_ale_img.png";
+import jeeraSodaImg from "./Images/jeera_soda_img.png";
+import vanillaIceCreamImg from "./Images/vanilla_ice_cream_img.png";
+import chocolateIceCreamImg from "./Images/chocolate_ice_cream_img.png";
+import strawberryIceCreamImg from "./Images/strawberry_ice_cream_img.png";
+import mangoIceCreamImg from "./Images/mango_ice_cream_img.png";
+import pistachioIceCreamImg from "./Images/pistachio_ice_cream_img.png";
+import coffeeIceCreamImg from "./Images/coffee_ice_cream_img.png";
+
+import kadaiVegImg from "./Images/Kadai Vegetable.jpg";
+import paneerButterImg from "./Images/Paneer Butter Masala.jpg";
+import soyaChaapImg from "./Images/Soya Chaap Biryani.jpg";
+import mushroomDumImg from "./Images/Mushroom Dum Biryani.jpg";
+import newFishTikkaImg from "./Images/Fish Tikka Biryani.jpg";
+import newEggDumImg from "./Images/Egg Dum Biryani.jpg";
+import roganJoshImg from "./Images/Mutton Rogan Josh.jpg";
+import pepperFryImg from "./Images/Mutton Pepper Fry.jpg";
+import keemaImg from "./Images/Keema Biryani.jpg";
+import tandooriImg from "./Images/Tandoori Chicken Biryani.jpg";
+import afghaniImg from "./Images/Murgh Afghani Biryani.jpg";
+import tikkaDumImg from "./Images/Chicken Tikka Dum Biryani.jpg";
+import tikkaMasalaImg from "./Images/Chicken Tikka Masala.jpg";
+import butterChickenImg from "./Images/Butter Chicken.jpg";
 
 const MENU_ITEMS = [
   {
@@ -94,7 +122,7 @@ const MENU_ITEMS = [
     price: 679,
     qty: 1,
     category: "Chicken",
-    image: feastImg,
+    image: vegspecial,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
   {
@@ -105,7 +133,7 @@ const MENU_ITEMS = [
     price: 679,
     qty: 1,
     category: "Veg",
-    image: vegspecial,
+    image: feastImg,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
   {
@@ -127,7 +155,7 @@ const MENU_ITEMS = [
     price: 679,
     qty: 1,
     category: "Chicken",
-    image: ton,
+    image: feastImg5,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
   {
@@ -138,7 +166,7 @@ const MENU_ITEMS = [
     price: 679,
     qty: 1,
     category: "Chicken",
-    image: feastImg5,
+    image: ton,
     desc: "Rich, slow-cooked biryani with chef's special masala.",
   },
   {
@@ -171,7 +199,7 @@ const MENU_ITEMS = [
     price: 299,
     qty: 1,
     category: "Special",
-    image: eggDumImg,
+    image: newEggDumImg,
     desc: "Spiced boiled eggs nestled in flavorful saffron rice.",
   },
   {
@@ -204,7 +232,7 @@ const MENU_ITEMS = [
     price: 749,
     qty: 1,
     category: "Special",
-    image: fishTikkaImg,
+    image: newFishTikkaImg,
     desc: "Juicy fish tikka chunks cooked with fragrant basmati rice.",
   },
   {
@@ -215,7 +243,7 @@ const MENU_ITEMS = [
     price: 349,
     qty: 1,
     category: "Veg",
-    image: vegImg,
+    image: mushroomDumImg,
     desc: "Fresh mushrooms cooked with aromatic spices and basmati rice.",
   },
   {
@@ -226,7 +254,7 @@ const MENU_ITEMS = [
     price: 329,
     qty: 1,
     category: "Veg",
-    image: vegspecial,
+    image: soyaChaapImg,
     desc: "Protein-rich soya chaap layered with spicy rice.",
   },
   {
@@ -237,7 +265,7 @@ const MENU_ITEMS = [
     price: 699,
     qty: 1,
     category: "Mutton",
-    image: muttonImg,
+    image: keemaImg,
     desc: "Minced mutton cooked with aromatic spices and layered with rice.",
   },
   {
@@ -248,7 +276,7 @@ const MENU_ITEMS = [
     price: 849,
     qty: 1,
     category: "Mutton",
-    image: royalImg,
+    image: familyImg,
     desc: "Famous South Indian biryani made with seeraga samba rice.",
   },
   {
@@ -259,7 +287,7 @@ const MENU_ITEMS = [
     price: 599,
     qty: 1,
     category: "Chicken",
-    image: chickenImg,
+    image: tandooriImg,
     desc: "Smoky tandoori chicken pieces in flavorful biryani rice.",
   },
   {
@@ -270,7 +298,7 @@ const MENU_ITEMS = [
     price: 649,
     qty: 1,
     category: "Chicken",
-    image: feastImg3,
+    image: royalImg,
     desc: "Spicy and tangy biryani with potatoes and dried plums.",
   },
   {
@@ -281,7 +309,7 @@ const MENU_ITEMS = [
     price: 499,
     qty: 1,
     category: "Special",
-    image: specialImg,
+    image: vegspecial,
     desc: "A flavorful and affordable alternative to the traditional biryani.",
   },
   {
@@ -303,7 +331,7 @@ const MENU_ITEMS = [
     price: 749,
     qty: 1,
     category: "Special",
-    image: familyImg,
+    image: feastImg3,
     desc: "Kerala style biryani with roasted spices and ghee rice.",
   },
   {
@@ -314,7 +342,7 @@ const MENU_ITEMS = [
     price: 689,
     qty: 1,
     category: "Chicken",
-    image: chickenImg,
+    image: tikkaDumImg,
     desc: "Spicy chicken tikka pieces layered with dum cooked rice.",
   },
   {
@@ -325,9 +353,30 @@ const MENU_ITEMS = [
     price: 729,
     qty: 1,
     category: "Chicken",
-    image: awadhiImg,
+    image: afghaniImg,
     desc: "Creamy, mild chicken cooked in rich Afghani style.",
   },
+  { id: 29, name: "Classic Vanilla Ice Cream", rating: 4.8, reviews: "320", price: 149, qty: 1, category: "Dessert", image: vanillaIceCreamImg, desc: "Rich and creamy classic vanilla bean ice cream." },
+  { id: 30, name: "Belgian Chocolate Ice Cream", rating: 4.9, reviews: "510", price: 179, qty: 1, category: "Dessert", image: chocolateIceCreamImg, desc: "Decadent dark chocolate ice cream made with Belgian cocoa." },
+  { id: 31, name: "Strawberry Ripple Ice Cream", rating: 4.6, reviews: "280", price: 159, qty: 1, category: "Dessert", image: strawberryIceCreamImg, desc: "Fresh strawberry ice cream with real fruit chunks." },
+  { id: 32, name: "Alphonso Mango Ice Cream", rating: 4.9, reviews: "640", price: 189, qty: 1, category: "Dessert", image: mangoIceCreamImg, desc: "Seasonal special ice cream made with real Alphonso mangoes." },
+  { id: 33, name: "Pistachio Nut Ice Cream", rating: 4.7, reviews: "390", price: 199, qty: 1, category: "Dessert", image: pistachioIceCreamImg, desc: "Premium pistachio ice cream with roasted nuts." },
+  { id: 34, name: "Butterscotch Ice Cream", rating: 4.8, reviews: "450", price: 169, qty: 1, category: "Dessert", image: coffeeIceCreamImg, desc: "Classic butterscotch with crunchy praline bits." },
+  { id: 35, name: "Cookies & Cream", rating: 4.8, reviews: "520", price: 179, qty: 1, category: "Dessert", image: vanillaIceCreamImg, desc: "Vanilla ice cream loaded with chocolate cookie chunks." },
+  { id: 36, name: "Mint Chocolate Chip", rating: 4.5, reviews: "210", price: 169, qty: 1, category: "Dessert", image: pistachioIceCreamImg, desc: "Refreshing mint ice cream with dark chocolate chips." },
+  { id: 37, name: "Coffee Mocha Ice Cream", rating: 4.7, reviews: "340", price: 189, qty: 1, category: "Dessert", image: coffeeIceCreamImg, desc: "Espresso infused ice cream with chocolate swirls." },
+  { id: 38, name: "Rocky Road Ice Cream", rating: 4.6, reviews: "290", price: 199, qty: 1, category: "Dessert", image: chocolateIceCreamImg, desc: "Chocolate ice cream with marshmallows and nuts." },
+  { id: 39, name: "Mutton Rogan Josh", rating: 4.8, reviews: "410", price: 449, qty: 1, category: "Mutton", image: roganJoshImg, desc: "Slow-cooked Kashmiri style mutton curry." },
+  { id: 40, name: "Mutton Pepper Fry", rating: 4.9, reviews: "520", price: 429, qty: 1, category: "Mutton", image: pepperFryImg, desc: "Spicy South Indian style dry mutton fry." },
+  { id: 41, name: "Paneer Butter Masala", rating: 4.7, reviews: "630", price: 299, qty: 1, category: "Veg", image: paneerButterImg, desc: "Rich and creamy tomato gravy with soft paneer cubes." },
+  { id: 42, name: "Kadai Vegetable", rating: 4.6, reviews: "380", price: 249, qty: 1, category: "Veg", image: kadaiVegImg, desc: "Mixed vegetables cooked in a spicy kadai masala." },
+  { id: 43, name: "Chicken Tikka Masala", rating: 4.8, reviews: "750", price: 349, qty: 1, category: "Chicken", image: tikkaMasalaImg, desc: "Roasted chicken chunks in a spicy, creamy sauce." },
+  { id: 44, name: "Butter Chicken", rating: 4.9, reviews: "890", price: 379, qty: 1, category: "Chicken", image: butterChickenImg, desc: "Classic mildly spiced chicken in a rich tomato and butter gravy." },
+  { id: 45, name: "Classic Cola", rating: 4.7, reviews: "450", price: 60, qty: 1, category: "Beverage", image: colaImg, desc: "Refreshing classic cola to beat the heat." },
+  { id: 46, name: "Lemon Soda", rating: 4.8, reviews: "380", price: 70, qty: 1, category: "Beverage", image: lemonSodaImg, desc: "Chilled fresh lemon soda with a hint of mint." },
+  { id: 47, name: "Orange Fizz", rating: 4.6, reviews: "290", price: 65, qty: 1, category: "Beverage", image: orangeSodaImg, desc: "Sparkling orange soda, sweet and tangy." },
+  { id: 48, name: "Ginger Ale", rating: 4.5, reviews: "190", price: 80, qty: 1, category: "Beverage", image: gingerAleImg, desc: "Crisp and dry ginger ale." },
+  { id: 49, name: "Masala Jeera Soda", rating: 4.9, reviews: "610", price: 75, qty: 1, category: "Beverage", image: jeeraSodaImg, desc: "Spiced cumin soda, perfect after a heavy biryani." },
 ];
 
 const SECTIONS = [
@@ -336,16 +385,24 @@ const SECTIONS = [
     ids: [1, 2, 5, 6, 15, 24, 25, 26],
   },
   {
-    title: "Chicken Biryani",
-    ids: [7, 9, 10, 11, 16, 22, 23, 27, 28],
+    title: "Chicken Biryani & Curries",
+    ids: [7, 9, 10, 11, 16, 22, 23, 27, 28, 43, 44],
   },
   {
-    title: "Mutton Biryani",
-    ids: [2, 12, 20, 21],
+    title: "Mutton Biryani & Curries",
+    ids: [2, 12, 20, 21, 39, 40],
   },
   {
     title: "Veg & Special",
-    ids: [3, 8, 4, 13, 14, 17, 18, 19],
+    ids: [3, 8, 4, 13, 14, 17, 18, 19, 41, 42],
+  },
+  {
+    title: "Ice Cream & Desserts",
+    ids: [29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+  },
+  {
+    title: "Beverages & Sodas",
+    ids: [45, 46, 47, 48, 49],
   },
 ];
 
@@ -397,6 +454,11 @@ const menuStyles = `
   align-items: center;
 }
 
+@keyframes popInBar {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .menuSearchInputWrapper,
 .menuLocationSelectWrapper {
   box-sizing: border-box;
@@ -404,8 +466,18 @@ const menuStyles = `
   min-width: 240px;
   background: #fff;
   border-radius: 18px;
-  padding: 16px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
+  padding: 6px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  animation: popInBar 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.menuSearchInputWrapper:focus-within,
+.menuLocationSelectWrapper:focus-within,
+.menuSearchInputWrapper:hover,
+.menuLocationSelectWrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(107, 15, 15, 0.12);
 }
 
 .menuLocationSelectWrapper {
@@ -415,9 +487,10 @@ const menuStyles = `
 .menuSearchInput,
 .menuLocationSelect {
   width: 100%;
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
   outline: none;
   box-sizing: border-box;
 }
@@ -453,6 +526,11 @@ const menuStyles = `
   border: none;
 }
 
+@keyframes slideUpMenu {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .menuItemCard {
   display: flex;
   flex-direction: column;
@@ -463,6 +541,8 @@ const menuStyles = `
   height: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
+  opacity: 0;
+  animation: slideUpMenu 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .menuItemCard:hover {
@@ -576,7 +656,7 @@ const menuStyles = `
   }
   .menuBrandSection { padding: 16px 18px; }
   .menuBrandTitle { font-size: 22px; }
-  .menuContainer { padding: 16px 1%; }
+  .menuContainer { padding: 16px 2%; }
 }
 
 @media (max-width: 768px) {
@@ -619,49 +699,18 @@ const menuStyles = `
   .menuSection { margin-bottom: 28px; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .menuProductGrid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .menuContainer { padding: 10px 2%; }
-  .menuBrandTitle { font-size: 20px; }
-}
-
-@media (max-width: 480px) {
-  .menuContainer { padding: 8px 2%; }
-  .menuBrandTitle { font-size: 18px; }
-  .menuItemPrice { font-size: 15px; }
-  .menuSectionTitle { font-size: 18px; }
-  .menuItemBody { padding: 10px; }
-  .menuBrandSection { padding: 12px 14px; border-radius: 14px; }
-  .menuLogoImg { width: 50px; height: 50px; }
-}
-
-.menuCartSummary {
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-}
-
-.menuCartSummaryTitle {
-  margin: 0 0 15px;
-  color: #6b0f0f;
-}
-
-.menuCartSummaryText {
-  margin: 0;
-  color: #555;
-}
-
-@media (max-width: 480px) {
-  .menuContainer { padding: 12px 1%; }
+  .menuContainer { padding: 12px 2%; }
   .menuBrandTitle { font-size: 20px; }
   .menuItemPrice { font-size: 16px; }
   .menuSectionTitle { font-size: 20px; }
   .menuItemBody { padding: 12px; }
+  .menuBrandSection { padding: 12px 14px; border-radius: 14px; }
+  .menuLogoImg { width: 50px; height: 50px; }
 }
 `;
 
@@ -680,7 +729,7 @@ export default function Menu({
       name: item.name,
       price: item.price,
       quantity: getQty(item.id),
-      image: item.image,
+      image: specialImg.image,
       description: item.desc,
     };
 
@@ -702,8 +751,8 @@ export default function Menu({
     })).filter((section) => section.items.length > 0);
   }, [q]);
 
-  const renderItem = (item) => (
-    <div key={item.id} className="menuItemCard" role="article" aria-label={item.name}>
+  const renderItem = (item, index) => (
+    <div key={item.id} className="menuItemCard" role="article" aria-label={item.name} style={{ animationDelay: `${index * 0.1}s` }}>
       <img src={item.image} alt={item.name} className="menuItemImage" loading="lazy" />
       <div className="menuItemBody">
         <h3 className="menuItemTitle">{item.name}</h3>
