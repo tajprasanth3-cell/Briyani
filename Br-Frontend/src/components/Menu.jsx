@@ -758,11 +758,10 @@ const menuStyles = `
   .menuBrandTitle { font-size: 20px; }
   .menuItemPrice { font-size: 16px; }
   .menuSectionTitle { font-size: 20px; }
-  .menuItemBody { padding: 16px; }
+  .menuItemBody { padding: 12px; }
   .menuBrandSection { padding: 12px 14px; border-radius: 14px; }
   .menuLogoImg { width: 50px; height: 50px; }
-  .menuItemActions { margin-top: 20px; gap: 12px; }
-  .menuAddToCartButton { padding: 14px; flex: 1; }
+  .menuItemActions { margin-top: auto; gap: 16px; }
 }
 `;
 
