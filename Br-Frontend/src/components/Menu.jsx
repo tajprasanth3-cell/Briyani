@@ -741,7 +741,7 @@ const menuStyles = `
     justify-content: space-between;
     align-items: center;
   }
-  .menuAddToCartButton { width: 100%; }
+  .menuAddToCartButton { width: 100%; gap:16px }
   .menuItemTitle { font-size: 15px; min-height: auto; }
   .menuItemBody { padding: 12px; }
   .menuItemDescription { font-size: 12px; min-height: auto; }

@@ -461,8 +461,8 @@ const biryaniStyles = `
   .briyaniCardTitle { font-size: 14px; }
   .briyaniPrice { font-size: 14px; }
   .briyaniAddBtn { padding: 9px; font-size: 12px; }
-  .briyaniHeroBtnRow { flex-direction: column; }
-  .briyaniHeroBtnRow button { width: 100%; padding: 10px 16px; }
+  .briyaniHeroBtnRow { flex-direction: column; align-items: center; }
+  .briyaniHeroBtnRow button { display: flex; justify-content: center; align-items: center; text-align: center; width: 60%; padding: 10px 16px; margin: 0 auto; }
   .briyaniModalCard { padding: 22px 18px; border-radius: 16px; }
   .briyaniNotifCard { padding: 32px 20px 28px; border-radius: 16px; }
 }
