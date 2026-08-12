@@ -17,7 +17,7 @@ import paneerTikkaImg from "./Images/veg special.jpg";
 import eggDumImg from "./Images/bri.jpg";
 import prawnsImg from "./Images/ciiii.jpg";
 import awadhiImg from "./Images/chicken full.jpg";
-import fishTikkaImg from "./Images/Fish tikka biryani.jpg";
+import fishTikkaImg from "./Images/Fish Tikka Biryani.jpg";
 import iceCreamImg from "./Images/ice_cream.png";
 import sodaImg from "./Images/soda.png";
 import colaImg from "./Images/cola_img.png";
