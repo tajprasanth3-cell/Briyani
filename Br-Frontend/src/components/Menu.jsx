@@ -673,14 +673,15 @@ const menuStyles = `
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 4px 8px;
   font-weight: bold;
+  font-size: 13px;
 }
 
 .menuQuantityDisplay {
-  width: 25px;
+  width: 20px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
 }
 
