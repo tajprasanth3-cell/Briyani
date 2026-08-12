@@ -452,6 +452,8 @@ const menuStyles = `
   gap:13px;
   flex-wrap: wrap;
   align-items: center;
+  position: relative;
+  z-index: 50;
 }
 
 @keyframes popInBar {

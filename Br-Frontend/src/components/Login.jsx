@@ -90,8 +90,9 @@ export default function Login() {
           .loginCard { padding: 22px 18px !important; border-radius: 20px !important; }
           .loginTitle { font-size: 19px !important; letter-spacing: 2px !important; }
           .loginSubtitle { font-size: 11px !important; }
-          .loginInput { font-size: 13px !important; padding: 10px 35px 10px 14px !important; }
+          .loginInput { font-size: 13px !important; padding: 10px 16px 10px 42px !important; }
           .loginButton { font-size: 14px !important; padding: 12px 24px !important; }
+          .loginIcon { width: 16px !important; height: 16px !important; left: 14px !important; }
         }
       `}</style>
       <img src={One} alt="Royal Biryani background" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1, animation: "fadeInScale 1.5s ease-out" }} />
@@ -129,7 +130,7 @@ export default function Login() {
             <div style={{ textAlign: "left" }}>
               <label style={{ display: "block", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "8px", color: "#f7c66b", fontWeight: "600" }}>Email Address</label>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                <Mail style={{ position: "absolute", left: "16px", color: isEmailFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "color 0.3s" }} size={18} />
+                <Mail className="loginIcon" style={{ position: "absolute", left: "16px", color: isEmailFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "all 0.3s" }} size={18} />
                 <input className="loginInput" type="email" placeholder="Enter your email" style={inputStyle(isEmailFocused)} value={email} onChange={(e) => setEmail(e.target.value)} onFocus={() => setIsEmailFocused(true)} onBlur={() => setIsEmailFocused(false)} required />
               </div>
             </div>
@@ -137,7 +138,7 @@ export default function Login() {
             <div style={{ textAlign: "left" }}>
               <label style={{ display: "block", fontSize: "12px", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "8px", color: "#f7c66b", fontWeight: "600" }}>Password</label>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-                <Lock style={{ position: "absolute", left: "16px", color: isPasswordFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "color 0.3s" }} size={18} />
+                <Lock className="loginIcon" style={{ position: "absolute", left: "16px", color: isPasswordFocused ? "#f7c66b" : "rgba(247, 198, 107, 0.5)", transition: "all 0.3s" }} size={18} />
                 <input className="loginInput" type="password" placeholder="Enter your password" style={inputStyle(isPasswordFocused)} value={password} onChange={(e) => setPassword(e.target.value)} onFocus={() => setIsPasswordFocused(true)} onBlur={() => setIsPasswordFocused(false)} required />
               </div>
             </div>
