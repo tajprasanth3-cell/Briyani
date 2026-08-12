@@ -484,8 +484,7 @@ const menuStyles = `
   min-width: 180px;
 }
 
-.menuSearchInput,
-.menuLocationSelect {
+.menuSearchInput {
   width: 100%;
   padding: 12px 16px;
   border-radius: 12px;
@@ -495,11 +494,60 @@ const menuStyles = `
   box-sizing: border-box;
 }
 
-.menuLocationSelect {
+.menuCustomDropdown {
+  position: relative;
+  width: 100%;
+}
+
+.menuDropdownButton {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.menuDropdownList {
+  position: absolute;
+  top: 100%;
+  left: 0;
   width: 100%;
   background: #fff;
-  cursor: pointer;
+  border-radius: 12px;
+  margin-top: 6px;
+  padding: 8px 0;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  z-index: 100;
+  animation: dropDownFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.menuDropdownItem {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #333;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menuDropdownItem:hover {
+  background: #fff6eb;
+  color: #b27414;
+}
+
+@keyframes dropDownFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 
 .menuSection {
   margin-bottom: 40px;
@@ -721,6 +769,8 @@ export default function Menu({
   cartCount = 0,
 }) {
   const [location, setLocation] = useState("Mumbai");
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+  const locations = ["Mumbai", "Hyderabad", "Delhi", "Bangalore"];
   const { getQty, updateQty, isAtMax, isAtMin } = useQuantityLimit(10);
 
   const addToCart = (item) => {
@@ -729,7 +779,7 @@ export default function Menu({
       name: item.name,
       price: item.price,
       quantity: getQty(item.id),
-      image: specialImg.image,
+      image: item.image,
       description: item.desc,
     };
 
@@ -819,16 +869,32 @@ export default function Menu({
         </div>
 
         <div className="menuLocationSelectWrapper">
-          <select
-            value={location}
-            onChange={(event) => setLocation(event.target.value)}
-            className="menuLocationSelect"
-          >
-            <option>Mumbai</option>
-            <option>Hyderabad</option>
-            <option>Delhi</option>
-            <option>Bangalore</option>
-          </select>
+          <div className="menuCustomDropdown">
+            <button
+              className="menuDropdownButton"
+              onClick={() => setIsLocationOpen(!isLocationOpen)}
+              aria-label="Select location"
+            >
+              {location}
+              <span style={{ fontSize: "10px", transition: "transform 0.3s", transform: isLocationOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+            </button>
+            {isLocationOpen && (
+              <div className="menuDropdownList">
+                {locations.map((loc) => (
+                  <div
+                    key={loc}
+                    className="menuDropdownItem"
+                    onClick={() => {
+                      setLocation(loc);
+                      setIsLocationOpen(false);
+                    }}
+                  >
+                    {loc}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
